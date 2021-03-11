@@ -1,0 +1,9 @@
+<map id="chip::BitFlags::Has" name="chip::BitFlags::Has">
+<area shape="rect" id="node1" title=" " alt="" coords="312,177,455,203"/>
+<area shape="rect" id="node2" href="$classchip_1_1_transport_mgr_base.html#a785f2d0b545364b3a215a2ada98313d4" title=" " alt="" coords="37,5,232,47"/>
+<area shape="rect" id="node3" href="$classchip_1_1_payload_header.html#a8fc818122731b3c3eaa0e73a4aa91c39" title="Determine whether the current message is an acknowledgment for a previously received message." alt="" coords="57,71,212,112"/>
+<area shape="rect" id="node4" href="$classchip_1_1_payload_header.html#abcca7d48e8053a612b815b4cd2f8bd80" title="Determine whether the initiator of the exchange." alt="" coords="57,136,212,177"/>
+<area shape="rect" id="node5" href="$classchip_1_1_packet_header.html#aa349730399a543587753fa7f22c3fb6a" title="Check if the peer&#39;s group key message counter is not synchronized." alt="" coords="5,201,264,243"/>
+<area shape="rect" id="node6" href="$classchip_1_1_packet_header.html#a3b57420e14da391787f4ec63e4ce471f" title="Check if it&#39;s a secure session control message." alt="" coords="30,267,239,308"/>
+<area shape="rect" id="node7" href="$classchip_1_1_payload_header.html#adbe1ce1f5c00454f9a9969550a8e79a2" title="Determine whether current message is requesting an acknowledgment from the recipient." alt="" coords="57,332,212,373"/>
+</map>

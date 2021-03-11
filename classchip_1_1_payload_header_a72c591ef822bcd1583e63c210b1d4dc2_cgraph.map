@@ -1,0 +1,4 @@
+<map id="chip::PayloadHeader::SetVendorId" name="chip::PayloadHeader::SetVendorId">
+<area shape="rect" id="node1" title="Set the vendor id for this header." alt="" coords="5,5,160,47"/>
+<area shape="rect" id="node2" href="$classchip_1_1_bit_flags.html#a8f5c3c628ad557290efb93efb0f99eff" title=" " alt="" coords="208,13,347,39"/>
+</map>
