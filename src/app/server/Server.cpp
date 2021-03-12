@@ -531,6 +531,10 @@ void InitServer(AppDelegate * delegate)
 #endif
     }
 
+#if CHIP_DEVICE_CONFIG_ENABLE_THREAD
+    app::Mdns::StartServer();
+#endif
+
 exit:
     if (err != CHIP_NO_ERROR)
     {
