@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Connected Home over IP
-   &#160;<span id="projectnumber">18b7343</span>
+   &#160;<span id="projectnumber">cf7aa2d</span>
    </div>
   </td>
  </tr>
@@ -121,13 +121,13 @@ Typedefs</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:a9317c7a3247b762442fa99129307ecb9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9">HexFlags</a> : int { <br />
-&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a9e38475c9e8e8973dba2c9ca15699924">kNone</a> = 0u, 
+&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a35c3ace1970663a16e5c65baa5941b13">HexFlags::kNone</a> = 0u, 
 <br />
-&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a6a1fe9490ffd08fb03ae034ed7cc952e">kUppercase</a> = (1u &lt;&lt; 0), 
+&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9aab6abd97e11c5eca7769d423295375ec">HexFlags::kUppercase</a> = (1u &lt;&lt; 0), 
 <br />
-&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a2795596e80424e2ae9ed42df8c255fbf">kNullTerminate</a> = (1u &lt;&lt; 1), 
+&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a606bc3bc8c720ed089d96c5996e4b4f4">HexFlags::kNullTerminate</a> = (1u &lt;&lt; 1), 
 <br />
-&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9add02d488acbd1b9c228b48e4bcf6c6b7">kUppercaseAndNullTerminate</a> = ((1u &lt;&lt; 0) | (1u &lt;&lt; 1))
+&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a633b2110744f90028821bf3a5bb2533b">HexFlags::kUppercaseAndNullTerminate</a> = ((1u &lt;&lt; 0) | (1u &lt;&lt; 1))
 <br />
  }</td></tr>
 <tr class="separator:a9317c7a3247b762442fa99129307ecb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -158,9 +158,9 @@ Functions</h2></td></tr>
 <tr class="memitem:adf9249aee776fca0b80f867c104f3cab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacechip_1_1_encoding.html#adf9249aee776fca0b80f867c104f3cab">Write8</a> (uint8_t *&amp;p, uint8_t v)</td></tr>
 <tr class="memdesc:adf9249aee776fca0b80f867c104f3cab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a, potentially unaligned, memory write of the 8-bit value to the specified pointer address and increment the pointer by 8-bits (1 byte).  <a href="namespacechip_1_1_encoding.html#adf9249aee776fca0b80f867c104f3cab">More...</a><br /></td></tr>
 <tr class="separator:adf9249aee776fca0b80f867c104f3cab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d2e44633c7717297f9e7be59a4cb4b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_c_h_i_p_error_8h.html#ab17a41277f81480d902cc2f8bb6d87d1">CHIP_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacechip_1_1_encoding.html#a5d2e44633c7717297f9e7be59a4cb4b8">BytesToHex</a> (const uint8_t *src_bytes, size_t src_size, char *dest_hex, size_t dest_size_max, <a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9">HexFlags</a> flags)</td></tr>
-<tr class="memdesc:a5d2e44633c7717297f9e7be59a4cb4b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a buffer of bytes into hexadecimal, with or without null-termination and using either lowercase or uppercase hex.  <a href="namespacechip_1_1_encoding.html#a5d2e44633c7717297f9e7be59a4cb4b8">More...</a><br /></td></tr>
-<tr class="separator:a5d2e44633c7717297f9e7be59a4cb4b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affc8076d311801d3bb39e8a93064cc73"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_c_h_i_p_error_8h.html#ab17a41277f81480d902cc2f8bb6d87d1">CHIP_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacechip_1_1_encoding.html#affc8076d311801d3bb39e8a93064cc73">BytesToHex</a> (const uint8_t *src_bytes, size_t src_size, char *dest_hex, size_t dest_size_max, <a class="el" href="classchip_1_1_bit_flags.html">BitFlags</a>&lt; <a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9">HexFlags</a> &gt; flags)</td></tr>
+<tr class="memdesc:affc8076d311801d3bb39e8a93064cc73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a buffer of bytes into hexadecimal, with or without null-termination and using either lowercase or uppercase hex.  <a href="namespacechip_1_1_encoding.html#affc8076d311801d3bb39e8a93064cc73">More...</a><br /></td></tr>
+<tr class="separator:affc8076d311801d3bb39e8a93064cc73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9389e040bc61bdc6bc8ed6fcaaac4cc2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_c_h_i_p_error_8h.html#ab17a41277f81480d902cc2f8bb6d87d1">CHIP_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacechip_1_1_encoding.html#a9389e040bc61bdc6bc8ed6fcaaac4cc2">BytesToUppercaseHexBuffer</a> (const uint8_t *src_bytes, size_t src_size, char *dest_hex_buf, size_t dest_size_max)</td></tr>
 <tr class="separator:a9389e040bc61bdc6bc8ed6fcaaac4cc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a513d95f9ac8f66bdfc0bab532294b1ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_c_h_i_p_error_8h.html#ab17a41277f81480d902cc2f8bb6d87d1">CHIP_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacechip_1_1_encoding.html#a513d95f9ac8f66bdfc0bab532294b1ff">BytesToLowercaseHexBuffer</a> (const uint8_t *src_bytes, size_t src_size, char *dest_hex_buf, size_t dest_size_max)</td></tr>
@@ -199,24 +199,32 @@ Safely performing simple, efficient memory-mapped accesses, potentially to unali
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">enum <a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9">chip::Encoding::HexFlags</a> : int</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a9317c7a3247b762442fa99129307ecb9a9e38475c9e8e8973dba2c9ca15699924"></a>kNone&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9317c7a3247b762442fa99129307ecb9a6a1fe9490ffd08fb03ae034ed7cc952e"></a>kUppercase&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9317c7a3247b762442fa99129307ecb9a2795596e80424e2ae9ed42df8c255fbf"></a>kNullTerminate&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9317c7a3247b762442fa99129307ecb9add02d488acbd1b9c228b48e4bcf6c6b7"></a>kUppercaseAndNullTerminate&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a9317c7a3247b762442fa99129307ecb9a35c3ace1970663a16e5c65baa5941b13"></a>kNone&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a9317c7a3247b762442fa99129307ecb9aab6abd97e11c5eca7769d423295375ec"></a>kUppercase&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a9317c7a3247b762442fa99129307ecb9a606bc3bc8c720ed089d96c5996e4b4f4"></a>kNullTerminate&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a9317c7a3247b762442fa99129307ecb9a633b2110744f90028821bf3a5bb2533b"></a>kUppercaseAndNullTerminate&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a5d2e44633c7717297f9e7be59a4cb4b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d2e44633c7717297f9e7be59a4cb4b8">&#9670;&nbsp;</a></span>BytesToHex()</h2>
+<a id="affc8076d311801d3bb39e8a93064cc73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affc8076d311801d3bb39e8a93064cc73">&#9670;&nbsp;</a></span>BytesToHex()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -248,7 +256,7 @@ Safely performing simple, efficient memory-mapped accesses, potentially to unali
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9">HexFlags</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classchip_1_1_bit_flags.html">BitFlags</a>&lt; <a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9">HexFlags</a> &gt;&#160;</td>
           <td class="paramname"><em>flags</em>&#160;</td>
         </tr>
         <tr>
@@ -261,9 +269,9 @@ Safely performing simple, efficient memory-mapped accesses, potentially to unali
 
 <p>Encode a buffer of bytes into hexadecimal, with or without null-termination and using either lowercase or uppercase hex. </p>
 <p>Default is lowercase output, not null-terminated.</p>
-<p>If <code>flags</code> has <code>HexFlags::kNullTerminate</code> set, treat <code>dest_hex</code> as a null-terminated string buffer. The function returns CHIP_ERROR_BUFFER_TOO_SMALL if <code>dest_size_max</code> can't fit the entire encoded buffer, and the null-terminator if enabled. This function will never output truncated data. The result either fits and is written, or does not fit and nothing is written to <code>dest_hex</code>.</p>
+<p>If <code>flags</code> has <code><a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a606bc3bc8c720ed089d96c5996e4b4f4">HexFlags::kNullTerminate</a></code> set, treat <code>dest_hex</code> as a null-terminated string buffer. The function returns CHIP_ERROR_BUFFER_TOO_SMALL if <code>dest_size_max</code> can't fit the entire encoded buffer, and the null-terminator if enabled. This function will never output truncated data. The result either fits and is written, or does not fit and nothing is written to <code>dest_hex</code>.</p>
 <p>If <code>src_bytes</code> and <code>dest_hex</code> overlap, the results may be incorrect, depending on overlap, but only the core validity checks are done and it's possible to get CHIP_NO_ERROR with erroneous output.</p>
-<p>On success, number of bytes written to destination is always: output_size = (src_size * 2) + ((flags &amp; HexFlags::kNullTerminate) ? 1 : 0);</p>
+<p>On success, number of bytes written to destination is always: output_size = (src_size * 2) + ((flags &amp; <a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a606bc3bc8c720ed089d96c5996e4b4f4">HexFlags::kNullTerminate</a>) ? 1 : 0);</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir"></td><td class="paramname">src_bytes</td><td>Pointer to non-null buffer to convert </td></tr>
@@ -280,10 +288,19 @@ CHIP_ERROR_INVALID_ARGUMENT if either src_bytes or dest_hex is nullptr </dd>
 <dd>
 CHIP_NO_ERROR on success </dd></dl>
 <div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespacechip_1_1_encoding_affc8076d311801d3bb39e8a93064cc73_cgraph.png" border="0" usemap="#namespacechip_1_1_encoding_affc8076d311801d3bb39e8a93064cc73_cgraph" alt=""/></div>
+<map name="namespacechip_1_1_encoding_affc8076d311801d3bb39e8a93064cc73_cgraph" id="namespacechip_1_1_encoding_affc8076d311801d3bb39e8a93064cc73_cgraph">
+<area shape="rect" title="Encode a buffer of bytes into hexadecimal, with or without null&#45;termination and using either lowercas..." alt="" coords="5,5,207,32"/>
+<area shape="rect" href="classchip_1_1_bit_flags.html#afa195f8334ef1727fc11742bfa52882b" title="Check whether flag(s) are set." alt="" coords="255,5,397,32"/>
+</map>
+</div>
+<div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="namespacechip_1_1_encoding_a5d2e44633c7717297f9e7be59a4cb4b8_icgraph.png" border="0" usemap="#namespacechip_1_1_encoding_a5d2e44633c7717297f9e7be59a4cb4b8_icgraph" alt=""/></div>
-<map name="namespacechip_1_1_encoding_a5d2e44633c7717297f9e7be59a4cb4b8_icgraph" id="namespacechip_1_1_encoding_a5d2e44633c7717297f9e7be59a4cb4b8_icgraph">
+<div class="center"><img src="namespacechip_1_1_encoding_affc8076d311801d3bb39e8a93064cc73_icgraph.png" border="0" usemap="#namespacechip_1_1_encoding_affc8076d311801d3bb39e8a93064cc73_icgraph" alt=""/></div>
+<map name="namespacechip_1_1_encoding_affc8076d311801d3bb39e8a93064cc73_icgraph" id="namespacechip_1_1_encoding_affc8076d311801d3bb39e8a93064cc73_icgraph">
 <area shape="rect" title="Encode a buffer of bytes into hexadecimal, with or without null&#45;termination and using either lowercas..." alt="" coords="297,111,499,138"/>
 <area shape="rect" href="namespacechip_1_1_encoding.html#a513d95f9ac8f66bdfc0bab532294b1ff" title=" " alt="" coords="5,5,249,47"/>
 <area shape="rect" href="namespacechip_1_1_encoding.html#ac780e234cb9d135fb85b5183c2861952" title=" " alt="" coords="5,71,249,112"/>
@@ -345,7 +362,8 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="namespacechip_1_1_encoding_a513d95f9ac8f66bdfc0bab532294b1ff_cgraph.png" border="0" usemap="#namespacechip_1_1_encoding_a513d95f9ac8f66bdfc0bab532294b1ff_cgraph" alt=""/></div>
 <map name="namespacechip_1_1_encoding_a513d95f9ac8f66bdfc0bab532294b1ff_cgraph" id="namespacechip_1_1_encoding_a513d95f9ac8f66bdfc0bab532294b1ff_cgraph">
 <area shape="rect" title=" " alt="" coords="5,5,249,47"/>
-<area shape="rect" href="namespacechip_1_1_encoding.html#a5d2e44633c7717297f9e7be59a4cb4b8" title="Encode a buffer of bytes into hexadecimal, with or without null&#45;termination and using either lowercas..." alt="" coords="297,13,499,39"/>
+<area shape="rect" href="namespacechip_1_1_encoding.html#affc8076d311801d3bb39e8a93064cc73" title="Encode a buffer of bytes into hexadecimal, with or without null&#45;termination and using either lowercas..." alt="" coords="297,13,499,39"/>
+<area shape="rect" href="classchip_1_1_bit_flags.html#afa195f8334ef1727fc11742bfa52882b" title="Check whether flag(s) are set." alt="" coords="547,13,689,39"/>
 </map>
 </div>
 
@@ -402,7 +420,8 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="namespacechip_1_1_encoding_ac780e234cb9d135fb85b5183c2861952_cgraph.png" border="0" usemap="#namespacechip_1_1_encoding_ac780e234cb9d135fb85b5183c2861952_cgraph" alt=""/></div>
 <map name="namespacechip_1_1_encoding_ac780e234cb9d135fb85b5183c2861952_cgraph" id="namespacechip_1_1_encoding_ac780e234cb9d135fb85b5183c2861952_cgraph">
 <area shape="rect" title=" " alt="" coords="5,5,249,47"/>
-<area shape="rect" href="namespacechip_1_1_encoding.html#a5d2e44633c7717297f9e7be59a4cb4b8" title="Encode a buffer of bytes into hexadecimal, with or without null&#45;termination and using either lowercas..." alt="" coords="297,13,499,39"/>
+<area shape="rect" href="namespacechip_1_1_encoding.html#affc8076d311801d3bb39e8a93064cc73" title="Encode a buffer of bytes into hexadecimal, with or without null&#45;termination and using either lowercas..." alt="" coords="297,13,499,39"/>
+<area shape="rect" href="classchip_1_1_bit_flags.html#afa195f8334ef1727fc11742bfa52882b" title="Check whether flag(s) are set." alt="" coords="547,13,689,39"/>
 </map>
 </div>
 
@@ -459,7 +478,8 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="namespacechip_1_1_encoding_a9389e040bc61bdc6bc8ed6fcaaac4cc2_cgraph.png" border="0" usemap="#namespacechip_1_1_encoding_a9389e040bc61bdc6bc8ed6fcaaac4cc2_cgraph" alt=""/></div>
 <map name="namespacechip_1_1_encoding_a9389e040bc61bdc6bc8ed6fcaaac4cc2_cgraph" id="namespacechip_1_1_encoding_a9389e040bc61bdc6bc8ed6fcaaac4cc2_cgraph">
 <area shape="rect" title=" " alt="" coords="5,5,249,47"/>
-<area shape="rect" href="namespacechip_1_1_encoding.html#a5d2e44633c7717297f9e7be59a4cb4b8" title="Encode a buffer of bytes into hexadecimal, with or without null&#45;termination and using either lowercas..." alt="" coords="297,13,499,39"/>
+<area shape="rect" href="namespacechip_1_1_encoding.html#affc8076d311801d3bb39e8a93064cc73" title="Encode a buffer of bytes into hexadecimal, with or without null&#45;termination and using either lowercas..." alt="" coords="297,13,499,39"/>
+<area shape="rect" href="classchip_1_1_bit_flags.html#afa195f8334ef1727fc11742bfa52882b" title="Check whether flag(s) are set." alt="" coords="547,13,689,39"/>
 </map>
 </div>
 
@@ -516,7 +536,8 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="namespacechip_1_1_encoding_a5ca4be8d41c24afbb5916ced3d0e4a3f_cgraph.png" border="0" usemap="#namespacechip_1_1_encoding_a5ca4be8d41c24afbb5916ced3d0e4a3f_cgraph" alt=""/></div>
 <map name="namespacechip_1_1_encoding_a5ca4be8d41c24afbb5916ced3d0e4a3f_cgraph" id="namespacechip_1_1_encoding_a5ca4be8d41c24afbb5916ced3d0e4a3f_cgraph">
 <area shape="rect" title=" " alt="" coords="5,5,249,47"/>
-<area shape="rect" href="namespacechip_1_1_encoding.html#a5d2e44633c7717297f9e7be59a4cb4b8" title="Encode a buffer of bytes into hexadecimal, with or without null&#45;termination and using either lowercas..." alt="" coords="297,13,499,39"/>
+<area shape="rect" href="namespacechip_1_1_encoding.html#affc8076d311801d3bb39e8a93064cc73" title="Encode a buffer of bytes into hexadecimal, with or without null&#45;termination and using either lowercas..." alt="" coords="297,13,499,39"/>
+<area shape="rect" href="classchip_1_1_bit_flags.html#afa195f8334ef1727fc11742bfa52882b" title="Check whether flag(s) are set." alt="" coords="547,13,689,39"/>
 </map>
 </div>
 
@@ -877,7 +898,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacechip.html">chip</a></li><li class="navelem"><a class="el" href="namespacechip_1_1_encoding.html">Encoding</a></li>
-    <li class="footer">Generated on Thu Mar 11 2021 12:56:48 for Connected Home over IP by
+    <li class="footer">Generated on Tue Mar 16 2021 09:55:55 for Connected Home over IP by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

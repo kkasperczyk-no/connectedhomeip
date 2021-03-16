@@ -1,9 +1,11 @@
 var classchip_1_1_ble_1_1_btp_engine =
 [
-    [ "kHeaderFlag_StartMessage", "classchip_1_1_ble_1_1_btp_engine.html#ad69bac12ac484346d928ab0cc07f1b2da9f8e69b9aa9e3db1ec1cb7efdfb7d3a1", null ],
-    [ "kHeaderFlag_ContinueMessage", "classchip_1_1_ble_1_1_btp_engine.html#ad69bac12ac484346d928ab0cc07f1b2da26285de15bd93315e3b76d0678f8b001", null ],
-    [ "kHeaderFlag_EndMessage", "classchip_1_1_ble_1_1_btp_engine.html#ad69bac12ac484346d928ab0cc07f1b2daa26f33077a714777b0350bcdbb810750", null ],
-    [ "kHeaderFlag_FragmentAck", "classchip_1_1_ble_1_1_btp_engine.html#ad69bac12ac484346d928ab0cc07f1b2da868b9955989927aa6a07bcee143b4741", null ],
+    [ "HeaderFlags", "classchip_1_1_ble_1_1_btp_engine.html#ac692dd7df39f9ab6d265251b80991fbb", [
+      [ "kStartMessage", "classchip_1_1_ble_1_1_btp_engine.html#ac692dd7df39f9ab6d265251b80991fbba92ebc2afaa5de600cfb15a86c4cb83d7", null ],
+      [ "kContinueMessage", "classchip_1_1_ble_1_1_btp_engine.html#ac692dd7df39f9ab6d265251b80991fbba249a056e8e8a874b649bf7f757b4befb", null ],
+      [ "kEndMessage", "classchip_1_1_ble_1_1_btp_engine.html#ac692dd7df39f9ab6d265251b80991fbba5233c66b67a738f23cfbab1ce794e566", null ],
+      [ "kFragmentAck", "classchip_1_1_ble_1_1_btp_engine.html#ac692dd7df39f9ab6d265251b80991fbba753de884d1480d6c4a3fbf0b207d85b5", null ]
+    ] ],
     [ "State_t", "classchip_1_1_ble_1_1_btp_engine.html#ab91e710abfc2f4b18656042ff6dd8752", [
       [ "kState_Idle", "classchip_1_1_ble_1_1_btp_engine.html#ab91e710abfc2f4b18656042ff6dd8752a79a16b2cc971bb531e8ddb155117ddea", null ],
       [ "kState_InProgress", "classchip_1_1_ble_1_1_btp_engine.html#ab91e710abfc2f4b18656042ff6dd8752a8cf818198370f73e0100a3c079b910eb", null ],

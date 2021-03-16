@@ -1,7 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classchip_1_1_encoding_1_1_buffer_writer.html" title=" " alt="" coords="5,46,208,73"/>
-<area shape="rect" id="node2" href="$classchip_1_1_encoding_1_1_endian_buffer_writer_base.html" title=" " alt="" coords="256,5,463,47"/>
-<area shape="rect" id="node3" href="$classchip_1_1_encoding_1_1_endian_buffer_writer_base.html" title=" " alt="" coords="256,71,463,112"/>
-<area shape="rect" id="node4" href="$classchip_1_1_encoding_1_1_big_endian_1_1_buffer_writer.html" title=" " alt="" coords="517,37,706,79"/>
-<area shape="rect" id="node5" href="$classchip_1_1_encoding_1_1_little_endian_1_1_buffer_writer.html" title=" " alt="" coords="511,103,712,144"/>
+<area shape="rect" id="node1" href="$classchip_1_1_device_layer_1_1_internal_1_1_generic_platform_manager_impl___free_r_t_o_s.html" title=" " alt="" coords="5,5,297,61"/>
+<area shape="rect" id="node2" href="$classchip_1_1_device_layer_1_1_platform_manager_impl.html" title="Concrete implementation of the PlatformManager singleton object for the CC13X2_26X2 platform." alt="" coords="345,50,509,91"/>
+<area shape="rect" id="node3" href="$classchip_1_1_device_layer_1_1_platform_manager.html" title="Provides features for initializing and interacting with the chip network stack on a chip&#45;enabled devi..." alt="" coords="78,86,225,127"/>
 </map>

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Connected Home over IP
-   &#160;<span id="projectnumber">18b7343</span>
+   &#160;<span id="projectnumber">cf7aa2d</span>
    </div>
   </td>
  </tr>
@@ -92,6 +92,7 @@ $(document).ready(function(){initNavTree('_bytes_to_hex_8h.html',''); initResiza
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="_c_h_i_p_error_8h_source.html">core/CHIPError.h</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="_bit_flags_8h_source.html">support/BitFlags.h</a>&gt;</code><br />
 <code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &lt;stdlib.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -99,14 +100,17 @@ Include dependency graph for BytesToHex.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="_bytes_to_hex_8h__incl.png" border="0" usemap="#lib_2support_2_bytes_to_hex_8h" alt=""/></div>
 <map name="lib_2support_2_bytes_to_hex_8h" id="lib_2support_2_bytes_to_hex_8h">
-<area shape="rect" title=" " alt="" coords="228,5,412,32"/>
+<area shape="rect" title=" " alt="" coords="281,5,465,32"/>
 <area shape="rect" href="_c_h_i_p_error_8h.html" title=" " alt="" coords="133,80,259,107"/>
-<area shape="rect" title=" " alt="" coords="209,379,279,405"/>
-<area shape="rect" title=" " alt="" coords="358,80,429,107"/>
+<area shape="rect" title=" " alt="" coords="234,379,305,405"/>
+<area shape="rect" href="_bit_flags_8h.html" title=" " alt="" coords="358,80,498,107"/>
+<area shape="rect" title=" " alt="" coords="522,80,593,107"/>
 <area shape="rect" href="_c_h_i_p_config_8h.html" title=" " alt="" coords="103,155,241,181"/>
 <area shape="rect" href="_ble_config_8h.html" title=" " alt="" coords="112,229,232,256"/>
 <area shape="rect" href="_system_config_8h.html" title=" " alt="" coords="5,304,181,331"/>
 <area shape="rect" title=" " alt="" coords="50,379,137,405"/>
+<area shape="rect" title=" " alt="" coords="409,155,501,181"/>
+<area shape="rect" title=" " alt="" coords="525,155,585,181"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -132,22 +136,22 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:a9317c7a3247b762442fa99129307ecb9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9">chip::Encoding::HexFlags</a> : int { <br />
-&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a9e38475c9e8e8973dba2c9ca15699924">chip::Encoding::kNone</a> = 0u, 
+&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a35c3ace1970663a16e5c65baa5941b13">chip::Encoding::HexFlags::kNone</a> = 0u, 
 <br />
-&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a6a1fe9490ffd08fb03ae034ed7cc952e">chip::Encoding::kUppercase</a> = (1u &lt;&lt; 0), 
+&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9aab6abd97e11c5eca7769d423295375ec">chip::Encoding::HexFlags::kUppercase</a> = (1u &lt;&lt; 0), 
 <br />
-&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a2795596e80424e2ae9ed42df8c255fbf">chip::Encoding::kNullTerminate</a> = (1u &lt;&lt; 1), 
+&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a606bc3bc8c720ed089d96c5996e4b4f4">chip::Encoding::HexFlags::kNullTerminate</a> = (1u &lt;&lt; 1), 
 <br />
-&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9add02d488acbd1b9c228b48e4bcf6c6b7">chip::Encoding::kUppercaseAndNullTerminate</a> = ((1u &lt;&lt; 0) | (1u &lt;&lt; 1))
+&#160;&#160;<a class="el" href="namespacechip_1_1_encoding.html#a9317c7a3247b762442fa99129307ecb9a633b2110744f90028821bf3a5bb2533b">chip::Encoding::HexFlags::kUppercaseAndNullTerminate</a> = ((1u &lt;&lt; 0) | (1u &lt;&lt; 1))
 <br />
  }</td></tr>
 <tr class="separator:a9317c7a3247b762442fa99129307ecb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a5d2e44633c7717297f9e7be59a4cb4b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_c_h_i_p_error_8h.html#ab17a41277f81480d902cc2f8bb6d87d1">CHIP_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacechip_1_1_encoding.html#a5d2e44633c7717297f9e7be59a4cb4b8">chip::Encoding::BytesToHex</a> (const uint8_t *src_bytes, size_t src_size, char *dest_hex, size_t dest_size_max, HexFlags flags)</td></tr>
-<tr class="memdesc:a5d2e44633c7717297f9e7be59a4cb4b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a buffer of bytes into hexadecimal, with or without null-termination and using either lowercase or uppercase hex.  <a href="namespacechip_1_1_encoding.html#a5d2e44633c7717297f9e7be59a4cb4b8">More...</a><br /></td></tr>
-<tr class="separator:a5d2e44633c7717297f9e7be59a4cb4b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affc8076d311801d3bb39e8a93064cc73"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_c_h_i_p_error_8h.html#ab17a41277f81480d902cc2f8bb6d87d1">CHIP_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacechip_1_1_encoding.html#affc8076d311801d3bb39e8a93064cc73">chip::Encoding::BytesToHex</a> (const uint8_t *src_bytes, size_t src_size, char *dest_hex, size_t dest_size_max, BitFlags&lt; HexFlags &gt; flags)</td></tr>
+<tr class="memdesc:affc8076d311801d3bb39e8a93064cc73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a buffer of bytes into hexadecimal, with or without null-termination and using either lowercase or uppercase hex.  <a href="namespacechip_1_1_encoding.html#affc8076d311801d3bb39e8a93064cc73">More...</a><br /></td></tr>
+<tr class="separator:affc8076d311801d3bb39e8a93064cc73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9389e040bc61bdc6bc8ed6fcaaac4cc2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_c_h_i_p_error_8h.html#ab17a41277f81480d902cc2f8bb6d87d1">CHIP_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacechip_1_1_encoding.html#a9389e040bc61bdc6bc8ed6fcaaac4cc2">chip::Encoding::BytesToUppercaseHexBuffer</a> (const uint8_t *src_bytes, size_t src_size, char *dest_hex_buf, size_t dest_size_max)</td></tr>
 <tr class="separator:a9389e040bc61bdc6bc8ed6fcaaac4cc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a513d95f9ac8f66bdfc0bab532294b1ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_c_h_i_p_error_8h.html#ab17a41277f81480d902cc2f8bb6d87d1">CHIP_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacechip_1_1_encoding.html#a513d95f9ac8f66bdfc0bab532294b1ff">chip::Encoding::BytesToLowercaseHexBuffer</a> (const uint8_t *src_bytes, size_t src_size, char *dest_hex_buf, size_t dest_size_max)</td></tr>
@@ -163,7 +167,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><a class="el" href="dir_07debba6119e8fae289f5c0650c95439.html">support</a></li><li class="navelem"><a class="el" href="_bytes_to_hex_8h.html">BytesToHex.h</a></li>
-    <li class="footer">Generated on Thu Mar 11 2021 12:56:46 for Connected Home over IP by
+    <li class="footer">Generated on Tue Mar 16 2021 09:55:53 for Connected Home over IP by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

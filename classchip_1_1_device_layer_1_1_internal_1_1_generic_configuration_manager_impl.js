@@ -1,10 +1,12 @@
 var classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl =
 [
-    [ "kFlag_IsServiceProvisioned", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a89c6d172fcd3d4731ebb1ffa1fd919b2a3aa5e1e1a87adf2865bdef6a3d34dba7", null ],
-    [ "kFlag_IsMemberOfFabric", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a89c6d172fcd3d4731ebb1ffa1fd919b2a64d30c956bdb0b4d9003fd2c13749299", null ],
-    [ "kFlag_IsPairedToAccount", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a89c6d172fcd3d4731ebb1ffa1fd919b2acd388e6f053de82a38b6c1e9bb5cbe56", null ],
-    [ "kFlag_OperationalDeviceCredentialsProvisioned", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a89c6d172fcd3d4731ebb1ffa1fd919b2a535c8c5298be91f96c2d144d0d93a26a", null ],
-    [ "kFlag_UseManufacturerCredentialsAsOperational", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a89c6d172fcd3d4731ebb1ffa1fd919b2ab6f266b5cc08092aadfff9becb823c45", null ],
+    [ "Flags", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a61c3a77eb11d5a94c81a7f8f464b466f", [
+      [ "kIsServiceProvisioned", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a61c3a77eb11d5a94c81a7f8f464b466fa896c459968243c5b12758899f7a9a3c1", null ],
+      [ "kIsMemberOfFabric", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a61c3a77eb11d5a94c81a7f8f464b466fa71ed7d1ab7526bc8dbab2cdbf7f2ed5e", null ],
+      [ "kIsPairedToAccount", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a61c3a77eb11d5a94c81a7f8f464b466fa0068d5e0747c9d6ba79b1cb5377ce6f5", null ],
+      [ "kOperationalDeviceCredentialsProvisioned", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a61c3a77eb11d5a94c81a7f8f464b466fa0adc5f57fc1b1c37146e317b7454ddad", null ],
+      [ "kUseManufacturerCredentialsAsOperational", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a61c3a77eb11d5a94c81a7f8f464b466faa6a8c6a0c7563b58371ade2ca4c7400d", null ]
+    ] ],
     [ "_ClearServiceProvisioningData", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a9d9145a88fc82f1c1208bed5c467f9d1", null ],
     [ "_ComputeProvisioningHash", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a91176c5a7b57548b8532dd74cb2b8e30", null ],
     [ "_ConfigureChipStack", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a4b3ff1d2163ac3c35d25e5840276e696", null ],
@@ -15,6 +17,7 @@ var classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_im
     [ "_GetDeviceIntermediateCACerts", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a26646f67d24533779d48d2f4cfb8c8ea", null ],
     [ "_GetDevicePrivateKey", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a4d421c237da125178da201bf2ed6fd3c", null ],
     [ "_GetFabricId", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a8f6a215cb2eaa8f65f8c66a0214ec36e", null ],
+    [ "_GetFactoryAssignedEUI64", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a007d4f8387065669d0b97d30d1c313ea", null ],
     [ "_GetFailSafeArmed", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a11864ea753adb84a155bfe8e39281fdb", null ],
     [ "_GetFirmwareBuildTime", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#ad5c802a23826e79f4367c578d868066a", null ],
     [ "_GetFirmwareRevision", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a997610bf842078d0d8c071b89c9386ee", null ],
@@ -60,5 +63,5 @@ var classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_im
     [ "_StoreSetupDiscriminator", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#afdfd7b55e9f8dd4597e9b00dc5d17bd3", null ],
     [ "_StoreSetupPinCode", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a8286526e4e76392895a205322b17a7eb", null ],
     [ "PersistProvisioningData", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#ac90fe7fe1b1c58bf7f5e1b343ac3864f", null ],
-    [ "mFlags", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a60989b58a2a2c17efa130a8b0dfe1c7b", null ]
+    [ "mFlags", "classchip_1_1_device_layer_1_1_internal_1_1_generic_configuration_manager_impl.html#a3f37e6ced4ea1bfd52341dd1a2f754f7", null ]
 ];

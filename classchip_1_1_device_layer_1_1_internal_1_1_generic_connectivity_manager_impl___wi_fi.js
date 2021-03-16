@@ -1,9 +1,9 @@
 var classchip_1_1_device_layer_1_1_internal_1_1_generic_connectivity_manager_impl___wi_fi =
 [
-    [ "Flags", "classchip_1_1_device_layer_1_1_internal_1_1_generic_connectivity_manager_impl___wi_fi.html#a9b043ddb9ffe80a22718d5953a70f7cb", [
-      [ "kFlag_HaveIPv4InternetConnectivity", "classchip_1_1_device_layer_1_1_internal_1_1_generic_connectivity_manager_impl___wi_fi.html#a9b043ddb9ffe80a22718d5953a70f7cba856372247a55182c09a2571749975cd9", null ],
-      [ "kFlag_HaveIPv6InternetConnectivity", "classchip_1_1_device_layer_1_1_internal_1_1_generic_connectivity_manager_impl___wi_fi.html#a9b043ddb9ffe80a22718d5953a70f7cba051f521425f1756d363330476374bca2", null ],
-      [ "kFlag_AwaitingConnectivity", "classchip_1_1_device_layer_1_1_internal_1_1_generic_connectivity_manager_impl___wi_fi.html#a9b043ddb9ffe80a22718d5953a70f7cba2ed27f2a3305406b820d3c744741e628", null ]
+    [ "ConnectivityFlags", "classchip_1_1_device_layer_1_1_internal_1_1_generic_connectivity_manager_impl___wi_fi.html#a2f3f90015d99fa7f7969c3112bf2b0a6", [
+      [ "kHaveIPv4InternetConnectivity", "classchip_1_1_device_layer_1_1_internal_1_1_generic_connectivity_manager_impl___wi_fi.html#a2f3f90015d99fa7f7969c3112bf2b0a6a9888940bde627f1f9b35a06c9c6b73d8", null ],
+      [ "kHaveIPv6InternetConnectivity", "classchip_1_1_device_layer_1_1_internal_1_1_generic_connectivity_manager_impl___wi_fi.html#a2f3f90015d99fa7f7969c3112bf2b0a6a8ffe96a7a40a2f5d1a70cedafaf83d71", null ],
+      [ "kAwaitingConnectivity", "classchip_1_1_device_layer_1_1_internal_1_1_generic_connectivity_manager_impl___wi_fi.html#a2f3f90015d99fa7f7969c3112bf2b0a6a6ef105c15628a530a3e4111de297d99b", null ]
     ] ],
     [ "_CanStartWiFiScan", "classchip_1_1_device_layer_1_1_internal_1_1_generic_connectivity_manager_impl___wi_fi.html#ab24abd709f74c62c62ac6bf9b7208e55", null ],
     [ "_ClearWiFiStationProvision", "classchip_1_1_device_layer_1_1_internal_1_1_generic_connectivity_manager_impl___wi_fi.html#a3e34b61f428e8e44baac551e1b341d8a", null ],

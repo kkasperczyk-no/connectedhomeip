@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Connected Home over IP
-   &#160;<span id="projectnumber">18b7343</span>
+   &#160;<span id="projectnumber">cf7aa2d</span>
    </div>
   </td>
  </tr>
@@ -89,7 +89,7 @@ $(document).ready(function(){initNavTree('_zephyr_2_b_l_e_manager_impl_8h_source
 <div class="contents">
 <a href="_zephyr_2_b_l_e_manager_impl_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *    Copyright (c) 2020 Project CHIP Authors</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *    Copyright (c) 2020-2021 Project CHIP Authors</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> *    you may not use this file except in compliance with the License.</span></div>
@@ -173,19 +173,19 @@ $(document).ready(function(){initNavTree('_zephyr_2_b_l_e_manager_impl_8h_source
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="comment">// ===== Private members reserved for use by this class only.</span></div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keyword">enum</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keyword">enum class</span> <a class="code" href="namespacechip_1_1_header.html#aebdda57d47e49eaf4cc8aef0d8b0474e">Flags</a> : uint8_t</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    {</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        kFlag_AsyncInitCompleted     = 0x0001, </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        kFlag_AdvertisingEnabled     = 0x0002, </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        kFlag_FastAdvertisingEnabled = 0x0004, </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        kFlag_Advertising            = 0x0008, </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        kFlag_AdvertisingRefreshNeeded =</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        kAsyncInitCompleted     = 0x0001, </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        kAdvertisingEnabled     = 0x0002, </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        kFastAdvertisingEnabled = 0x0004, </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        kAdvertising            = 0x0008, </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        kAdvertisingRefreshNeeded =</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            0x0010, </div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    };</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keyword">struct </span>ServiceData;</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    uint16_t mFlags;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    BitFlags&lt;Flags&gt; mFlags;</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    uint16_t mGAPConns;</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    CHIPoBLEServiceMode mServiceMode;</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordtype">bool</span> mSubscribedConns[CONFIG_BT_MAX_CONN];</div>
@@ -250,17 +250,17 @@ $(document).ready(function(){initNavTree('_zephyr_2_b_l_e_manager_impl_8h_source
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="keyword">inline</span> <span class="keywordtype">bool</span> BLEManagerImpl::_IsAdvertisingEnabled(<span class="keywordtype">void</span>)</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;{</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacechip.html#a93621ea75926d3f9e38e0134cb25c943">GetFlag</a>(mFlags, kFlag_AdvertisingEnabled);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="keywordflow">return</span> mFlags.Has(Flags::kAdvertisingEnabled);</div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;}</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="keyword">inline</span> <span class="keywordtype">bool</span> BLEManagerImpl::_IsFastAdvertisingEnabled(<span class="keywordtype">void</span>)</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;{</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacechip.html#a93621ea75926d3f9e38e0134cb25c943">GetFlag</a>(mFlags, kFlag_FastAdvertisingEnabled);</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="keywordflow">return</span> mFlags.Has(Flags::kFastAdvertisingEnabled);</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;}</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="keyword">inline</span> <span class="keywordtype">bool</span> BLEManagerImpl::_IsAdvertising(<span class="keywordtype">void</span>)</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;{</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacechip.html#a93621ea75926d3f9e38e0134cb25c943">GetFlag</a>(mFlags, kFlag_Advertising);</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="keywordflow">return</span> mFlags.Has(Flags::kAdvertising);</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;}</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;} <span class="comment">// namespace Internal</span></div>
@@ -275,7 +275,6 @@ $(document).ready(function(){initNavTree('_zephyr_2_b_l_e_manager_impl_8h_source
 <div class="ttc" id="anamespacechip_1_1tlv_html_a97ebd841280a361e8cd185f706a39921"><div class="ttname"><a href="namespacechip_1_1tlv.html#a97ebd841280a361e8cd185f706a39921">chip.tlv.val</a></div><div class="ttdeci">val</div><div class="ttdef"><b>Definition:</b> __init__.py:655</div></div>
 <div class="ttc" id="astructchip_1_1_ble_1_1_chip_ble_u_u_i_d_html"><div class="ttname"><a href="structchip_1_1_ble_1_1_chip_ble_u_u_i_d.html">chip::Ble::ChipBleUUID</a></div><div class="ttdef"><b>Definition:</b> BleUUID.h:29</div></div>
 <div class="ttc" id="a_c_h_i_p_device_controller-_j_n_i_8cpp_html_ae3836345291c9268bfe537fefebf1081"><div class="ttname"><a href="_c_h_i_p_device_controller-_j_n_i_8cpp.html#ae3836345291c9268bfe537fefebf1081">conn</a></div><div class="ttdeci">JNIEnv jobject jint conn</div><div class="ttdef"><b>Definition:</b> CHIPDeviceController-JNI.cpp:603</div></div>
-<div class="ttc" id="anamespacechip_html_a93621ea75926d3f9e38e0134cb25c943"><div class="ttname"><a href="namespacechip.html#a93621ea75926d3f9e38e0134cb25c943">chip::GetFlag</a></div><div class="ttdeci">bool GetFlag(const FlagsT &amp;inFlags, const FlagT inFlag)</div><div class="ttdef"><b>Definition:</b> BitFlags.h:109</div></div>
 <div class="ttc" id="anamespacechip_1_1_ble_html"><div class="ttname"><a href="namespacechip_1_1_ble.html">chip::Ble</a></div><div class="ttdef"><b>Definition:</b> BleApplicationDelegate.h:32</div></div>
 <div class="ttc" id="a_c_h_i_p_error_8h_html_ab17a41277f81480d902cc2f8bb6d87d1"><div class="ttname"><a href="_c_h_i_p_error_8h.html#ab17a41277f81480d902cc2f8bb6d87d1">CHIP_ERROR</a></div><div class="ttdeci">CHIP_CONFIG_ERROR_TYPE CHIP_ERROR</div><div class="ttdoc">The basic type for all CHIP errors.</div><div class="ttdef"><b>Definition:</b> CHIPError.h:90</div></div>
 <div class="ttc" id="a_c_h_i_p_device_controller-_j_n_i_8cpp_html_a795f9de877ce3d7d15dcac4cfaad9023"><div class="ttname"><a href="_c_h_i_p_device_controller-_j_n_i_8cpp.html#a795f9de877ce3d7d15dcac4cfaad9023">svcId</a></div><div class="ttdeci">JNIEnv jobject jint jbyteArray svcId</div><div class="ttdef"><b>Definition:</b> CHIPDeviceController-JNI.cpp:603</div></div>
@@ -287,11 +286,12 @@ $(document).ready(function(){initNavTree('_zephyr_2_b_l_e_manager_impl_8h_source
 <div class="ttc" id="a_c_h_i_p_device_controller-_j_n_i_8cpp_html_ac50abae6d98e9974b60124d04929c51e"><div class="ttname"><a href="_c_h_i_p_device_controller-_j_n_i_8cpp.html#ac50abae6d98e9974b60124d04929c51e">value</a></div><div class="ttdeci">JNIEnv jobject jint jbyteArray jbyteArray jbyteArray value</div><div class="ttdef"><b>Definition:</b> CHIPDeviceController-JNI.cpp:604</div></div>
 <div class="ttc" id="aclasschip_1_1_ble_1_1_ble_layer_html"><div class="ttname"><a href="classchip_1_1_ble_1_1_ble_layer.html">chip::Ble::BleLayer</a></div><div class="ttdoc">This class provides an interface for a single thread to drive data either up the stack via the BleLay...</div><div class="ttdef"><b>Definition:</b> BleLayer.h:239</div></div>
 <div class="ttc" id="a_c_h_i_p_logging_8h_html"><div class="ttname"><a href="_c_h_i_p_logging_8h.html">CHIPLogging.h</a></div></div>
+<div class="ttc" id="anamespacechip_1_1_header_html_aebdda57d47e49eaf4cc8aef0d8b0474e"><div class="ttname"><a href="namespacechip_1_1_header.html#aebdda57d47e49eaf4cc8aef0d8b0474e">chip::Header::Flags</a></div><div class="ttdeci">BitFlags&lt; FlagValues &gt; Flags</div><div class="ttdef"><b>Definition:</b> MessageHeader.h:98</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_4b68c2fef3e151b6b93d5e93b14f1857.html">platform</a></li><li class="navelem"><a class="el" href="dir_5622a41dbea6cfc87110f572fb48985f.html">Zephyr</a></li><li class="navelem"><a class="el" href="_zephyr_2_b_l_e_manager_impl_8h.html">BLEManagerImpl.h</a></li>
-    <li class="footer">Generated on Thu Mar 11 2021 12:56:45 for Connected Home over IP by
+    <li class="footer">Generated on Tue Mar 16 2021 09:55:51 for Connected Home over IP by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

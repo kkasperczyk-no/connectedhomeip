@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Connected Home over IP
-   &#160;<span id="projectnumber">18b7343</span>
+   &#160;<span id="projectnumber">cf7aa2d</span>
    </div>
   </td>
  </tr>
@@ -108,17 +108,17 @@ Public Types</h2></td></tr>
 <br />
  }</td></tr>
 <tr class="separator:ab91e710abfc2f4b18656042ff6dd8752"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad69bac12ac484346d928ab0cc07f1b2d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br />
-&#160;&#160;<a class="el" href="classchip_1_1_ble_1_1_btp_engine.html#ad69bac12ac484346d928ab0cc07f1b2da9f8e69b9aa9e3db1ec1cb7efdfb7d3a1">kHeaderFlag_StartMessage</a> = 0x01, 
+<tr class="memitem:ac692dd7df39f9ab6d265251b80991fbb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchip_1_1_ble_1_1_btp_engine.html#ac692dd7df39f9ab6d265251b80991fbb">HeaderFlags</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="classchip_1_1_ble_1_1_btp_engine.html#ac692dd7df39f9ab6d265251b80991fbba92ebc2afaa5de600cfb15a86c4cb83d7">HeaderFlags::kStartMessage</a> = 0x01, 
 <br />
-&#160;&#160;<a class="el" href="classchip_1_1_ble_1_1_btp_engine.html#ad69bac12ac484346d928ab0cc07f1b2da26285de15bd93315e3b76d0678f8b001">kHeaderFlag_ContinueMessage</a> = 0x02, 
+&#160;&#160;<a class="el" href="classchip_1_1_ble_1_1_btp_engine.html#ac692dd7df39f9ab6d265251b80991fbba249a056e8e8a874b649bf7f757b4befb">HeaderFlags::kContinueMessage</a> = 0x02, 
 <br />
-&#160;&#160;<a class="el" href="classchip_1_1_ble_1_1_btp_engine.html#ad69bac12ac484346d928ab0cc07f1b2daa26f33077a714777b0350bcdbb810750">kHeaderFlag_EndMessage</a> = 0x04, 
+&#160;&#160;<a class="el" href="classchip_1_1_ble_1_1_btp_engine.html#ac692dd7df39f9ab6d265251b80991fbba5233c66b67a738f23cfbab1ce794e566">HeaderFlags::kEndMessage</a> = 0x04, 
 <br />
-&#160;&#160;<a class="el" href="classchip_1_1_ble_1_1_btp_engine.html#ad69bac12ac484346d928ab0cc07f1b2da868b9955989927aa6a07bcee143b4741">kHeaderFlag_FragmentAck</a> = 0x08
+&#160;&#160;<a class="el" href="classchip_1_1_ble_1_1_btp_engine.html#ac692dd7df39f9ab6d265251b80991fbba753de884d1480d6c4a3fbf0b207d85b5">HeaderFlags::kFragmentAck</a> = 0x08
 <br />
  }</td></tr>
-<tr class="separator:ad69bac12ac484346d928ab0cc07f1b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:ac692dd7df39f9ab6d265251b80991fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -179,22 +179,30 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a9026406545c7ed9c8437748ecf8595df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="ad69bac12ac484346d928ab0cc07f1b2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad69bac12ac484346d928ab0cc07f1b2d">&#9670;&nbsp;</a></span>anonymous enum</h2>
+<a id="ac692dd7df39f9ab6d265251b80991fbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac692dd7df39f9ab6d265251b80991fbb">&#9670;&nbsp;</a></span>HeaderFlags</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">anonymous enum</td>
+          <td class="memname">enum <a class="el" href="classchip_1_1_ble_1_1_btp_engine.html#ac692dd7df39f9ab6d265251b80991fbb">chip::Ble::BtpEngine::HeaderFlags</a> : uint8_t</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ad69bac12ac484346d928ab0cc07f1b2da9f8e69b9aa9e3db1ec1cb7efdfb7d3a1"></a>kHeaderFlag_StartMessage&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="ad69bac12ac484346d928ab0cc07f1b2da26285de15bd93315e3b76d0678f8b001"></a>kHeaderFlag_ContinueMessage&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="ad69bac12ac484346d928ab0cc07f1b2daa26f33077a714777b0350bcdbb810750"></a>kHeaderFlag_EndMessage&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="ad69bac12ac484346d928ab0cc07f1b2da868b9955989927aa6a07bcee143b4741"></a>kHeaderFlag_FragmentAck&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ac692dd7df39f9ab6d265251b80991fbba92ebc2afaa5de600cfb15a86c4cb83d7"></a>kStartMessage&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ac692dd7df39f9ab6d265251b80991fbba249a056e8e8a874b649bf7f757b4befb"></a>kContinueMessage&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ac692dd7df39f9ab6d265251b80991fbba5233c66b67a738f23cfbab1ce794e566"></a>kEndMessage&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ac692dd7df39f9ab6d265251b80991fbba753de884d1480d6c4a3fbf0b207d85b5"></a>kFragmentAck&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -634,7 +642,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classchip_1_1_ble_1_1_btp_engine_ab258c6594642545c5a6da37065eea9c3_cgraph.png" border="0" usemap="#classchip_1_1_ble_1_1_btp_engine_ab258c6594642545c5a6da37065eea9c3_cgraph" alt=""/></div>
 <map name="classchip_1_1_ble_1_1_btp_engine_ab258c6594642545c5a6da37065eea9c3_cgraph" id="classchip_1_1_ble_1_1_btp_engine_ab258c6594642545c5a6da37065eea9c3_cgraph">
-<area shape="rect" title=" " alt="" coords="5,332,204,373"/>
+<area shape="rect" title=" " alt="" coords="5,361,204,403"/>
 <area shape="rect" href="classchip_1_1_system_1_1_packet_buffer.html#a9ac3f03ccf49d369aebc939d0b7b5edb" title="Get the length, in bytes, of data in a packet buffer." alt="" coords="547,416,741,457"/>
 <area shape="rect" href="classchip_1_1_system_1_1_packet_buffer.html#ac2e32db66d6fc0d6386f80aef77b60bd" title="Ensure the buffer has at least the specified amount of reserved space." alt="" coords="278,71,473,112"/>
 <area shape="rect" href="classchip_1_1_ble_1_1_btp_engine.html#ad25d6c4fa5cbd64cb602d0d5d133a9d9" title=" " alt="" coords="252,5,499,47"/>
@@ -642,9 +650,10 @@ Here is the call graph for this function:</div>
 <area shape="rect" href="classchip_1_1_ble_1_1_btp_engine.html#a5a2d593d0e69f3a1d015c84cdb806a95" title=" " alt="" coords="299,267,451,308"/>
 <area shape="rect" href="classchip_1_1_system_1_1_packet_buffer_handle.html#a63e13c201b8c13dc611111e3ec3612da" title="Test whether this PacketBufferHandle is empty, or conversely owns a PacketBuffer." alt="" coords="278,332,473,373"/>
 <area shape="rect" href="namespacechip_1_1_ble.html#a087607f2e06749846a309a31f3c3ff4a" title=" " alt="" coords="285,449,465,475"/>
-<area shape="rect" href="classchip_1_1_system_1_1_packet_buffer.html#a1ccfaa7a1054db388a2f1ceba4501e17" title="Get a pointer to the start of data in a buffer." alt="" coords="547,532,741,573"/>
-<area shape="rect" href="classchip_1_1_system_1_1_packet_buffer.html#a66dbb9c3b0110f2304d5e521c4d40570" title="Set the length, in bytes, of data in a packet buffer, adjusting total length accordingly." alt="" coords="278,500,473,541"/>
-<area shape="rect" href="namespacechip.html#a1243532c9ce5750d0c24727379d2f668" title=" " alt="" coords="322,566,429,593"/>
+<area shape="rect" href="classchip_1_1_system_1_1_packet_buffer.html#a1ccfaa7a1054db388a2f1ceba4501e17" title="Get a pointer to the start of data in a buffer." alt="" coords="547,557,741,599"/>
+<area shape="rect" href="classchip_1_1_bit_flags.html#a7e04bc082ef554be82e01ee17f4d2d23" title="Get the flags as the underlying integer type." alt="" coords="302,499,449,526"/>
+<area shape="rect" href="classchip_1_1_bit_flags.html#a1f4fbdd1486e303c0c85c33e7f1606e0" title="Set flag(s)." alt="" coords="306,550,445,577"/>
+<area shape="rect" href="classchip_1_1_system_1_1_packet_buffer.html#a66dbb9c3b0110f2304d5e521c4d40570" title="Set the length, in bytes, of data in a packet buffer, adjusting total length accordingly." alt="" coords="278,601,473,643"/>
 <area shape="rect" href="classchip_1_1_system_1_1_packet_buffer.html#af7feda7eaf9607d291e30d9b57b09926" title="Set the the start of data in a buffer, adjusting length and total length accordingly." alt="" coords="278,136,473,177"/>
 <area shape="rect" href="classchip_1_1_system_1_1_packet_buffer.html#a46827678a540122d2a6ea6c90c360d61" title="Return the size of the allocation including the reserved and payload data spaces but not including sp..." alt="" coords="547,136,741,177"/>
 <area shape="rect" href="classchip_1_1_system_1_1_packet_buffer.html#abbe23fb3ab616eb2a0d656371a2d18f1" title="Get the number of bytes within the current buffer between the start of the buffer and the current dat..." alt="" coords="547,71,741,112"/>
@@ -979,7 +988,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacechip.html">chip</a></li><li class="navelem"><a class="el" href="namespacechip_1_1_ble.html">Ble</a></li><li class="navelem"><a class="el" href="classchip_1_1_ble_1_1_btp_engine.html">BtpEngine</a></li>
-    <li class="footer">Generated on Thu Mar 11 2021 12:56:47 for Connected Home over IP by
+    <li class="footer">Generated on Tue Mar 16 2021 09:55:54 for Connected Home over IP by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

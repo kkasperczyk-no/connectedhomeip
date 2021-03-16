@@ -3,9 +3,9 @@ var _message_header_8h =
     [ "PacketHeader", "classchip_1_1_packet_header.html", "classchip_1_1_packet_header" ],
     [ "PayloadHeader", "classchip_1_1_payload_header.html", "classchip_1_1_payload_header" ],
     [ "MessageAuthenticationCode", "classchip_1_1_message_authentication_code.html", "classchip_1_1_message_authentication_code" ],
-    [ "ExFlags", "_message_header_8h.html#a01c35c206ba9fa422317aa7995796e77", null ],
-    [ "Flags", "_message_header_8h.html#a1527846e8b265d348f1956523df26ff0", null ],
-    [ "InternalFlags", "_message_header_8h.html#a61604ab87925670f5e948dbceb3a8977", null ],
+    [ "ExFlags", "_message_header_8h.html#ad67568c9278152f00a7d18f60464e4f0", null ],
+    [ "Flags", "_message_header_8h.html#aebdda57d47e49eaf4cc8aef0d8b0474e", null ],
+    [ "InternalFlags", "_message_header_8h.html#ae513076d8ef35495525067199af49c00", null ],
     [ "NodeId", "_message_header_8h.html#a911a83fdf89daee3f71f39da9e743e01", null ],
     [ "PacketHeaderFlags", "_message_header_8h.html#a2b7627dbf2df1bffced6ef27d9096d77", null ],
     [ "EncryptionType", "_message_header_8h.html#a19d9b7d115cbe8612608982730ea19d1", [

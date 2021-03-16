@@ -5,7 +5,9 @@ var dir_07debba6119e8fae289f5c0650c95439 =
     [ "verhoeff", "dir_eb770341e44a21b9268b234a82066de6.html", "dir_eb770341e44a21b9268b234a82066de6" ],
     [ "Base64.cpp", "_base64_8cpp.html", "_base64_8cpp" ],
     [ "Base64.h", "_base64_8h.html", "_base64_8h" ],
-    [ "BitFlags.h", "_bit_flags_8h.html", "_bit_flags_8h" ],
+    [ "BitFlags.h", "_bit_flags_8h.html", [
+      [ "BitFlags", "classchip_1_1_bit_flags.html", "classchip_1_1_bit_flags" ]
+    ] ],
     [ "BufferReader.cpp", "_buffer_reader_8cpp.html", null ],
     [ "BufferReader.h", "_buffer_reader_8h.html", [
       [ "Reader", "classchip_1_1_encoding_1_1_little_endian_1_1_reader.html", "classchip_1_1_encoding_1_1_little_endian_1_1_reader" ]
