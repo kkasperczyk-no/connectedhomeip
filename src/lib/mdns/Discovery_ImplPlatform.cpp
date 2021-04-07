@@ -29,6 +29,7 @@
 #include "support/CodeUtils.h"
 #include "support/ErrorStr.h"
 #include "support/RandUtils.h"
+#include <core/CHIPEncoding.h>
 
 namespace {
 
@@ -263,17 +264,64 @@ CHIP_ERROR DiscoveryImplPlatform::Advertise(const OperationalAdvertisingParamete
     mOperationalAdvertisingParams = params;
     // TODO: There may be multilple device/fabrid ids after multi-admin.
 
-    ReturnErrorOnFailure(SetupHostname(params.GetMac()));
+    // According to spec CRI and CRA intervals should not exceed 1 hour (3600000 ms).
+    // TODO: That value should be defined in the ReliableMessageProtocolConfig.h,
+    // but for now it is not possible to access it from src/lib/mdns. It should be
+    // refactored after creating common DNS-SD layer.
+    constexpr uint32_t kMaxCRMPRetryInterval = 3600000;
+    TextEntry crmpRetryIntervalEntries[2];
+    size_t textEntrySize = 0;
+    char crmpRetryIntervalIdleBuf[8];
+    char crmpRetryIntervalActiveBuf[8];
+    uint32_t crmpRetryIntervalIdle, crmpRetryIntervalActive;
+    params.GetCRMPRetryIntervals(crmpRetryIntervalIdle, crmpRetryIntervalActive);
 
+    // TODO: Issue #5833 - CRMP retry intervals should be updated on the poll period value
+    // change or device type change.
+#if CHIP_DEVICE_CONFIG_ENABLE_THREAD
+    if (chip::DeviceLayer::ConnectivityMgr().GetThreadDeviceType() ==
+        chip::DeviceLayer::ConnectivityManager::kThreadDeviceType_SleepyEndDevice)
+    {
+        uint32_t sedPollPeriod;
+        ReturnErrorOnFailure(chip::DeviceLayer::ThreadStackMgr().GetPollPeriod(sedPollPeriod));
+        // Increment default CRMP retry intervals by SED poll period to be on the safe side
+        // and avoid unnecessary retransmissions.
+        crmpRetryIntervalIdle += sedPollPeriod;
+        crmpRetryIntervalActive += sedPollPeriod;
+    }
+#endif
+
+    if (crmpRetryIntervalIdle > kMaxCRMPRetryInterval)
+    {
+        ChipLogProgress(Discovery, "CRMP retry interval idle value exceeds allowed range of 1 hour, using maximum available",
+                        chip::ErrorStr(error));
+        crmpRetryIntervalIdle = kMaxCRMPRetryInterval;
+    }
+    snprintf(crmpRetryIntervalIdleBuf, sizeof(crmpRetryIntervalIdleBuf), "%u", crmpRetryIntervalIdle);
+    crmpRetryIntervalEntries[textEntrySize++] = { "CRI", reinterpret_cast<const uint8_t *>(crmpRetryIntervalIdleBuf),
+                                                  strlen(crmpRetryIntervalIdleBuf) };
+
+    if (crmpRetryIntervalActive > kMaxCRMPRetryInterval)
+    {
+        ChipLogProgress(Discovery, "CRMP retry interval active value exceeds allowed range of 1 hour, using maximum available",
+                        chip::ErrorStr(error));
+        crmpRetryIntervalActive = kMaxCRMPRetryInterval;
+    }
+    snprintf(crmpRetryIntervalActiveBuf, sizeof(crmpRetryIntervalActiveBuf), "%u", crmpRetryIntervalActive);
+    crmpRetryIntervalEntries[textEntrySize++] = { "CRA", reinterpret_cast<const uint8_t *>(crmpRetryIntervalActiveBuf),
+                                                  strlen(crmpRetryIntervalActiveBuf) };
+
+    ReturnErrorOnFailure(SetupHostname(params.GetMac()));
     ReturnErrorOnFailure(MakeInstanceName(service.mName, sizeof(service.mName), params.GetFabricId(), params.GetNodeId()));
     strncpy(service.mType, "_chip", sizeof(service.mType));
     service.mProtocol      = MdnsServiceProtocol::kMdnsProtocolTcp;
     service.mPort          = CHIP_PORT;
-    service.mTextEntries   = nullptr;
-    service.mTextEntrySize = 0;
-    service.mInterface     = INET_NULL_INTERFACEID;
-    service.mAddressType   = Inet::kIPAddressType_Any;
-    error                  = ChipMdnsPublishService(&service);
+    service.mTextEntries   = crmpRetryIntervalEntries;
+    service.mTextEntrySize = textEntrySize;
+
+    service.mInterface   = INET_NULL_INTERFACEID;
+    service.mAddressType = Inet::kIPAddressType_Any;
+    error                = ChipMdnsPublishService(&service);
 
     return error;
 }
