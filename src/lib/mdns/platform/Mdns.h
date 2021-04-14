@@ -145,6 +145,18 @@ CHIP_ERROR ChipMdnsPublishService(const MdnsService * service);
 CHIP_ERROR ChipMdnsStopPublish();
 
 /**
+ * This function removes a service published by mDNS.
+ *
+ * @param[in] service   The service entry.
+ *
+ * @retval CHIP_NO_ERROR                The remove succeeds.
+ * @retval CHIP_ERROR_INVALID_ARGUMENT  The service is nullptr.
+ * @retval Error code                   The remove fails.
+ *
+ */
+CHIP_ERROR ChipMdnsRemoveService(const MdnsService * service);
+
+/**
  * This function browses the services published by mdns
  *
  * @param[in] type        The service type.
