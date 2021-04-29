@@ -22,6 +22,7 @@ into an existing CHIP network and can be controlled by this network.
 -   [Overview](#overview)
     -   [Bluetooth LE advertising](#bluetooth-le-advertising)
     -   [Bluetooth LE rendezvous](#bluetooth-le-rendezvous)
+    -   [Bootloader support](#bootloader-support)
 -   [Requirements](#requirements)
     -   [Supported devices](#supported_devices)
 -   [Device UI](#device-ui)
@@ -32,6 +33,7 @@ into an existing CHIP network and can be controlled by this network.
     -   [Removing build artifacts](#removing-build-artifacts)
     -   [Building with release configuration](#building-with-release-configuration)
     -   [Building with Pigweed RPCs](#building-with-pigweed-rpcs)
+    -   [Building with bootloader support](#building-with-bootloader-support)
 -   [Configuring the example](#configuring-the-example)
 -   [Flashing and debugging](#flashing-and-debugging)
 -   [Testing the example](#testing-the-example)
@@ -61,6 +63,8 @@ default settings by pressing button manually. However, this mode does not
 guarantee that the device will be able to communicate with the CHIP controller
 and other devices.
 
+The example can be configured to use the secure bootloader and utilize it for performing Over-the-air Device Firmware Upgrade via Bluetooth LE.
+
 ### Bluetooth LE advertising
 
 To commission the device onto a CHIP network, the device must be discoverable
@@ -85,6 +89,15 @@ Last part of the rendezvous procedure, the provisioning operation involves
 sending the Thread network credentials from the CHIP controller to the CHIP
 device. As a result, device is able to join the Thread network and communicate
 with other Thread devices in the network.
+
+### Bootloader support
+
+The example allows enabling bootloader and building the target with the [MCUboot](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/mcuboot/index.html) support.
+MCUboot is a secure bootloader used for generating proper output files that can be used in the device firmware upgrade process.
+
+Bootloader solution requires certain area of flash memory to perform application images swapping process regarding the firmware upgrade. The Nordic devices use for that purpose external memory chip that communicates with the microcontroller via QSPI bus.
+
+See the [Building with bootloader support](#building-with-bootloader-support) section to learn how to enable MCUboot using external flash in this example.
 
 <hr>
 
@@ -317,6 +330,25 @@ _build-target_ replaced with the build target name of the Nordic Semiconductor's
 kit you own:
 
     $ west build -b build-target -- -DOVERLAY_CONFIG=rpc.overlay
+
+### Building with bootloader support
+
+To build the example with configuration enabling MCUboot using external flash as its working area of memory, run the following command with _build-target_ replaced by the build target name of the Nordic Semiconductor's kit you own, for
+example `nrf52840dk_nrf52840`:
+
+> **_WARNING:_** Please do remember about replacing _build-target_ also in the PM_STATIC_YML_FILE path.
+
+    $ west build -b build-target -- -DOVERLAY_CONFIG=third_party/connectedhomeip/config/nrfconnect/app/overlay-mcuboot_support.conf -DPM_STATIC_YML_FILE="configuration/build-target/pm_static.yml"
+
+#### Changing bootloader configuration
+
+To change default MCUboot configuration you can edit overlay file containing bootloader configuration options and located in the `config/nrfconnect/app/overlay-mcuboot_support.conf` or define desired options in your example `prj.conf` file.
+
+#### Changing flash memory settings
+
+In the default configuration MCUboot uses [Partition Manager](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/scripts/partition_manager/partition_manager.html#partition-manager) to configure flash partitions utilized for the bootloader application image slots purposes. That settings can be changed by defining [static partitions](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/scripts/partition_manager/partition_manager.html#ug-pm-static), what was done in this example case in order to define using external flash.
+
+To modify flash settings of your board named by the _build-target_ (e.g. `nrf52840dk_nrf52840`) edit file located in `configuration/build-target/pm_static.yml`. 
 
 <hr>
 
