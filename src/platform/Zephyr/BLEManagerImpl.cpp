@@ -33,6 +33,7 @@
 #include <support/logging/CHIPLogging.h>
 
 #include <bluetooth/addr.h>
+#include <bluetooth/gatt.h>
 #include <logging/log.h>
 #include <sys/byteorder.h>
 #include <sys/util.h>
@@ -65,8 +66,7 @@ _bt_gatt_ccc CHIPoBLEChar_TX_CCC = BT_GATT_CCC_INITIALIZER(nullptr, BLEManagerIm
 
 // clang-format off
 
-BT_GATT_SERVICE_DEFINE(CHIPoBLE_Service,
-    BT_GATT_PRIMARY_SERVICE(&UUID16_CHIPoBLEService.uuid),
+struct bt_gatt_attr sChipoBleAttributes[] = {    BT_GATT_PRIMARY_SERVICE(&UUID16_CHIPoBLEService.uuid),
         BT_GATT_CHARACTERISTIC(&UUID128_CHIPoBLEChar_RX.uuid,
                                BT_GATT_CHRC_WRITE | BT_GATT_CHRC_WRITE_WITHOUT_RESP,
                                BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
@@ -75,8 +75,9 @@ BT_GATT_SERVICE_DEFINE(CHIPoBLE_Service,
                                BT_GATT_CHRC_NOTIFY,
                                BT_GATT_PERM_NONE,
                                nullptr, nullptr, nullptr),
-        BT_GATT_CCC_MANAGED(&CHIPoBLEChar_TX_CCC, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE)
-);
+        BT_GATT_CCC_MANAGED(&CHIPoBLEChar_TX_CCC, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE)};
+
+struct bt_gatt_service sChipoBleService = BT_GATT_SERVICE(sChipoBleAttributes);
 
 // clang-format on
 
@@ -155,6 +156,20 @@ void BLEManagerImpl::DriveBLEState()
         if (ConfigurationMgr().IsFullyProvisioned())
         {
             mFlags.Clear(Flags::kAdvertisingEnabled);
+
+            if (mIsChipoBleServiceRegistered)
+            {
+                // Unregister CHIPoBLE service to not allow discovering it when pairing is disabled.
+                if (bt_gatt_service_unregister(&sChipoBleService) != 0)
+                {
+                    ChipLogError(DeviceLayer, "Failed to unregister CHIPoBLE GATT service");
+                }
+                else
+                {
+                    mIsChipoBleServiceRegistered = false;
+                }
+            }
+
             ChipLogProgress(DeviceLayer, "CHIPoBLE advertising disabled because device is fully provisioned");
         }
 #endif // CHIP_DEVICE_CONFIG_CHIPOBLE_DISABLE_ADVERTISING_WHEN_PROVISIONED
@@ -179,7 +194,7 @@ void BLEManagerImpl::DriveBLEState()
         }
     }
     // Otherwise, stop advertising if currently active.
-    else
+    else if (mFlags.Has(Flags::kAdvertising))
     {
         err = StopAdvertising();
         SuccessOrExit(err);
@@ -220,6 +235,19 @@ CHIP_ERROR BLEManagerImpl::StartAdvertising(void)
     bt_data ad[] = { BT_DATA(BT_DATA_FLAGS, &advFlags, sizeof(advFlags)),
                      BT_DATA(BT_DATA_SVC_DATA16, &serviceData, sizeof(serviceData)),
                      BT_DATA(BT_DATA_NAME_COMPLETE, deviceName, static_cast<uint8_t>(strlen(deviceName))) };
+
+    // Register dynamically CHIPoBLE GATT service
+    if (!mIsChipoBleServiceRegistered)
+    {
+        err = bt_gatt_service_register(&sChipoBleService);
+
+        if (err != 0)
+            ChipLogError(DeviceLayer, "Failed to register CHIPoBLE GATT service");
+
+        VerifyOrExit(err == CHIP_NO_ERROR, err = MapErrorZephyr(err));
+
+        mIsChipoBleServiceRegistered = true;
+    }
 
     // Initialize service data
     static_assert(sizeof(serviceData) == 9, "Size of BLE advertisement data changed! Was that intentional?");
@@ -559,6 +587,20 @@ void BLEManagerImpl::_OnPlatformEvent(const ChipDeviceEvent * event)
         if (ConfigurationMgr().IsFullyProvisioned())
         {
             mFlags.Clear(Flags::kAdvertisingEnabled);
+
+            if (mIsChipoBleServiceRegistered)
+            {
+                // Unregister CHIPoBLE service to not allow discovering it when pairing is disabled.
+                if (bt_gatt_service_unregister(&sChipoBleService) != 0)
+                {
+                    ChipLogError(DeviceLayer, "Failed to unregister CHIPoBLE GATT service");
+                }
+                else
+                {
+                    mIsChipoBleServiceRegistered = false;
+                }
+            }
+
             ChipLogProgress(DeviceLayer, "CHIPoBLE advertising disabled because device is fully provisioned");
         }
 #endif // CHIP_DEVICE_CONFIG_CHIPOBLE_DISABLE_ADVERTISING_WHEN_PROVISIONED
@@ -623,7 +665,7 @@ bool BLEManagerImpl::SendIndication(BLE_CONNECTION_OBJECT conId, const ChipBleUU
     ChipLogDetail(DeviceLayer, "Sending notification for CHIPoBLE TX (ConnId %02" PRIx16 ", len %u)", index, pBuf->DataLength());
 
     params->uuid      = nullptr;
-    params->attr      = &CHIPoBLE_Service.attrs[kCHIPoBLE_CCC_AttributeIndex];
+    params->attr      = &sChipoBleAttributes[kCHIPoBLE_CCC_AttributeIndex];
     params->data      = pBuf->Start();
     params->len       = pBuf->DataLength();
     params->func      = HandleTXCompleted;
@@ -769,6 +811,10 @@ void BLEManagerImpl::HandleConnect(struct bt_conn * conId, uint8_t err)
 {
     ChipDeviceEvent event;
 
+    // Don't handle BLE connecting events when it is not related to CHIPoBLE
+    if (!ConnectivityMgr().IsBLEAdvertisingEnabled())
+        return;
+
     event.Type                            = DeviceEventType::kPlatformZephyrBleConnected;
     event.Platform.BleConnEvent.BtConn    = bt_conn_ref(conId);
     event.Platform.BleConnEvent.HciResult = err;
@@ -779,6 +825,10 @@ void BLEManagerImpl::HandleConnect(struct bt_conn * conId, uint8_t err)
 void BLEManagerImpl::HandleDisconnect(struct bt_conn * conId, uint8_t reason)
 {
     ChipDeviceEvent event;
+
+    // Don't handle BLE disconnecting events when it is not related to CHIPoBLE
+    if (!ConnectivityMgr().IsBLEAdvertisingEnabled())
+        return;
 
     event.Type                            = DeviceEventType::kPlatformZephyrBleDisconnected;
     event.Platform.BleConnEvent.BtConn    = bt_conn_ref(conId);

@@ -101,6 +101,7 @@ private:
     bool mSubscribedConns[CONFIG_BT_MAX_CONN];
     bt_gatt_notify_params mNotifyParams[CONFIG_BT_MAX_CONN];
     bt_conn_cb mConnCallbacks;
+    bool mIsChipoBleServiceRegistered;
 
     void DriveBLEState(void);
     CHIP_ERROR ConfigureAdvertising(void);
