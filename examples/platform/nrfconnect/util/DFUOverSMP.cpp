@@ -124,15 +124,15 @@ void DFUOverSMP::StartBLEAdvertising()
 
 void DFUOverSMP::OnBleDisconnect(struct bt_conn * conId, uint8_t reason)
 {
-    if (chip::DeviceLayer::PlatformMgr().TryLockChipStack())
+    chip::DeviceLayer::PlatformMgr().LockChipStack();
+
+    // After BLE disconnect SMP advertising needs to be restarted. Before making it ensure that BLE disconnect was not triggered
+    // by closing CHIPoBLE service connection (in that case CHIPoBLE advertising needs to be restarted).
+    if (!chip::DeviceLayer::ConnectivityMgr().IsBLEAdvertisingEnabled() &&
+        chip::DeviceLayer::ConnectivityMgr().NumBLEConnections() == 0)
     {
-        // After BLE disconnect SMP advertising needs to be restarted. Before making it ensure that BLE disconnect was not triggered
-        // by closing CHIPoBLE service connection (in that case CHIPoBLE advertising needs to be restarted).
-        if (!chip::DeviceLayer::ConnectivityMgr().IsBLEAdvertisingEnabled() &&
-            chip::DeviceLayer::ConnectivityMgr().NumBLEConnections() == 0)
-        {
-            sDFUOverSMP.restartAdvertisingCallback();
-        }
-        chip::DeviceLayer::PlatformMgr().UnlockChipStack();
+        sDFUOverSMP.restartAdvertisingCallback();
     }
+
+    chip::DeviceLayer::PlatformMgr().UnlockChipStack();
 }

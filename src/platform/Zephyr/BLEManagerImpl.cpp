@@ -156,20 +156,6 @@ void BLEManagerImpl::DriveBLEState()
         if (ConfigurationMgr().IsFullyProvisioned())
         {
             mFlags.Clear(Flags::kAdvertisingEnabled);
-
-            if (mFlags.Has(Flags::kChipoBleGattServiceRegister))
-            {
-                // Unregister CHIPoBLE service to not allow discovering it when pairing is disabled.
-                if (bt_gatt_service_unregister(&sChipoBleService) != 0)
-                {
-                    ChipLogError(DeviceLayer, "Failed to unregister CHIPoBLE GATT service");
-                }
-                else
-                {
-                    mFlags.Clear(Flags::kChipoBleGattServiceRegister);
-                }
-            }
-
             ChipLogProgress(DeviceLayer, "CHIPoBLE advertising disabled because device is fully provisioned");
         }
 #endif // CHIP_DEVICE_CONFIG_CHIPOBLE_DISABLE_ADVERTISING_WHEN_PROVISIONED
@@ -601,20 +587,6 @@ void BLEManagerImpl::_OnPlatformEvent(const ChipDeviceEvent * event)
         if (ConfigurationMgr().IsFullyProvisioned())
         {
             mFlags.Clear(Flags::kAdvertisingEnabled);
-
-            if (mFlags.Has(Flags::kChipoBleGattServiceRegister))
-            {
-                // Unregister CHIPoBLE service to not allow discovering it when pairing is disabled.
-                if (bt_gatt_service_unregister(&sChipoBleService) != 0)
-                {
-                    ChipLogError(DeviceLayer, "Failed to unregister CHIPoBLE GATT service");
-                }
-                else
-                {
-                    mFlags.Clear(Flags::kChipoBleGattServiceRegister);
-                }
-            }
-
             ChipLogProgress(DeviceLayer, "CHIPoBLE advertising disabled because device is fully provisioned");
         }
 #endif // CHIP_DEVICE_CONFIG_CHIPOBLE_DISABLE_ADVERTISING_WHEN_PROVISIONED
@@ -823,44 +795,41 @@ void BLEManagerImpl::HandleTXCompleted(struct bt_conn * conId, void * /* param *
 
 void BLEManagerImpl::HandleConnect(struct bt_conn * conId, uint8_t err)
 {
-    if (PlatformMgr().TryLockChipStack())
-    {
-        ChipDeviceEvent event;
+    ChipDeviceEvent event;
 
-        // Don't handle BLE connecting events when it is not related to CHIPoBLE
-        VerifyOrExit(ConnectivityMgr().IsBLEAdvertisingEnabled(), );
+    PlatformMgr().LockChipStack();
 
-        event.Type                            = DeviceEventType::kPlatformZephyrBleConnected;
-        event.Platform.BleConnEvent.BtConn    = bt_conn_ref(conId);
-        event.Platform.BleConnEvent.HciResult = err;
+    // Don't handle BLE connecting events when it is not related to CHIPoBLE
+    VerifyOrExit(ConnectivityMgr().IsBLEAdvertisingEnabled(), );
 
-        PlatformMgr().PostEvent(&event);
+    event.Type                            = DeviceEventType::kPlatformZephyrBleConnected;
+    event.Platform.BleConnEvent.BtConn    = bt_conn_ref(conId);
+    event.Platform.BleConnEvent.HciResult = err;
 
-    exit:
-        chip::DeviceLayer::PlatformMgr().UnlockChipStack();
-    }
+    PlatformMgr().PostEvent(&event);
+
+exit:
+    PlatformMgr().UnlockChipStack();
 }
 
 void BLEManagerImpl::HandleDisconnect(struct bt_conn * conId, uint8_t reason)
 {
-    if (PlatformMgr().TryLockChipStack())
-    {
-        ChipDeviceEvent event;
+    ChipDeviceEvent event;
 
-        // Don't handle BLE disconnecting events when it is not related to CHIPoBLE
-        VerifyOrExit(ConnectivityMgr().IsBLEAdvertisingEnabled(), );
+    PlatformMgr().LockChipStack();
 
-        event.Type                            = DeviceEventType::kPlatformZephyrBleDisconnected;
-        event.Platform.BleConnEvent.BtConn    = bt_conn_ref(conId);
-        event.Platform.BleConnEvent.HciResult = reason;
+    // Don't handle BLE disconnecting events when it is not related to CHIPoBLE
+    VerifyOrExit(ConnectivityMgr().IsBLEAdvertisingEnabled(), );
 
-        PlatformMgr().PostEvent(&event);
+    event.Type                            = DeviceEventType::kPlatformZephyrBleDisconnected;
+    event.Platform.BleConnEvent.BtConn    = bt_conn_ref(conId);
+    event.Platform.BleConnEvent.HciResult = reason;
 
-    exit:
-        chip::DeviceLayer::PlatformMgr().UnlockChipStack();
-    }
+    PlatformMgr().PostEvent(&event);
+
+exit:
+    PlatformMgr().UnlockChipStack();
 }
-
 } // namespace Internal
 } // namespace DeviceLayer
 } // namespace chip

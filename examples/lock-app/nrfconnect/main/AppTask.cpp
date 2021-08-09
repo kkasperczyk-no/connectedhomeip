@@ -97,7 +97,7 @@ int AppTask::Init()
     ConfigurationMgr().LogDeviceConfig();
     PrintOnboardingCodes(chip::RendezvousInformationFlag(chip::RendezvousInformationFlag::kBLE));
 
-#ifdef CONFIG_CHIP_NFC_COMMISSIONING
+#if defined(CONFIG_CHIP_NFC_COMMISSIONING) || defined(CONFIG_MCUMGR_SMP_BT)
     PlatformMgr().AddEventHandler(ChipEventHandler, 0);
 #endif
     return 0;
