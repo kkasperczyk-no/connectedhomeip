@@ -64,7 +64,6 @@ private:
 
 #ifdef CONFIG_MCUMGR_SMP_BT
     static void RequestSMPAdvertisingStart(void);
-    static void StartSMPBLEAdvertisingHandler(AppEvent * aEvent);
 #endif
 
     void StartTimer(uint32_t aTimeoutInMs);

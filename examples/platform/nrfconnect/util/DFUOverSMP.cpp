@@ -92,6 +92,9 @@ void DFUOverSMP::StartServer()
 
 void DFUOverSMP::StartBLEAdvertising()
 {
+    if (!mIsEnabled)
+        return;
+
     const char * deviceName = bt_get_name();
     const uint8_t advFlags  = BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR;
 
@@ -121,11 +124,15 @@ void DFUOverSMP::StartBLEAdvertising()
 
 void DFUOverSMP::OnBleDisconnect(struct bt_conn * conId, uint8_t reason)
 {
-    // After BLE disconnect SMP advertising needs to be restarted. Before making it ensure that BLE disconnect was not triggered by
-    // closing CHIPoBLE service connection (in that case CHIPoBLE advertising needs to be restarted).
-    if (!chip::DeviceLayer::ConnectivityMgr().IsBLEAdvertisingEnabled() &&
-        chip::DeviceLayer::ConnectivityMgr().NumBLEConnections() == 0)
+    if (chip::DeviceLayer::PlatformMgr().TryLockChipStack())
     {
-        sDFUOverSMP.restartAdvertisingCallback();
+        // After BLE disconnect SMP advertising needs to be restarted. Before making it ensure that BLE disconnect was not triggered
+        // by closing CHIPoBLE service connection (in that case CHIPoBLE advertising needs to be restarted).
+        if (!chip::DeviceLayer::ConnectivityMgr().IsBLEAdvertisingEnabled() &&
+            chip::DeviceLayer::ConnectivityMgr().NumBLEConnections() == 0)
+        {
+            sDFUOverSMP.restartAdvertisingCallback();
+        }
+        chip::DeviceLayer::PlatformMgr().UnlockChipStack();
     }
 }

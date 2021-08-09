@@ -287,16 +287,11 @@ void AppTask::FunctionTimerEventHandler(AppEvent * aEvent)
 }
 
 #ifdef CONFIG_MCUMGR_SMP_BT
-void AppTask::StartSMPBLEAdvertisingHandler(AppEvent * aEvent)
-{
-    GetDFUOverSMP().StartBLEAdvertising();
-}
-
 void AppTask::RequestSMPAdvertisingStart(void)
 {
     AppEvent event;
     event.Type    = AppEvent::kEventType_StartSMPAdvertising;
-    event.Handler = StartSMPBLEAdvertisingHandler;
+    event.Handler = [](AppEvent *) { GetDFUOverSMP().StartBLEAdvertising(); };
     sAppTask.PostEvent(&event);
 }
 #endif

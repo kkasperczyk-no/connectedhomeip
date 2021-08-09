@@ -157,7 +157,7 @@ void BLEManagerImpl::DriveBLEState()
         {
             mFlags.Clear(Flags::kAdvertisingEnabled);
 
-            if (mIsChipoBleServiceRegistered)
+            if (mFlags.Has(Flags::kChipoBleGattServiceRegister))
             {
                 // Unregister CHIPoBLE service to not allow discovering it when pairing is disabled.
                 if (bt_gatt_service_unregister(&sChipoBleService) != 0)
@@ -166,7 +166,7 @@ void BLEManagerImpl::DriveBLEState()
                 }
                 else
                 {
-                    mIsChipoBleServiceRegistered = false;
+                    mFlags.Clear(Flags::kChipoBleGattServiceRegister);
                 }
             }
 
@@ -196,6 +196,20 @@ void BLEManagerImpl::DriveBLEState()
     // Otherwise, stop advertising if currently active.
     else if (mFlags.Has(Flags::kAdvertising))
     {
+        // If no connections are active unregister also CHIPoBLE GATT service
+        if (NumConnections() == 0 && mFlags.Has(Flags::kChipoBleGattServiceRegister))
+        {
+            // Unregister CHIPoBLE service to not allow discovering it when pairing is disabled.
+            if (bt_gatt_service_unregister(&sChipoBleService) != 0)
+            {
+                ChipLogError(DeviceLayer, "Failed to unregister CHIPoBLE GATT service");
+            }
+            else
+            {
+                mFlags.Clear(Flags::kChipoBleGattServiceRegister);
+            }
+        }
+
         err = StopAdvertising();
         SuccessOrExit(err);
     }
@@ -237,16 +251,16 @@ CHIP_ERROR BLEManagerImpl::StartAdvertising(void)
                      BT_DATA(BT_DATA_NAME_COMPLETE, deviceName, static_cast<uint8_t>(strlen(deviceName))) };
 
     // Register dynamically CHIPoBLE GATT service
-    if (!mIsChipoBleServiceRegistered)
+    if (!mFlags.Has(Flags::kChipoBleGattServiceRegister))
     {
         err = bt_gatt_service_register(&sChipoBleService);
 
         if (err != 0)
             ChipLogError(DeviceLayer, "Failed to register CHIPoBLE GATT service");
 
-        VerifyOrExit(err == CHIP_NO_ERROR, err = MapErrorZephyr(err));
+        VerifyOrReturnError(err == 0, MapErrorZephyr(err));
 
-        mIsChipoBleServiceRegistered = true;
+        mFlags.Set(Flags::kChipoBleGattServiceRegister);
     }
 
     // Initialize service data
@@ -588,7 +602,7 @@ void BLEManagerImpl::_OnPlatformEvent(const ChipDeviceEvent * event)
         {
             mFlags.Clear(Flags::kAdvertisingEnabled);
 
-            if (mIsChipoBleServiceRegistered)
+            if (mFlags.Has(Flags::kChipoBleGattServiceRegister))
             {
                 // Unregister CHIPoBLE service to not allow discovering it when pairing is disabled.
                 if (bt_gatt_service_unregister(&sChipoBleService) != 0)
@@ -597,7 +611,7 @@ void BLEManagerImpl::_OnPlatformEvent(const ChipDeviceEvent * event)
                 }
                 else
                 {
-                    mIsChipoBleServiceRegistered = false;
+                    mFlags.Clear(Flags::kChipoBleGattServiceRegister);
                 }
             }
 
@@ -809,32 +823,42 @@ void BLEManagerImpl::HandleTXCompleted(struct bt_conn * conId, void * /* param *
 
 void BLEManagerImpl::HandleConnect(struct bt_conn * conId, uint8_t err)
 {
-    ChipDeviceEvent event;
+    if (PlatformMgr().TryLockChipStack())
+    {
+        ChipDeviceEvent event;
 
-    // Don't handle BLE connecting events when it is not related to CHIPoBLE
-    if (!ConnectivityMgr().IsBLEAdvertisingEnabled())
-        return;
+        // Don't handle BLE connecting events when it is not related to CHIPoBLE
+        VerifyOrExit(ConnectivityMgr().IsBLEAdvertisingEnabled(), );
 
-    event.Type                            = DeviceEventType::kPlatformZephyrBleConnected;
-    event.Platform.BleConnEvent.BtConn    = bt_conn_ref(conId);
-    event.Platform.BleConnEvent.HciResult = err;
+        event.Type                            = DeviceEventType::kPlatformZephyrBleConnected;
+        event.Platform.BleConnEvent.BtConn    = bt_conn_ref(conId);
+        event.Platform.BleConnEvent.HciResult = err;
 
-    PlatformMgr().PostEvent(&event);
+        PlatformMgr().PostEvent(&event);
+
+    exit:
+        chip::DeviceLayer::PlatformMgr().UnlockChipStack();
+    }
 }
 
 void BLEManagerImpl::HandleDisconnect(struct bt_conn * conId, uint8_t reason)
 {
-    ChipDeviceEvent event;
+    if (PlatformMgr().TryLockChipStack())
+    {
+        ChipDeviceEvent event;
 
-    // Don't handle BLE disconnecting events when it is not related to CHIPoBLE
-    if (!ConnectivityMgr().IsBLEAdvertisingEnabled())
-        return;
+        // Don't handle BLE disconnecting events when it is not related to CHIPoBLE
+        VerifyOrExit(ConnectivityMgr().IsBLEAdvertisingEnabled(), );
 
-    event.Type                            = DeviceEventType::kPlatformZephyrBleDisconnected;
-    event.Platform.BleConnEvent.BtConn    = bt_conn_ref(conId);
-    event.Platform.BleConnEvent.HciResult = reason;
+        event.Type                            = DeviceEventType::kPlatformZephyrBleDisconnected;
+        event.Platform.BleConnEvent.BtConn    = bt_conn_ref(conId);
+        event.Platform.BleConnEvent.HciResult = reason;
 
-    PlatformMgr().PostEvent(&event);
+        PlatformMgr().PostEvent(&event);
+
+    exit:
+        chip::DeviceLayer::PlatformMgr().UnlockChipStack();
+    }
 }
 
 } // namespace Internal

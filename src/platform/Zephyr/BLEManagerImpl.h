@@ -91,6 +91,7 @@ private:
         kAdvertising            = 0x0008, /**< The system is currently CHIPoBLE advertising. */
         kAdvertisingRefreshNeeded =
             0x0010, /**< The advertising state/configuration has changed, but the SoftDevice has yet to be updated. */
+        kChipoBleGattServiceRegister = 0x0020, /**< The system has currently CHIPoBLE GATT service registered. */
     };
 
     struct ServiceData;
@@ -101,7 +102,6 @@ private:
     bool mSubscribedConns[CONFIG_BT_MAX_CONN];
     bt_gatt_notify_params mNotifyParams[CONFIG_BT_MAX_CONN];
     bt_conn_cb mConnCallbacks;
-    bool mIsChipoBleServiceRegistered;
 
     void DriveBLEState(void);
     CHIP_ERROR ConfigureAdvertising(void);
