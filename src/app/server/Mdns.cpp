@@ -80,6 +80,26 @@ chip::ByteSpan FillMAC(uint8_t (&mac)[8])
 
 } // namespace
 
+void OnPlatformEvent(const DeviceLayer::ChipDeviceEvent * event)
+{
+    ChipLogProgress(Discovery, "OnPlatformEvent");
+    if (event->Type == DeviceLayer::DeviceEventType::kMdnsStateChanged)
+    {
+        ChipLogProgress(Discovery, "Got MDNS changed event");
+        if (event->MdnsStateChanged.IsInitialized)
+        {
+            ChipLogProgress(Discovery, "MDNS was initialized");
+            app::MdnsServer::Instance().StartServer();
+        }
+    }
+}
+
+void OnPlatformEventWrapper(const DeviceLayer::ChipDeviceEvent * event, intptr_t arg)
+{
+    (void) arg;
+    OnPlatformEvent(event);
+}
+
 #if CHIP_DEVICE_CONFIG_ENABLE_EXTENDED_DISCOVERY
 
 constexpr const char kExtendedDiscoveryTimeoutKeypairStorage[] = "ExtDiscKey";
@@ -155,7 +175,10 @@ bool MdnsServer::OnExpiration(uint64_t expirationMs)
     {
         ChipLogError(Discovery, "Failed to stop ServiceAdvertiser: %s", chip::ErrorStr(err));
     }
-    err = chip::Mdns::ServiceAdvertiser::Instance().Start(&chip::DeviceLayer::InetLayer, chip::Mdns::kMdnsPort);
+
+    uint8_t mac[8];
+    err =
+        chip::Mdns::ServiceAdvertiser::Instance().Start(&chip::DeviceLayer::InetLayer, chip::Mdns::kMdnsPort, FillMAC(mac));
     if (err != CHIP_NO_ERROR)
     {
         ChipLogError(Discovery, "Failed to start ServiceAdvertiser: %s", chip::ErrorStr(err));
@@ -413,7 +436,11 @@ void MdnsServer::StartServer(chip::Mdns::CommissioningMode mode)
         ChipLogError(Discovery, "Failed to stop ServiceAdvertiser: %s", chip::ErrorStr(err));
     }
 
-    err = chip::Mdns::ServiceAdvertiser::Instance().Start(&chip::DeviceLayer::InetLayer, chip::Mdns::kMdnsPort);
+    DeviceLayer::PlatformMgr().AddEventHandler(OnPlatformEventWrapper, 0);
+
+    uint8_t mac[8];
+    err =
+        chip::Mdns::ServiceAdvertiser::Instance().Start(&chip::DeviceLayer::InetLayer, chip::Mdns::kMdnsPort, FillMAC(mac));
     if (err != CHIP_NO_ERROR)
     {
         ChipLogError(Discovery, "Failed to start ServiceAdvertiser: %s", chip::ErrorStr(err));

@@ -39,7 +39,7 @@ public:
     CHIP_ERROR Init();
 
     /// Starts the service advertiser if not yet started. Otherwise, removes all existing services.
-    CHIP_ERROR Start(Inet::InetLayer * inetLayer, uint16_t port) override;
+    CHIP_ERROR Start(Inet::InetLayer * inetLayer, uint16_t port, ByteSpan mac) override;
 
     /// Starts the service resolver if not yet started
     CHIP_ERROR StartResolver(Inet::InetLayer * inetLayer, uint16_t port) override { return Init(); }
@@ -97,6 +97,7 @@ private:
     uint64_t mCommissionInstanceName;
 
     bool mMdnsInitialized                = false;
+    bool mIsAdvertiserInitialized        = false;
     ResolverDelegate * mResolverDelegate = nullptr;
 
     static DiscoveryImplPlatform sManager;

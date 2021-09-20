@@ -779,6 +779,11 @@ CHIP_ERROR ChipMdnsInit(MdnsAsyncReturnCallback initCallback, MdnsAsyncReturnCal
     return MdnsAvahi::GetInstance().Init(initCallback, errorCallback, context);
 }
 
+CHIP_ERROR ChipMdnsClearHost(const char * hostname)
+{
+    return CHIP_ERROR_NOT_IMPLEMENTED;
+}
+
 CHIP_ERROR ChipMdnsShutdown()
 {
     return MdnsAvahi::GetInstance().Shutdown();

@@ -106,6 +106,7 @@ protected:
     CHIP_ERROR _RemoveSrpService(const char * aInstanceName, const char * aName);
     CHIP_ERROR _RemoveAllSrpServices();
     CHIP_ERROR _SetupSrpHost(const char * aHostName);
+    CHIP_ERROR _ClearSrpHost(const char * aHostName);
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD_DNS_CLIENT
     CHIP_ERROR _DnsBrowse(const char * aServiceName, DnsBrowseCallback aCallback, void * aContext);
     CHIP_ERROR _DnsResolve(const char * aServiceName, const char * aInstanceName, DnsResolveCallback aCallback, void * aContext);
@@ -174,6 +175,7 @@ private:
         char mHostName[kMaxHostNameSize + 1];
         otIp6Address mHostAddress;
         Service mServices[kMaxServicesNumber];
+        bool mIsInitialized;
     };
 
     SrpClient mSrpClient;

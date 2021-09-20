@@ -215,6 +215,11 @@ enum PublicEventTypes
      *
      */
     kOperationalNetworkEnabled,
+
+    /**
+     *
+     */
+    kMdnsStateChanged,
 };
 
 /**
@@ -441,6 +446,12 @@ struct ChipDeviceEvent final
             // TODO(cecille): This should just specify wifi or thread since we assume at most 1.
             int network;
         } OperationalNetwork;
+
+        // TODO: add more generic options
+        struct
+        {
+            bool IsInitialized;
+        } MdnsStateChanged;
     };
 
     void Clear() { memset(this, 0, sizeof(*this)); }

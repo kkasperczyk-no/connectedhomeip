@@ -55,6 +55,11 @@ exit:
     return error;
 }
 
+CHIP_ERROR ChipMdnsClearHost(const char * hostname)
+{
+    return CHIP_ERROR_NOT_IMPLEMENTED;
+}
+
 CHIP_ERROR ChipMdnsShutdown()
 {
     return CHIP_NO_ERROR;

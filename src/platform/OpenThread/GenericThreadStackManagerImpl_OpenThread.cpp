@@ -1362,7 +1362,7 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::DoInit(otInstanc
 #endif
 
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD_SRP_CLIENT
-    otSrpClientSetCallback(mOTInst, &OnSrpClientNotification, nullptr);
+    otSrpClientSetCallback(mOTInst, &OnSrpClientNotification, this);
     otSrpClientEnableAutoStartMode(mOTInst, &OnSrpClientStateChange, nullptr);
     memset(&mSrpClient, 0, sizeof(mSrpClient));
 #endif // CHIP_DEVICE_CONFIG_ENABLE_THREAD_SRP_CLIENT
@@ -1520,6 +1520,26 @@ void GenericThreadStackManagerImpl_OpenThread<ImplClass>::OnSrpClientNotificatio
     case OT_ERROR_NONE: {
         ChipLogProgress(DeviceLayer, "OnSrpClientNotification: Last requested operation completed successfully");
 
+        if (aHostInfo)
+        {
+            if (aHostInfo->mState == OT_SRP_CLIENT_ITEM_STATE_REMOVED)
+            {
+                ChipLogProgress(DeviceLayer, "Host was removed");
+
+                // Clear memory
+                char * hostname = static_cast<GenericThreadStackManagerImpl_OpenThread *>(aContext)->Impl()->mSrpClient.mHostName;
+                memset(reinterpret_cast<void *>(hostname), 0, sizeof(hostname));
+
+                static_cast<GenericThreadStackManagerImpl_OpenThread *>(aContext)->Impl()->mSrpClient.mIsInitialized = true;
+
+                ChipDeviceEvent event;
+                event.Type                           = DeviceEventType::kMdnsStateChanged;
+                event.MdnsStateChanged.IsInitialized = true;
+
+                CHIP_ERROR error = PlatformMgr().PostEvent(&event);
+            }
+        }
+
         if (aRemovedServices)
         {
             otSrpClientService * otService = const_cast<otSrpClientService *>(aRemovedServices);
@@ -1618,6 +1638,8 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_AddSrpService(c
     size_t entryId                           = 0;
     FixedBufferAllocator alloc;
 
+    VerifyOrExit(mSrpClient.mIsInitialized, error = CHIP_ERROR_WELL_UNINITIALIZED);
+
     Impl()->LockThreadStack();
 
     VerifyOrExit(aInstanceName, error = CHIP_ERROR_INVALID_ARGUMENT);
@@ -1712,6 +1734,8 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_RemoveSrpServic
     CHIP_ERROR error                         = CHIP_NO_ERROR;
     typename SrpClient::Service * srpService = nullptr;
 
+    VerifyOrExit(mSrpClient.mIsInitialized, error = CHIP_ERROR_WELL_UNINITIALIZED);
+
     Impl()->LockThreadStack();
 
     VerifyOrExit(aInstanceName, error = CHIP_ERROR_INVALID_ARGUMENT);
@@ -1743,6 +1767,8 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_RemoveAllSrpSer
 {
     CHIP_ERROR error = CHIP_NO_ERROR;
 
+    VerifyOrExit(mSrpClient.mIsInitialized, error = CHIP_ERROR_WELL_UNINITIALIZED);
+
     Impl()->LockThreadStack();
 
     for (typename SrpClient::Service & service : mSrpClient.mServices)
@@ -1766,6 +1792,8 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_SetupSrpHost(co
     CHIP_ERROR error = CHIP_NO_ERROR;
     Inet::IPAddress hostAddress;
 
+    VerifyOrExit(mSrpClient.mIsInitialized, error = CHIP_ERROR_WELL_UNINITIALIZED);
+
     Impl()->LockThreadStack();
 
     VerifyOrExit(aHostName, error = CHIP_ERROR_INVALID_ARGUMENT);
@@ -1786,6 +1814,34 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_SetupSrpHost(co
         memcpy(&mSrpClient.mHostAddress.mFields.m32, hostAddress.Addr, sizeof(hostAddress.Addr));
         error = MapOpenThreadError(otSrpClientSetHostAddresses(mOTInst, &mSrpClient.mHostAddress, 1));
     }
+
+exit:
+    Impl()->UnlockThreadStack();
+
+    return error;
+}
+
+template <class ImplClass>
+CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_ClearSrpHost(const char * aHostName)
+{
+    CHIP_ERROR error = CHIP_NO_ERROR;
+
+    ChipLogError(DeviceLayer, "_ClearSrpHost %s", aHostName);
+
+    Impl()->LockThreadStack();
+
+    VerifyOrExit(aHostName, error = CHIP_ERROR_INVALID_ARGUMENT);
+
+    // Avoid adding the same host name multiple times
+    if (strcmp(mSrpClient.mHostName, aHostName) != 0)
+    {
+        ChipLogError(DeviceLayer, "Not found host, adding");
+        strcpy(mSrpClient.mHostName, aHostName);
+        error = MapOpenThreadError(otSrpClientSetHostName(mOTInst, mSrpClient.mHostName));
+        SuccessOrExit(error);
+    }
+    error = MapOpenThreadError(otSrpClientRemoveHostAndServices(mOTInst, false, true));
+    ChipLogError(DeviceLayer, "error: %s", ErrorStr(error));
 
 exit:
     Impl()->UnlockThreadStack();

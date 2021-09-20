@@ -37,6 +37,11 @@ CHIP_ERROR ChipMdnsShutdown()
     return CHIP_NO_ERROR;
 }
 
+CHIP_ERROR ChipMdnsClearHost(const char * hostname)
+{
+    return ThreadStackMgr().ClearSrpHost(hostname);
+}
+
 const char * GetProtocolString(MdnsServiceProtocol protocol)
 {
     return protocol == MdnsServiceProtocol::kMdnsProtocolUdp ? "_udp" : "_tcp";

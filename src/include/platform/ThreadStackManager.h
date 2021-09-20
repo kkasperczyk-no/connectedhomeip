@@ -101,6 +101,7 @@ public:
     CHIP_ERROR RemoveSrpService(const char * aInstanceName, const char * aName);
     CHIP_ERROR RemoveAllSrpServices();
     CHIP_ERROR SetupSrpHost(const char * aHostName);
+    CHIP_ERROR ClearSrpHost(const char * aHostName);
 
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD_DNS_CLIENT
     CHIP_ERROR DnsBrowse(const char * aServiceName, DnsBrowseCallback aCallback, void * aContext);
@@ -267,6 +268,11 @@ inline CHIP_ERROR ThreadStackManager::RemoveAllSrpServices()
 inline CHIP_ERROR ThreadStackManager::SetupSrpHost(const char * aHostName)
 {
     return static_cast<ImplClass *>(this)->_SetupSrpHost(aHostName);
+}
+
+inline CHIP_ERROR ThreadStackManager::ClearSrpHost(const char * aHostName)
+{
+    return static_cast<ImplClass *>(this)->_ClearSrpHost(aHostName);
 }
 
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD_DNS_CLIENT

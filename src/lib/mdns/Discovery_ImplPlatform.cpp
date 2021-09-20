@@ -55,18 +55,19 @@ CHIP_ERROR DiscoveryImplPlatform::Init()
     return CHIP_NO_ERROR;
 }
 
-CHIP_ERROR DiscoveryImplPlatform::Start(Inet::InetLayer * inetLayer, uint16_t port)
+CHIP_ERROR DiscoveryImplPlatform::Start(Inet::InetLayer * inetLayer, uint16_t port, chip::ByteSpan mac)
 {
     ReturnErrorOnFailure(Init());
 
-    CHIP_ERROR error = ChipMdnsStopPublish();
-
-    if (error != CHIP_NO_ERROR)
+    if (!mIsAdvertiserInitialized)
     {
-        ChipLogError(Discovery, "Failed to initialize platform mdns: %s", ErrorStr(error));
+        char hostname[kMdnsHostNameMaxSize + 1] = "";
+        MakeHostName(hostname, sizeof(hostname), mac);
+        ReturnErrorOnFailure(ChipMdnsClearHost(hostname));
+        mIsAdvertiserInitialized = true;
     }
 
-    return error;
+    return CHIP_NO_ERROR;
 }
 
 void DiscoveryImplPlatform::HandleMdnsInit(void * context, CHIP_ERROR initError)
