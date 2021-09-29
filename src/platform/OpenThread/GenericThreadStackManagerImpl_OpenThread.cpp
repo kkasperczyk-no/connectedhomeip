@@ -1525,18 +1525,14 @@ void GenericThreadStackManagerImpl_OpenThread<ImplClass>::OnSrpClientNotificatio
             if (aHostInfo->mState == OT_SRP_CLIENT_ITEM_STATE_REMOVED)
             {
                 ChipLogProgress(DeviceLayer, "Host was removed");
+                GenericThreadStackManagerImpl_OpenThread * threadStackInstance = static_cast<GenericThreadStackManagerImpl_OpenThread *>(aContext);
 
                 // Clear memory
-                char * hostname = static_cast<GenericThreadStackManagerImpl_OpenThread *>(aContext)->Impl()->mSrpClient.mHostName;
+                char * hostname = threadStackInstance->Impl()->mSrpClient.mHostName;
                 memset(reinterpret_cast<void *>(hostname), 0, sizeof(hostname));
 
-                static_cast<GenericThreadStackManagerImpl_OpenThread *>(aContext)->Impl()->mSrpClient.mIsInitialized = true;
-
-                ChipDeviceEvent event;
-                event.Type                           = DeviceEventType::kMdnsStateChanged;
-                event.MdnsStateChanged.IsInitialized = true;
-
-                CHIP_ERROR error = PlatformMgr().PostEvent(&event);
+                threadStackInstance->Impl()->mSrpClient.mIsInitialized = true;
+                threadStackInstance->Impl()->mSrpClient.mInitializedCallback(threadStackInstance->Impl()->mSrpClient.mInitializedCallbackContext, CHIP_NO_ERROR);
             }
         }
 
@@ -1847,6 +1843,14 @@ exit:
     Impl()->UnlockThreadStack();
 
     return error;
+}
+
+template <class ImplClass>
+CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_SetSrpInitializedCallback(DnsAsyncReturnCallback aCallback, void * aContext)
+{
+    mSrpClient.mInitializedCallback = aCallback;
+    mSrpClient.mInitializedCallbackContext = aContext;
+    return CHIP_NO_ERROR;
 }
 
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD_DNS_CLIENT

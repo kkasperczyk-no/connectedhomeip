@@ -63,6 +63,7 @@ class GenericThreadStackManagerImpl_FreeRTOS;
 // Declaration of callback types corresponding to MdnsResolveCallback and MdnsBrowseCallback to avoid circular including.
 using DnsResolveCallback = void (*)(void * context, chip::Mdns::MdnsService * result, CHIP_ERROR error);
 using DnsBrowseCallback  = void (*)(void * context, chip::Mdns::MdnsService * services, size_t servicesSize, CHIP_ERROR error);
+using DnsAsyncReturnCallback = void (*)(void * context, CHIP_ERROR error);
 #endif // CHIP_DEVICE_CONFIG_ENABLE_THREAD_DNS_CLIENT
 
 /**
@@ -102,6 +103,7 @@ public:
     CHIP_ERROR RemoveAllSrpServices();
     CHIP_ERROR SetupSrpHost(const char * aHostName);
     CHIP_ERROR ClearSrpHost(const char * aHostName);
+    CHIP_ERROR SetSrpInitializedCallback(DnsAsyncReturnCallback aCallback, void * aContext);
 
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD_DNS_CLIENT
     CHIP_ERROR DnsBrowse(const char * aServiceName, DnsBrowseCallback aCallback, void * aContext);
@@ -273,6 +275,11 @@ inline CHIP_ERROR ThreadStackManager::SetupSrpHost(const char * aHostName)
 inline CHIP_ERROR ThreadStackManager::ClearSrpHost(const char * aHostName)
 {
     return static_cast<ImplClass *>(this)->_ClearSrpHost(aHostName);
+}
+
+inline CHIP_ERROR ThreadStackManager::SetSrpInitializedCallback(DnsAsyncReturnCallback aCallback, void * aContext)
+{
+    return static_cast<ImplClass *>(this)->_SetSrpInitializedCallback(aCallback, aContext);
 }
 
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD_DNS_CLIENT

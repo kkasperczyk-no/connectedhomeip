@@ -28,8 +28,7 @@ namespace Mdns {
 
 CHIP_ERROR ChipMdnsInit(MdnsAsyncReturnCallback initCallback, MdnsAsyncReturnCallback errorCallback, void * context)
 {
-    // Intentionally empty
-    return CHIP_NO_ERROR;
+    return ThreadStackMgr().SetSrpInitializedCallback(initCallback, context);
 }
 
 CHIP_ERROR ChipMdnsShutdown()
