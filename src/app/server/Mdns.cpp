@@ -55,29 +55,6 @@ bool HaveOperationalCredentials()
     ChipLogProgress(Discovery, "Failed to find a valid admin pairing. Node ID unknown");
     return false;
 }
-
-// Requires an 8-byte mac to accommodate thread.
-chip::ByteSpan FillMAC(uint8_t (&mac)[8])
-{
-    memset(mac, 0, 8);
-#if CHIP_DEVICE_CONFIG_ENABLE_THREAD
-    if (chip::DeviceLayer::ThreadStackMgr().GetPrimary802154MACAddress(mac) == CHIP_NO_ERROR)
-    {
-        ChipLogDetail(Discovery, "Using Thread extended MAC for hostname.");
-        return chip::ByteSpan(mac, 8);
-    }
-#endif
-    if (DeviceLayer::ConfigurationMgr().GetPrimaryWiFiMACAddress(mac) == CHIP_NO_ERROR)
-    {
-        ChipLogDetail(Discovery, "Using wifi MAC for hostname");
-        return chip::ByteSpan(mac, 6);
-    }
-    ChipLogError(Discovery, "Wifi mac not known. Using a default.");
-    uint8_t temp[6] = { 0xEE, 0xAA, 0xBA, 0xDA, 0xBA, 0xD0 };
-    memcpy(mac, temp, 6);
-    return chip::ByteSpan(mac, 6);
-}
-
 } // namespace
 
 void OnPlatformEvent(const DeviceLayer::ChipDeviceEvent * event)
@@ -176,9 +153,7 @@ bool MdnsServer::OnExpiration(uint64_t expirationMs)
         ChipLogError(Discovery, "Failed to stop ServiceAdvertiser: %s", chip::ErrorStr(err));
     }
 
-    uint8_t mac[8];
-    err =
-        chip::Mdns::ServiceAdvertiser::Instance().Start(&chip::DeviceLayer::InetLayer, chip::Mdns::kMdnsPort, FillMAC(mac));
+    err = chip::Mdns::ServiceAdvertiser::Instance().Start(&chip::DeviceLayer::InetLayer, chip::Mdns::kMdnsPort);
     if (err != CHIP_NO_ERROR)
     {
         ChipLogError(Discovery, "Failed to start ServiceAdvertiser: %s", chip::ErrorStr(err));
@@ -438,9 +413,7 @@ void MdnsServer::StartServer(chip::Mdns::CommissioningMode mode)
 
     DeviceLayer::PlatformMgr().AddEventHandler(OnPlatformEventWrapper, 0);
 
-    uint8_t mac[8];
-    err =
-        chip::Mdns::ServiceAdvertiser::Instance().Start(&chip::DeviceLayer::InetLayer, chip::Mdns::kMdnsPort, FillMAC(mac));
+    err = chip::Mdns::ServiceAdvertiser::Instance().Start(&chip::DeviceLayer::InetLayer, chip::Mdns::kMdnsPort);
     if (err != CHIP_NO_ERROR)
     {
         ChipLogError(Discovery, "Failed to start ServiceAdvertiser: %s", chip::ErrorStr(err));
@@ -498,6 +471,28 @@ void MdnsServer::StartServer(chip::Mdns::CommissioningMode mode)
         ChipLogError(Discovery, "Failed to advertise commissioner: %s", chip::ErrorStr(err));
     }
 #endif // CHIP_DEVICE_CONFIG_ENABLE_COMMISSIONER_DISCOVERY
+}
+
+// Requires an 8-byte mac to accommodate thread.
+chip::ByteSpan MdnsServer::FillMAC(uint8_t (&mac)[8])
+{
+    memset(mac, 0, 8);
+#if CHIP_DEVICE_CONFIG_ENABLE_THREAD
+    if (chip::DeviceLayer::ThreadStackMgr().GetPrimary802154MACAddress(mac) == CHIP_NO_ERROR)
+    {
+        ChipLogDetail(Discovery, "Using Thread extended MAC for hostname.");
+        return chip::ByteSpan(mac, 8);
+    }
+#endif
+    if (DeviceLayer::ConfigurationMgr().GetPrimaryWiFiMACAddress(mac) == CHIP_NO_ERROR)
+    {
+        ChipLogDetail(Discovery, "Using wifi MAC for hostname");
+        return chip::ByteSpan(mac, 6);
+    }
+    ChipLogError(Discovery, "Wifi mac not known. Using a default.");
+    uint8_t temp[6] = { 0xEE, 0xAA, 0xBA, 0xDA, 0xBA, 0xD0 };
+    memcpy(mac, temp, 6);
+    return chip::ByteSpan(mac, 6);
 }
 
 #if CHIP_ENABLE_ROTATING_DEVICE_ID

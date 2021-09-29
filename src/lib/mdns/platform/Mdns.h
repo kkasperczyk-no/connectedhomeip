@@ -128,8 +128,6 @@ CHIP_ERROR ChipMdnsInit(MdnsAsyncReturnCallback initCallback, MdnsAsyncReturnCal
  */
 CHIP_ERROR ChipMdnsShutdown();
 
-CHIP_ERROR ChipMdnsClearHost(const char * hostname);
-
 /**
  * This function publishes an service via mDNS.
  *

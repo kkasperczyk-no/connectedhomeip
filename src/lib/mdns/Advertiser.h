@@ -293,7 +293,7 @@ public:
 
     /// Starts the advertiser. Items 'Advertised' will become visible.
     /// Must be called before Advertise() calls.
-    virtual CHIP_ERROR Start(chip::Inet::InetLayer * inetLayer, uint16_t port, chip::ByteSpan mac) = 0;
+    virtual CHIP_ERROR Start(chip::Inet::InetLayer * inetLayer, uint16_t port) = 0;
 
     /// Advertises the CHIP node as an operational node
     virtual CHIP_ERROR Advertise(const OperationalAdvertisingParameters & params) = 0;

@@ -54,19 +54,9 @@ CHIP_ERROR DiscoveryImplPlatform::Init()
     return CHIP_NO_ERROR;
 }
 
-CHIP_ERROR DiscoveryImplPlatform::Start(Inet::InetLayer * inetLayer, uint16_t port, chip::ByteSpan mac)
+CHIP_ERROR DiscoveryImplPlatform::Start(Inet::InetLayer * inetLayer, uint16_t port)
 {
-    ReturnErrorOnFailure(Init());
-
-    if (!mIsAdvertiserInitialized)
-    {
-        char hostname[kMdnsHostNameMaxSize + 1] = "";
-        MakeHostName(hostname, sizeof(hostname), mac);
-        ReturnErrorOnFailure(ChipMdnsClearHost(hostname));
-        mIsAdvertiserInitialized = true;
-    }
-
-    return CHIP_NO_ERROR;
+    return Init();
 }
 
 void DiscoveryImplPlatform::HandleMdnsInit(void * context, CHIP_ERROR initError)

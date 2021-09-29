@@ -39,7 +39,7 @@ public:
     CHIP_ERROR Init();
 
     /// Starts the service advertiser if not yet started. Otherwise, removes all existing services.
-    CHIP_ERROR Start(Inet::InetLayer * inetLayer, uint16_t port, ByteSpan mac) override;
+    CHIP_ERROR Start(Inet::InetLayer * inetLayer, uint16_t port) override;
 
     /// Starts the service resolver if not yet started
     CHIP_ERROR StartResolver(Inet::InetLayer * inetLayer, uint16_t port) override { return Init(); }

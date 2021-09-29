@@ -17,6 +17,7 @@
 
 #include "lib/mdns/platform/Mdns.h"
 
+#include <app/server/Mdns.h>
 #include <lib/support/CodeUtils.h>
 #include <platform/CHIPDeviceLayer.h>
 #include <platform/OpenThread/OpenThreadUtils.h>
@@ -28,7 +29,14 @@ namespace Mdns {
 
 CHIP_ERROR ChipMdnsInit(MdnsAsyncReturnCallback initCallback, MdnsAsyncReturnCallback errorCallback, void * context)
 {
-    return ThreadStackMgr().SetSrpInitializedCallback(initCallback, context);
+    ReturnErrorOnFailure(ThreadStackMgr().SetSrpInitializedCallback(initCallback, context));
+
+    uint8_t mac[8];
+    char hostname[kMdnsHostNameMaxSize + 1] = "";
+    // app::MdnsServer::Instance().FillMAC(mac);
+    MakeHostName(hostname, sizeof(hostname), app::MdnsServer::Instance().FillMAC(mac));
+
+    return ThreadStackMgr().ClearSrpHost(hostname);
 }
 
 CHIP_ERROR ChipMdnsShutdown()

@@ -272,7 +272,7 @@ void AdvertiserMinMdns::OnQuery(const QueryData & data)
     }
 }
 
-CHIP_ERROR AdvertiserMinMdns::Start(chip::Inet::InetLayer * inetLayer, uint16_t port, chip::ByteSpan mac)
+CHIP_ERROR AdvertiserMinMdns::Start(chip::Inet::InetLayer * inetLayer, uint16_t port)
 {
     GlobalMinimalMdnsServer::Server().Shutdown();
 

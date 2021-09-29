@@ -57,11 +57,6 @@ CHIP_ERROR ChipMdnsShutdown()
     return CHIP_NO_ERROR;
 }
 
-CHIP_ERROR ChipMdnsClearHost(const char * hostname)
-{
-    return CHIP_ERROR_NOT_IMPLEMENTED;
-}
-
 CHIP_ERROR ChipMdnsPublishService(const MdnsService * service)
 {
     return CHIP_ERROR_NOT_IMPLEMENTED;
