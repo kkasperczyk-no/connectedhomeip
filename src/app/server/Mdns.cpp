@@ -59,13 +59,10 @@ bool HaveOperationalCredentials()
 
 void OnPlatformEvent(const DeviceLayer::ChipDeviceEvent * event)
 {
-    ChipLogProgress(Discovery, "OnPlatformEvent");
-    if (event->Type == DeviceLayer::DeviceEventType::kMdnsStateChanged)
+    if (event->Type == DeviceLayer::DeviceEventType::kMdnsPlatformInitialized)
     {
-        ChipLogProgress(Discovery, "Got MDNS changed event");
-        if (event->MdnsStateChanged.IsInitialized)
+        if (event->MdnsPlatformInitialized.IsInitialized)
         {
-            ChipLogProgress(Discovery, "MDNS was initialized");
             app::MdnsServer::Instance().StartServer();
         }
     }

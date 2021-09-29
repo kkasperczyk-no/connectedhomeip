@@ -1524,15 +1524,14 @@ void GenericThreadStackManagerImpl_OpenThread<ImplClass>::OnSrpClientNotificatio
         {
             if (aHostInfo->mState == OT_SRP_CLIENT_ITEM_STATE_REMOVED)
             {
-                ChipLogProgress(DeviceLayer, "Host was removed");
                 GenericThreadStackManagerImpl_OpenThread * threadStackInstance = static_cast<GenericThreadStackManagerImpl_OpenThread *>(aContext);
 
-                // Clear memory
+                // Clear memory for removed host
                 char * hostname = threadStackInstance->Impl()->mSrpClient.mHostName;
                 memset(reinterpret_cast<void *>(hostname), 0, sizeof(hostname));
 
                 threadStackInstance->Impl()->mSrpClient.mIsInitialized = true;
-                threadStackInstance->Impl()->mSrpClient.mInitializedCallback(threadStackInstance->Impl()->mSrpClient.mInitializedCallbackContext, CHIP_NO_ERROR);
+                threadStackInstance->Impl()->mSrpClient.mInitializedCallback(threadStackInstance->Impl()->mSrpClient.mCallbackContext, CHIP_NO_ERROR);
             }
         }
 
@@ -1822,22 +1821,19 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_ClearSrpHost(co
 {
     CHIP_ERROR error = CHIP_NO_ERROR;
 
-    ChipLogError(DeviceLayer, "_ClearSrpHost %s", aHostName);
-
     Impl()->LockThreadStack();
 
     VerifyOrExit(aHostName, error = CHIP_ERROR_INVALID_ARGUMENT);
 
+    // Add host and remove it with notifying SRP server to clean old information related to the host.
     // Avoid adding the same host name multiple times
     if (strcmp(mSrpClient.mHostName, aHostName) != 0)
     {
-        ChipLogError(DeviceLayer, "Not found host, adding");
         strcpy(mSrpClient.mHostName, aHostName);
         error = MapOpenThreadError(otSrpClientSetHostName(mOTInst, mSrpClient.mHostName));
         SuccessOrExit(error);
     }
     error = MapOpenThreadError(otSrpClientRemoveHostAndServices(mOTInst, false, true));
-    ChipLogError(DeviceLayer, "error: %s", ErrorStr(error));
 
 exit:
     Impl()->UnlockThreadStack();
@@ -1846,10 +1842,11 @@ exit:
 }
 
 template <class ImplClass>
-CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_SetSrpInitializedCallback(DnsAsyncReturnCallback aCallback, void * aContext)
+CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_SetSrpDnsCallbacks(DnsAsyncReturnCallback aInitCallback, DnsAsyncReturnCallback aErrorCallback, void * aContext)
 {
-    mSrpClient.mInitializedCallback = aCallback;
-    mSrpClient.mInitializedCallbackContext = aContext;
+    mSrpClient.mInitializedCallback = aInitCallback;
+    mSrpClient.mErrorCallback = aErrorCallback;
+    mSrpClient.mCallbackContext = aContext;
     return CHIP_NO_ERROR;
 }
 

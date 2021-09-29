@@ -97,7 +97,6 @@ private:
     uint64_t mCommissionInstanceName;
 
     bool mMdnsInitialized                = false;
-    bool mIsAdvertiserInitialized        = false;
     ResolverDelegate * mResolverDelegate = nullptr;
 
     static DiscoveryImplPlatform sManager;

@@ -217,9 +217,9 @@ enum PublicEventTypes
     kOperationalNetworkEnabled,
 
     /**
-     *
+     * Signals that mDNS platform layer was initialized and is ready to operate.
      */
-    kMdnsStateChanged,
+    kMdnsPlatformInitialized,
 };
 
 /**
@@ -447,11 +447,10 @@ struct ChipDeviceEvent final
             int network;
         } OperationalNetwork;
 
-        // TODO: add more generic options
         struct
         {
             bool IsInitialized;
-        } MdnsStateChanged;
+        } MdnsPlatformInitialized;
     };
 
     void Clear() { memset(this, 0, sizeof(*this)); }

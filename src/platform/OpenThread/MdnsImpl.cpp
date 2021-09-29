@@ -29,11 +29,10 @@ namespace Mdns {
 
 CHIP_ERROR ChipMdnsInit(MdnsAsyncReturnCallback initCallback, MdnsAsyncReturnCallback errorCallback, void * context)
 {
-    ReturnErrorOnFailure(ThreadStackMgr().SetSrpInitializedCallback(initCallback, context));
+    ReturnErrorOnFailure(ThreadStackMgr().SetSrpDnsCallbacks(initCallback, errorCallback, context));
 
     uint8_t mac[8];
     char hostname[kMdnsHostNameMaxSize + 1] = "";
-    // app::MdnsServer::Instance().FillMAC(mac);
     MakeHostName(hostname, sizeof(hostname), app::MdnsServer::Instance().FillMAC(mac));
 
     return ThreadStackMgr().ClearSrpHost(hostname);
@@ -42,11 +41,6 @@ CHIP_ERROR ChipMdnsInit(MdnsAsyncReturnCallback initCallback, MdnsAsyncReturnCal
 CHIP_ERROR ChipMdnsShutdown()
 {
     return CHIP_NO_ERROR;
-}
-
-CHIP_ERROR ChipMdnsClearHost(const char * hostname)
-{
-    return ThreadStackMgr().ClearSrpHost(hostname);
 }
 
 const char * GetProtocolString(MdnsServiceProtocol protocol)
