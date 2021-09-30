@@ -164,9 +164,7 @@ private:
         {
             otSrpClientService mService;
             uint8_t mServiceBuffer[kServiceBufferSize];
-#if OPENTHREAD_API_VERSION >= 132
             const char * mSubTypes[kSubTypeMaxNumber + 1]; // extra entry for null terminator
-#endif
             otDnsTxtEntry mTxtEntries[kTxtMaxNumber];
 
             bool IsUsed() const { return mService.mInstanceName != nullptr; }

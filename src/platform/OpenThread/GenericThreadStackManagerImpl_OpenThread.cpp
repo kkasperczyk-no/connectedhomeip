@@ -1506,7 +1506,7 @@ exit:
 
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD_SRP_CLIENT
 
-static_assert(OPENTHREAD_API_VERSION >= 120, "SRP Client requires a more recent OpenThread version");
+static_assert(OPENTHREAD_API_VERSION >= 156, "SRP Client requires a more recent OpenThread version");
 
 template <class ImplClass>
 void GenericThreadStackManagerImpl_OpenThread<ImplClass>::OnSrpClientNotification(otError aError,
@@ -1526,12 +1526,6 @@ void GenericThreadStackManagerImpl_OpenThread<ImplClass>::OnSrpClientNotificatio
             {
                 // Clear memory for removed host
                 memset(ThreadStackMgrImpl().mSrpClient.mHostName, 0, sizeof(ThreadStackMgrImpl().mSrpClient.mHostName));
-
-                if (!ThreadStackMgrImpl().mSrpClient.mInitializedCallback)
-                {
-                    ChipLogError(DeviceLayer, "OnSrpClientNotification: Failed to call mDNS initialization callback");
-                    break;
-                }
 
                 ThreadStackMgrImpl().mSrpClient.mIsInitialized = true;
                 ThreadStackMgrImpl().mSrpClient.mInitializedCallback(ThreadStackMgrImpl().mSrpClient.mCallbackContext,
@@ -1676,7 +1670,6 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_AddSrpService(c
     srpService->mService.mName         = alloc.Clone(aName);
     srpService->mService.mPort         = aPort;
 
-#if OPENTHREAD_API_VERSION >= 132
     VerifyOrExit(aSubTypes.size() < ArraySize(srpService->mSubTypes), error = CHIP_ERROR_BUFFER_TOO_SMALL);
     entryId = 0;
 
@@ -1687,7 +1680,6 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_AddSrpService(c
 
     srpService->mSubTypes[entryId]      = nullptr;
     srpService->mService.mSubTypeLabels = srpService->mSubTypes;
-#endif
 
     // Initialize TXT entries
     VerifyOrExit(aTxtEntries.size() <= ArraySize(srpService->mTxtEntries), error = CHIP_ERROR_BUFFER_TOO_SMALL);
@@ -1828,7 +1820,7 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_ClearSrpHost(co
     Impl()->LockThreadStack();
 
     VerifyOrExit(aHostName, error = CHIP_ERROR_INVALID_ARGUMENT);
-    VerifyOrExit(mSrpClient.mInitializedCallback, CHIP_ERROR_INCORRECT_STATE);
+    VerifyOrExit(mSrpClient.mInitializedCallback, error = CHIP_ERROR_INCORRECT_STATE);
 
     // Add host and remove it with notifying SRP server to clean old information related to the host.
     // Avoid adding the same host name multiple times
