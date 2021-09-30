@@ -55,16 +55,12 @@ bool HaveOperationalCredentials()
     ChipLogProgress(Discovery, "Failed to find a valid admin pairing. Node ID unknown");
     return false;
 }
-} // namespace
 
 void OnPlatformEvent(const DeviceLayer::ChipDeviceEvent * event)
 {
     if (event->Type == DeviceLayer::DeviceEventType::kMdnsPlatformInitialized)
     {
-        if (event->MdnsPlatformInitialized.IsInitialized)
-        {
-            app::MdnsServer::Instance().StartServer();
-        }
+        app::MdnsServer::Instance().StartServer();
     }
 }
 
@@ -73,6 +69,8 @@ void OnPlatformEventWrapper(const DeviceLayer::ChipDeviceEvent * event, intptr_t
     (void) arg;
     OnPlatformEvent(event);
 }
+
+} // namespace
 
 #if CHIP_DEVICE_CONFIG_ENABLE_EXTENDED_DISCOVERY
 

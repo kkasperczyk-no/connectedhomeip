@@ -178,7 +178,6 @@ private:
         Service mServices[kMaxServicesNumber];
         bool mIsInitialized;
         DnsAsyncReturnCallback mInitializedCallback;
-        DnsAsyncReturnCallback mErrorCallback;
         void * mCallbackContext;
     };
 

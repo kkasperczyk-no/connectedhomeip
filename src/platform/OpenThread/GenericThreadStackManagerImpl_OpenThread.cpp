@@ -1524,14 +1524,18 @@ void GenericThreadStackManagerImpl_OpenThread<ImplClass>::OnSrpClientNotificatio
         {
             if (aHostInfo->mState == OT_SRP_CLIENT_ITEM_STATE_REMOVED)
             {
-                GenericThreadStackManagerImpl_OpenThread * threadStackInstance = static_cast<GenericThreadStackManagerImpl_OpenThread *>(aContext);
-
                 // Clear memory for removed host
-                char * hostname = threadStackInstance->Impl()->mSrpClient.mHostName;
-                memset(reinterpret_cast<void *>(hostname), 0, sizeof(hostname));
+                memset(ThreadStackMgrImpl().mSrpClient.mHostName, 0, sizeof(ThreadStackMgrImpl().mSrpClient.mHostName));
 
-                threadStackInstance->Impl()->mSrpClient.mIsInitialized = true;
-                threadStackInstance->Impl()->mSrpClient.mInitializedCallback(threadStackInstance->Impl()->mSrpClient.mCallbackContext, CHIP_NO_ERROR);
+                if (!ThreadStackMgrImpl().mSrpClient.mInitializedCallback)
+                {
+                    ChipLogError(DeviceLayer, "OnSrpClientNotification: Failed to call mDNS initialization callback");
+                    break;
+                }
+
+                ThreadStackMgrImpl().mSrpClient.mIsInitialized = true;
+                ThreadStackMgrImpl().mSrpClient.mInitializedCallback(ThreadStackMgrImpl().mSrpClient.mCallbackContext,
+                                                                     CHIP_NO_ERROR);
             }
         }
 
@@ -1824,6 +1828,7 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_ClearSrpHost(co
     Impl()->LockThreadStack();
 
     VerifyOrExit(aHostName, error = CHIP_ERROR_INVALID_ARGUMENT);
+    VerifyOrExit(mSrpClient.mInitializedCallback, CHIP_ERROR_INCORRECT_STATE);
 
     // Add host and remove it with notifying SRP server to clean old information related to the host.
     // Avoid adding the same host name multiple times
@@ -1842,11 +1847,12 @@ exit:
 }
 
 template <class ImplClass>
-CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_SetSrpDnsCallbacks(DnsAsyncReturnCallback aInitCallback, DnsAsyncReturnCallback aErrorCallback, void * aContext)
+CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_SetSrpDnsCallbacks(DnsAsyncReturnCallback aInitCallback,
+                                                                                    DnsAsyncReturnCallback aErrorCallback,
+                                                                                    void * aContext)
 {
     mSrpClient.mInitializedCallback = aInitCallback;
-    mSrpClient.mErrorCallback = aErrorCallback;
-    mSrpClient.mCallbackContext = aContext;
+    mSrpClient.mCallbackContext     = aContext;
     return CHIP_NO_ERROR;
 }
 

@@ -69,8 +69,7 @@ void DiscoveryImplPlatform::HandleMdnsInit(void * context, CHIP_ERROR initError)
 
         // Post an event that will start advertising
         chip::DeviceLayer::ChipDeviceEvent event;
-        event.Type                           = chip::DeviceLayer::DeviceEventType::kMdnsPlatformInitialized;
-        event.MdnsPlatformInitialized.IsInitialized = true;
+        event.Type = chip::DeviceLayer::DeviceEventType::kMdnsPlatformInitialized;
 
         CHIP_ERROR error = chip::DeviceLayer::PlatformMgr().PostEvent(&event);
     }

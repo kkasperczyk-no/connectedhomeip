@@ -446,11 +446,6 @@ struct ChipDeviceEvent final
             // TODO(cecille): This should just specify wifi or thread since we assume at most 1.
             int network;
         } OperationalNetwork;
-
-        struct
-        {
-            bool IsInitialized;
-        } MdnsPlatformInitialized;
     };
 
     void Clear() { memset(this, 0, sizeof(*this)); }
