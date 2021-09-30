@@ -86,8 +86,6 @@ public:
     /// Generates the (random) instance name that a CHIP device is to use for pre-commissioning DNS-SD
     CHIP_ERROR GetCommissionableInstanceName(char * buffer, size_t bufferLen);
 
-    static chip::ByteSpan FillMAC(uint8_t (&mac)[8]);
-
 private:
     /// Overloaded utility method for commissioner and commissionable advertisement
     /// This method is used for both commissioner discovery and commissionable node discovery since

@@ -245,11 +245,12 @@ CHIP_ERROR MdnsServer::AdvertiseOperational()
         if (fabricInfo.IsInitialized())
         {
             uint8_t mac[8];
+            chip::DeviceLayer::ConfigurationMgr().GetPrimaryMACAddress(mac);
 
             const auto advertiseParameters =
                 chip::Mdns::OperationalAdvertisingParameters()
                     .SetPeerId(fabricInfo.GetPeerId())
-                    .SetMac(FillMAC(mac))
+                    .SetMac(chip::ByteSpan(mac, 8))
                     .SetPort(GetSecuredPort())
                     .SetMRPRetryIntervals(Optional<uint32_t>(CHIP_CONFIG_MRP_DEFAULT_INITIAL_RETRY_INTERVAL),
                                           Optional<uint32_t>(CHIP_CONFIG_MRP_DEFAULT_ACTIVE_RETRY_INTERVAL))
@@ -282,7 +283,8 @@ CHIP_ERROR MdnsServer::Advertise(bool commissionableNode, chip::Mdns::Commission
     char pairingInst[chip::Mdns::kKeyPairingInstructionMaxLength + 1];
 
     uint8_t mac[8];
-    advertiseParameters.SetMac(FillMAC(mac));
+    chip::DeviceLayer::ConfigurationMgr().GetPrimaryMACAddress(mac);
+    advertiseParameters.SetMac(chip::ByteSpan(mac, 8));
 
     uint16_t value;
     if (DeviceLayer::ConfigurationMgr().GetVendorId(value) != CHIP_NO_ERROR)
@@ -466,28 +468,6 @@ void MdnsServer::StartServer(chip::Mdns::CommissioningMode mode)
         ChipLogError(Discovery, "Failed to advertise commissioner: %s", chip::ErrorStr(err));
     }
 #endif // CHIP_DEVICE_CONFIG_ENABLE_COMMISSIONER_DISCOVERY
-}
-
-// Requires an 8-byte mac to accommodate thread.
-chip::ByteSpan MdnsServer::FillMAC(uint8_t (&mac)[8])
-{
-    memset(mac, 0, 8);
-#if CHIP_DEVICE_CONFIG_ENABLE_THREAD
-    if (chip::DeviceLayer::ThreadStackMgr().GetPrimary802154MACAddress(mac) == CHIP_NO_ERROR)
-    {
-        ChipLogDetail(Discovery, "Using Thread extended MAC for hostname.");
-        return chip::ByteSpan(mac, 8);
-    }
-#endif
-    if (DeviceLayer::ConfigurationMgr().GetPrimaryWiFiMACAddress(mac) == CHIP_NO_ERROR)
-    {
-        ChipLogDetail(Discovery, "Using wifi MAC for hostname");
-        return chip::ByteSpan(mac, 6);
-    }
-    ChipLogError(Discovery, "Wifi mac not known. Using a default.");
-    uint8_t temp[6] = { 0xEE, 0xAA, 0xBA, 0xDA, 0xBA, 0xD0 };
-    memcpy(mac, temp, 6);
-    return chip::ByteSpan(mac, 6);
 }
 
 #if CHIP_ENABLE_ROTATING_DEVICE_ID

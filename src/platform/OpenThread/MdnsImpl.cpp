@@ -17,7 +17,6 @@
 
 #include "lib/mdns/platform/Mdns.h"
 
-#include <app/server/Mdns.h>
 #include <lib/support/CodeUtils.h>
 #include <platform/CHIPDeviceLayer.h>
 #include <platform/OpenThread/OpenThreadUtils.h>
@@ -33,7 +32,8 @@ CHIP_ERROR ChipMdnsInit(MdnsAsyncReturnCallback initCallback, MdnsAsyncReturnCal
 
     uint8_t mac[8];
     char hostname[kMdnsHostNameMaxSize + 1] = "";
-    MakeHostName(hostname, sizeof(hostname), app::MdnsServer::Instance().FillMAC(mac));
+    ReturnErrorOnFailure(chip::DeviceLayer::ConfigurationMgr().GetPrimaryMACAddress(mac));
+    MakeHostName(hostname, sizeof(hostname), chip::ByteSpan(mac, 8));
 
     return ThreadStackMgr().ClearSrpHost(hostname);
 }
