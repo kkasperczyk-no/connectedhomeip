@@ -71,7 +71,7 @@ Complete the following steps to perform DFU using mcumgr:
 
         $ sudo mcumgr --conntype ble --hci ble-hci-number --connstring peer_name='ble-device-name' image upload build/zephyr/app_update.bin -n 0
 
-    The operation can take few minutes. Wait until the progress bar reaches
+    The operation can take a few minutes. Wait until the progress bar reaches
     100%.
 
 5.  Obtain the list of images present in the device memory by running following
@@ -83,7 +83,8 @@ Complete the following steps to perform DFU using mcumgr:
     active and the new image in slot 1, which is not active yet (flags field
     empty):
 
-        Images:
+    ```
+    Images:
         image=0 slot=0
             version: 0.0.0
             bootable: true
@@ -95,17 +96,19 @@ Complete the following steps to perform DFU using mcumgr:
             flags:
             hash: cbd58fc3821e749d3abfb00b3069f98c078824735f1b2a333e8a1579971e7de1
         Split status: N/A (0)
+    ```
 
 6.  Swap the firmware images by calling the following method with `image-hash`
     replaced by the image present in the slot 1 hash (for example,
-    `cbd58fc3821e749d3abfb00b3069f98c078824735f1b2a333e8a1579971e7de1`):
+    ```cbd58fc3821e749d3abfb00b3069f98c078824735f1b2a333e8a1579971e7de1```):
 
         $ sudo mcumgr --conntype ble --hci ble-hci-number --connstring peer_name='ble-device-name' image test image-hash
 
     You can observe that the `flags:` field in the image for slot 1 changes
     value to `pending`:
 
-        Images:
+    ```
+    Images:
         image=0 slot=0
             version: 0.0.0
             bootable: true
@@ -117,16 +120,17 @@ Complete the following steps to perform DFU using mcumgr:
             flags: pending
             hash: cbd58fc3821e749d3abfb00b3069f98c078824735f1b2a333e8a1579971e7de1
         Split status: N/A (0)
+    ```
 
-> **_NOTE:_** In case you use nRF5340DK board that supports multi-image device firmare upgrade,
-> complete 7-9 steps. In other case you should omit them and go to the step 10.
+> **_NOTE:_** If you are using the nRF5340DK board, that supports multi-image device firmware upgrade,
+> complete Steps 7-9. If not using one, go straight to the step 10.
 
 7.  Upload the network core firmware image to the device by running the following command in
     your example directory:
 
         $ sudo mcumgr --conntype ble --hci ble-hci-number --connstring peer_name='ble-device-name' image upload build/zephyr/net_core_app_update.bin -n 1
 
-    The operation can take few minutes. Wait until the progress bar reaches
+    The operation can take a few minutes. Wait until the progress bar reaches
     100%. 
 
 8.  Obtain the list of images present in the device memory by running following
@@ -135,10 +139,10 @@ Complete the following steps to perform DFU using mcumgr:
         $ sudo mcumgr --conntype ble --hci ble-hci-number --connstring peer_name='ble-device-name' image list
 
     The displayed output contains the old application image in slot 0 that is currently
-    active, new application image in slot 1 in pending state and the new network image in slot 1, which is not active yet (flags field
-    empty):
+    active, the new application image in slot 1 in pending state, and the new network image which is in slot 1 and not active yet (flags field empty):
 
-        Images:
+    ```
+    Images:
         image=0 slot=0
             version: 0.0.0
             bootable: true
@@ -155,17 +159,19 @@ Complete the following steps to perform DFU using mcumgr:
             flags:
             hash: d9e3bea3cb7a959c26411250c2aeb28f3510ae88a4549ae3f2f097c3e7530f48
         Split status: N/A (0)
+    ```
 
 9.  Swap the firmware images by calling the following method with `image-hash`
     replaced by the image present in the slot 1 hash (for example,
-    `d9e3bea3cb7a959c26411250c2aeb28f3510ae88a4549ae3f2f097c3e7530f48`):
+    ```d9e3bea3cb7a959c26411250c2aeb28f3510ae88a4549ae3f2f097c3e7530f48```):
 
         $ sudo mcumgr --conntype ble --hci ble-hci-number --connstring peer_name='ble-device-name' image test image-hash
 
     You can observe that the `flags:` field in the image for slot 1 changes
     value to `pending`:
 
-        Images:
+    ```
+    Images:
         image=0 slot=0
             version: 0.0.0
             bootable: true
@@ -182,6 +188,7 @@ Complete the following steps to perform DFU using mcumgr:
             flags: pending
             hash: d9e3bea3cb7a959c26411250c2aeb28f3510ae88a4549ae3f2f097c3e7530f48
         Split status: N/A (0)
+    ```
 
 10.  Reset the device with the following command to let the bootloader swap
     images:

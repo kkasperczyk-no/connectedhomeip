@@ -369,16 +369,16 @@ Semiconductor's kit you own (for example `nrf52840dk_nrf52840`):
 
 > **Note**:
 >
-> There are two types of Device Firmware Upgrade modes that are single-image DFU
-> and multi-image DFU. Single-image mode supports upgrading only one firmware image
-> that is application image and should be used for single-core nRF52840 DK device.
-> Multi-image mode allows to upgrade more firmware images and is suitable to upgrade
-> application core and network core firmware in two-cores nRF5340 DK device.
+> There are two types of Device Firmware Upgrade modes: single-image DFU
+> and multi-image DFU. Single-image mode supports upgrading only one firmware image,
+> the application image, and should be used for single-core nRF52840 DK devices.
+> Multi-image mode allows to upgrade more firmware images and is suitable for upgrading
+> the application core and network core firmware in two-core nRF5340 DK devices.
 
 #### Changing Device Firmware Upgrade configuration
 
 To change the default DFU configuration, edit the `overlay-single_image_dfu_support.conf`
-or `overlay-multi_image_dfu_support.conf` overlay files depending on whether build target device
+or `overlay-multi_image_dfu_support.conf` overlay files depending on whether the build target device
 supports multi-image DFU (nRF5340 DK) or single-image DFU (nRF52840 DK). The files are located
 in the `config/nrfconnect/app` directory. You can also define the desired
 options in your example's `prj.conf` file.
@@ -386,11 +386,11 @@ options in your example's `prj.conf` file.
 #### Changing bootloader configuration
 
 To change the default MCUboot configuration, edit the `mcuboot_single_image_dfu.conf`
-or `mcuboot_multi_image_dfu.conf` overlay files depending on whether build target device
+or `mcuboot_multi_image_dfu.conf` overlay files depending on whether the build target device
 supports multi-image DFU (nRF5340 DK) or single-image DFU (nRF52840 DK). The files are located
 in the `configuration` directory.
 
-Make sure to apply the configuration changes that are consistent with the application configuration.
+Make sure to keep the configuration consistent with changes made to the application configuration.
 This is necessary for the configuration to work, as the bootloader image is a separate application 
 from the user application and it has its own configuration file.
 
