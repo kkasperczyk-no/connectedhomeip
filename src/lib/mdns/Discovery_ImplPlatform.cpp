@@ -72,6 +72,10 @@ void DiscoveryImplPlatform::HandleMdnsInit(void * context, CHIP_ERROR initError)
         event.Type = chip::DeviceLayer::DeviceEventType::kMdnsPlatformInitialized;
 
         CHIP_ERROR error = chip::DeviceLayer::PlatformMgr().PostEvent(&event);
+        if (error != CHIP_NO_ERROR)
+        {
+            ChipLogError(Discovery, "Posting mDNS platform initialized event failed with %s", chip::ErrorStr(error));
+        }
     }
     else
     {
