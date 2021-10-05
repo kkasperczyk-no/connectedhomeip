@@ -1362,7 +1362,7 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::DoInit(otInstanc
 #endif
 
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD_SRP_CLIENT
-    otSrpClientSetCallback(mOTInst, &OnSrpClientNotification, this);
+    otSrpClientSetCallback(mOTInst, &OnSrpClientNotification, nullptr);
     otSrpClientEnableAutoStartMode(mOTInst, &OnSrpClientStateChange, nullptr);
     memset(&mSrpClient, 0, sizeof(mSrpClient));
 #endif // CHIP_DEVICE_CONFIG_ENABLE_THREAD_SRP_CLIENT
@@ -1631,10 +1631,9 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_AddSrpService(c
     size_t entryId                           = 0;
     FixedBufferAllocator alloc;
 
-    VerifyOrExit(mSrpClient.mIsInitialized, error = CHIP_ERROR_WELL_UNINITIALIZED);
-
     Impl()->LockThreadStack();
 
+    VerifyOrExit(mSrpClient.mIsInitialized, error = CHIP_ERROR_WELL_UNINITIALIZED);
     VerifyOrExit(aInstanceName, error = CHIP_ERROR_INVALID_ARGUMENT);
     VerifyOrExit(aName, error = CHIP_ERROR_INVALID_ARGUMENT);
 

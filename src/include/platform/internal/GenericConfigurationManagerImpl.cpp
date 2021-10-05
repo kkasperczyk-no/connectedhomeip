@@ -231,7 +231,7 @@ CHIP_ERROR GenericConfigurationManagerImpl<ImplClass>::_StorePrimaryWiFiMACAddre
 }
 
 template <class ImplClass>
-CHIP_ERROR GenericConfigurationManagerImpl<ImplClass>::_GetPrimaryMACAddress(uint8_t * buf)
+CHIP_ERROR GenericConfigurationManagerImpl<ImplClass>::_GetPrimaryMACAddress(uint8_t (&buf)[8])
 {
     memset(buf, 0, 8);
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD

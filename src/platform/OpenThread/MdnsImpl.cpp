@@ -32,7 +32,7 @@ CHIP_ERROR ChipMdnsInit(MdnsAsyncReturnCallback initCallback, MdnsAsyncReturnCal
 
     uint8_t mac[8];
     char hostname[kMdnsHostNameMaxSize + 1] = "";
-    ReturnErrorOnFailure(chip::DeviceLayer::ConfigurationMgr().GetPrimaryMACAddress(mac));
+    ReturnErrorOnFailure(DeviceLayer::ConfigurationMgr().GetPrimaryMACAddress(mac));
     MakeHostName(hostname, sizeof(hostname), chip::ByteSpan(mac, 8));
 
     return ThreadStackMgr().ClearSrpHost(hostname);
