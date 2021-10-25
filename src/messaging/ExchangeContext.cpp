@@ -43,6 +43,10 @@
 #include <protocols/Protocols.h>
 #include <protocols/secure_channel/Constants.h>
 
+#if CONFIG_DEVICE_LAYER
+#include <platform/CHIPDeviceLayer.h>
+#endif
+
 using namespace chip::Encoding;
 using namespace chip::Inet;
 using namespace chip::System;
@@ -111,48 +115,69 @@ CHIP_ERROR ExchangeContext::SendMessage(Protocols::Id protocolId, uint8_t msgTyp
     bool isUDPTransport                = peerAddress && peerAddress->GetTransportType() == Transport::Type::kUdp;
     bool reliableTransmissionRequested = isUDPTransport && !sendFlags.Has(SendMessageFlags::kNoAutoRequestAck);
 
+    CHIP_ERROR err = CHIP_NO_ERROR;
+
     // If a response message is expected...
     if (sendFlags.Has(SendMessageFlags::kExpectResponse))
     {
         // Only one 'response expected' message can be outstanding at a time.
-        if (IsResponseExpected())
-        {
-            // TODO: add a test for this case.
-            return CHIP_ERROR_INCORRECT_STATE;
-        }
+        // TODO: add a test for this case.
+        VerifyOrExit(!IsResponseExpected(), err = CHIP_ERROR_INCORRECT_STATE);
 
         SetResponseExpected(true);
 
         // Arm the response timer if a timeout has been specified.
         if (mResponseTimeout > System::Clock::Zero)
         {
-            CHIP_ERROR err = StartResponseTimer();
-            if (err != CHIP_NO_ERROR)
-            {
-                SetResponseExpected(false);
-                return err;
-            }
+            err = StartResponseTimer();
+            VerifyOrExit(err == CHIP_NO_ERROR, SetResponseExpected(false));
         }
     }
 
+    err = mDispatch->SendMessage(mSecureSession.Value(), mExchangeId, IsInitiator(), GetReliableMessageContext(),
+                                 reliableTransmissionRequested, protocolId, msgType, std::move(msgBuf));
+    if (err != CHIP_NO_ERROR && IsResponseExpected())
     {
-        // Create a new scope for `err`, to avoid shadowing warning previous `err`.
-        CHIP_ERROR err = mDispatch->SendMessage(mSession.Value(), mExchangeId, IsInitiator(), GetReliableMessageContext(),
-                                                reliableTransmissionRequested, protocolId, msgType, std::move(msgBuf));
-        if (err != CHIP_NO_ERROR && IsResponseExpected())
-        {
-            CancelResponseTimer();
-            SetResponseExpected(false);
-        }
-
-        // Standalone acks are not application-level message sends.
-        if (err == CHIP_NO_ERROR && !isStandaloneAck)
-        {
-            MessageHandled();
-        }
-
-        return err;
+        CancelResponseTimer();
+        SetResponseExpected(false);
     }
+
+    // Standalone acks are not application-level message sends.
+    if (err == CHIP_NO_ERROR && !isStandaloneAck)
+    {
+        MessageHandled();
+    }
+
+exit:
+
+// Updating Sleepy End Device polling interval in the following way:
+// - it is not done for exchanges over Bluetooth LE
+// - set IDLE polling mode if all conditions are met:
+//    - device doesn't expect response
+//    - there is no other active exchange that current one
+//    - active state is not forced (commissioning window is not opened)
+// - set ACTIVE polling mode if any of the conditions is met:
+//    - device expects response
+//    - there is another active exchange
+//    - active state is forced (commissioning window is currently open)
+#if CONFIG_DEVICE_LAYER && CHIP_DEVICE_CONFIG_ENABLE_SED
+    if (peerAddress->GetTransportType() != Transport::Type::kBle)
+    {
+        if ((!IsResponseExpected() || err != CHIP_NO_ERROR) && (mExchangeMgr->GetNumActiveExchanges() == 1) &&
+            !GetExchangeMgr()->GetActiveStateForced())
+        {
+            chip::DeviceLayer::ConnectivityMgr().AdjustSEDPollingInterval(
+                chip::DeviceLayer::ConnectivityManager::SEDPollingIntervalType::Idle);
+        }
+        else
+        {
+            chip::DeviceLayer::ConnectivityMgr().AdjustSEDPollingInterval(
+                chip::DeviceLayer::ConnectivityManager::SEDPollingIntervalType::Active);
+        }
+    }
+#endif
+
+    return err;
 }
 
 void ExchangeContext::DoClose(bool clearRetransTable)
