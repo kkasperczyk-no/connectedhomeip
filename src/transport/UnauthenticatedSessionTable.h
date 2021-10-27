@@ -59,6 +59,18 @@ public:
 
     const PeerAddress & GetPeerAddress() const { return mPeerAddress; }
 
+    void GetMRPIntervals(uint32_t & idleInterval, uint32_t & activeInterval)
+    {
+        idleInterval   = mMRPIdleInterval;
+        activeInterval = mMRPActiveInterval;
+    }
+
+    void SetMRPIntervals(uint32_t idleInterval, uint32_t activeInterval)
+    {
+        mMRPIdleInterval   = idleInterval;
+        mMRPActiveInterval = activeInterval;
+    }
+
     MessageCounter & GetLocalMessageCounter() { return mLocalMessageCounter; }
     PeerMessageCounter & GetPeerMessageCounter() { return mPeerMessageCounter; }
 
@@ -66,6 +78,8 @@ private:
     uint64_t mLastActivityTimeMs = 0;
 
     const PeerAddress mPeerAddress;
+    uint32_t mMRPIdleInterval   = 0;
+    uint32_t mMRPActiveInterval = 0;
     GlobalUnencryptedMessageCounter mLocalMessageCounter;
     PeerMessageCounter mPeerMessageCounter;
 };
