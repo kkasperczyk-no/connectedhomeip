@@ -382,7 +382,7 @@ CHIP_ERROR Device::CloseSession()
     return CHIP_NO_ERROR;
 }
 
-CHIP_ERROR Device::UpdateAddress(const Transport::PeerAddress & addr)
+CHIP_ERROR Device::UpdateAddress(const Transport::PeerAddress & addr, Messaging::ReliableMessageProtocolConfig & rmpConfig)
 {
     bool didLoad;
 
@@ -401,6 +401,7 @@ CHIP_ERROR Device::UpdateAddress(const Transport::PeerAddress & addr)
 
     Transport::SecureSession * secureSession = mSessionManager->GetSecureSession(mSecureSession.Value());
     secureSession->SetPeerAddress(addr);
+    secureSession->SetMRPIntervals(rmpConfig.mInitialRetransTimeoutTick, rmpConfig.mActiveRetransTimeoutTick);
 
     return CHIP_NO_ERROR;
 }

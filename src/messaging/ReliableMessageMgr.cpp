@@ -169,6 +169,7 @@ void ReliableMessageMgr::ExecuteActions()
         {
             // If the retransmission was successful, update the passive timer
             entry->nextRetransTimeTick = static_cast<uint16_t>(entry->ec->GetActiveRetransmitTimeoutTick());
+            ChipLogError(ExchangeManager, "=================> My Active RMP: %d", entry->nextRetransTimeTick);
 #if !defined(NDEBUG)
             ChipLogDetail(ExchangeManager,
                           "Retransmitted MessageCounter:" ChipLogFormatMessageCounter " on exchange " ChipLogFormatExchange
@@ -281,6 +282,7 @@ void ReliableMessageMgr::StartRetransmision(RetransTableEntry * entry)
     entry->nextRetransTimeTick =
         static_cast<uint16_t>(entry->ec->GetInitialRetransmitTimeoutTick() +
                               GetTickCounterFromTimeDelta(System::SystemClock().GetMonotonicMilliseconds()));
+    ChipLogError(ExchangeManager, "================> My initial RMP %d", entry->nextRetransTimeTick);
 
     // Check if the timer needs to be started and start it.
     StartTimer();

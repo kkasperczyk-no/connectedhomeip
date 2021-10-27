@@ -41,6 +41,7 @@
 #include <messaging/ExchangeDelegate.h>
 #include <messaging/ExchangeMgr.h>
 #include <messaging/Flags.h>
+#include <messaging/ReliableMessageProtocolConfig.h>
 #include <protocols/secure_channel/CASESession.h>
 #include <protocols/secure_channel/PASESession.h>
 #include <protocols/secure_channel/SessionIDAllocator.h>
@@ -350,7 +351,7 @@ public:
      *
      * @return CHIP_NO_ERROR if the address has been updated, an error code otherwise.
      */
-    CHIP_ERROR UpdateAddress(const Transport::PeerAddress & addr);
+    CHIP_ERROR UpdateAddress(const Transport::PeerAddress & addr, Messaging::ReliableMessageProtocolConfig & rmpConfig);
     /**
      * @brief
      *   Return whether the current device object is actively associated with a paired CHIP
