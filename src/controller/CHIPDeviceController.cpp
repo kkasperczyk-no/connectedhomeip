@@ -559,10 +559,9 @@ void DeviceController::OnNodeIdResolved(const chip::Dnssd::ResolvedNodeData & no
         interfaceId = nodeData.mInterfaceId;
     }
 
-    Messaging::ReliableMessageProtocolConfig rmpConf;
-    rmpConf.mInitialRetransTimeoutTick = nodeData.mMrpRetryIntervalIdle;
-    rmpConf.mActiveRetransTimeoutTick  = nodeData.mMrpRetryIntervalActive;
-    err = device->UpdateAddress(Transport::PeerAddress::UDP(nodeData.mAddress, nodeData.mPort, interfaceId), rmpConf);
+    ChipLogError(Controller, "UpdateDeviceData: %d %d", nodeData.mMrpRetryIntervalIdle, nodeData.mMrpRetryIntervalActive);
+    err = device->UpdateDeviceData(Transport::PeerAddress::UDP(nodeData.mAddress, nodeData.mPort, interfaceId),
+                                   nodeData.mMrpRetryIntervalIdle, nodeData.mMrpRetryIntervalActive);
     SuccessOrExit(err);
 
     PersistDevice(device);

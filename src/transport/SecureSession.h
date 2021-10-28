@@ -66,10 +66,16 @@ public:
     NodeId GetPeerNodeId() const { return mPeerNodeId; }
     void SetPeerNodeId(NodeId peerNodeId) { mPeerNodeId = peerNodeId; }
 
-    void SetMRPIntervals(uint32_t initial, uint32_t active)
+    void GetMRPIntervals(uint32_t & idleInterval, uint32_t & activeInterval)
     {
-        mInitialMRPInterval = initial;
-        mActiveMRPInterval  = active;
+        idleInterval   = mMRPIdleInterval;
+        activeInterval = mMRPActiveInterval;
+    }
+
+    void SetMRPIntervals(uint32_t idleInterval, uint32_t activeInterval)
+    {
+        mMRPIdleInterval   = idleInterval;
+        mMRPActiveInterval = activeInterval;
     }
 
     uint16_t GetPeerSessionId() const { return mPeerSessionId; }
@@ -110,8 +116,8 @@ public:
 private:
     PeerAddress mPeerAddress;
     NodeId mPeerNodeId           = kUndefinedNodeId;
-    uint32_t mInitialMRPInterval = CHIP_CONFIG_MRP_DEFAULT_INITIAL_RETRY_INTERVAL;
-    uint32_t mActiveMRPInterval  = CHIP_CONFIG_MRP_DEFAULT_ACTIVE_RETRY_INTERVAL;
+    uint32_t mMRPIdleInterval    = CHIP_CONFIG_MRP_DEFAULT_INITIAL_RETRY_INTERVAL;
+    uint32_t mMRPActiveInterval  = CHIP_CONFIG_MRP_DEFAULT_ACTIVE_RETRY_INTERVAL;
     uint16_t mPeerSessionId      = UINT16_MAX;
     uint16_t mLocalSessionId     = UINT16_MAX;
     uint64_t mLastActivityTimeMs = 0;

@@ -41,7 +41,6 @@
 #include <messaging/ExchangeDelegate.h>
 #include <messaging/ExchangeMgr.h>
 #include <messaging/Flags.h>
-#include <messaging/ReliableMessageProtocolConfig.h>
 #include <protocols/secure_channel/CASESession.h>
 #include <protocols/secure_channel/PASESession.h>
 #include <protocols/secure_channel/SessionIDAllocator.h>
@@ -351,7 +350,7 @@ public:
      *
      * @return CHIP_NO_ERROR if the address has been updated, an error code otherwise.
      */
-    CHIP_ERROR UpdateAddress(const Transport::PeerAddress & addr, Messaging::ReliableMessageProtocolConfig & rmpConfig);
+    CHIP_ERROR UpdateDeviceData(const Transport::PeerAddress & addr, uint32_t mrpIdleInterval, uint32_t mrpActiveInterval);
     /**
      * @brief
      *   Return whether the current device object is actively associated with a paired CHIP
@@ -485,6 +484,9 @@ private:
     /** Address used to communicate with the device.
      */
     Transport::PeerAddress mDeviceAddress = Transport::PeerAddress::UDP(Inet::IPAddress::Any);
+
+    uint32_t mDeviceMrpIdleInterval   = CHIP_CONFIG_MRP_DEFAULT_INITIAL_RETRY_INTERVAL;
+    uint32_t mDeviceMrpActiveInterval = CHIP_CONFIG_MRP_DEFAULT_ACTIVE_RETRY_INTERVAL;
 
     Inet::InetLayer * mInetLayer = nullptr;
 
