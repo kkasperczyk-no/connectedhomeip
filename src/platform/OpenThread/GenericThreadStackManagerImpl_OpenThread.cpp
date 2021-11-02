@@ -1411,7 +1411,17 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_SetSEDPollingCo
         return CHIP_ERROR_INVALID_ARGUMENT;
     }
     mPollingConfig = pollingConfig;
-    return Impl()->_SetSEDPollingMode(mPollingMode);
+
+    CHIP_ERROR err = Impl()->_SetSEDPollingMode(mPollingMode);
+
+    if (err == CHIP_NO_ERROR)
+    {
+        ChipDeviceEvent event;
+        event.Type = DeviceEventType::kSEDPollingIntervalChange;
+        err        = chip::DeviceLayer::PlatformMgr().PostEvent(&event);
+    }
+
+    return err;
 }
 
 template <class ImplClass>
@@ -1449,13 +1459,6 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_SetSEDPollingMo
     if (interval != curPollingIntervalMS)
     {
         ChipLogProgress(DeviceLayer, "OpenThread polling interval set to %" PRId32 "ms", interval);
-    }
-
-    if (err == CHIP_NO_ERROR)
-    {
-        ChipDeviceEvent event;
-        event.Type = DeviceEventType::kSEDPollingIntervalChange;
-        err        = chip::DeviceLayer::PlatformMgr().PostEvent(&event);
     }
 
     return err;

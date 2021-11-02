@@ -242,11 +242,11 @@ private:
      * Updates Sleepy End Device polling interval in the following way:
      * - does nothing for exchanges over Bluetooth LE
      * - set IDLE polling mode if all conditions are met:
-     *   - device doesn't expect response
+     *   - device doesn't expect getting response nor sending message
      *   - there is no other active exchange that current one
      *   - active state is not forced (commissioning window is not opened)
      * - set ACTIVE polling mode if any of the conditions is met:
-     *   - device expects response
+     *   - device expects getting response or sending message
      *   - there is another active exchange
      *   - active state is forced (commissioning window is currently open)
      *

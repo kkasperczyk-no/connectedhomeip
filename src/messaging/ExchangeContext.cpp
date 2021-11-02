@@ -88,7 +88,8 @@ void ExchangeContext::UpdateSEDPollingMode(Transport::Type transportType)
 {
     if (transportType != Transport::Type::kBle)
     {
-        if (!IsResponseExpected() && (mExchangeMgr->GetNumActiveExchanges() == 1) && !GetExchangeMgr()->GetActiveStateForced())
+        if (!IsResponseExpected() && !IsSendExpected() && (mExchangeMgr->GetNumActiveExchanges() == 1) &&
+            !GetExchangeMgr()->GetActiveStateForced())
         {
             chip::DeviceLayer::ConnectivityMgr().SetSEDPollingMode(chip::DeviceLayer::ConnectivityManager::SEDPollingMode::Idle);
         }
@@ -132,8 +133,6 @@ CHIP_ERROR ExchangeContext::SendMessage(Protocols::Id protocolId, uint8_t msgTyp
     bool isUDPTransport                = peerAddress && peerAddress->GetTransportType() == Transport::Type::kUdp;
     bool reliableTransmissionRequested = isUDPTransport && !sendFlags.Has(SendMessageFlags::kNoAutoRequestAck);
 
-    CHIP_ERROR err = CHIP_NO_ERROR;
-
     // If a response message is expected...
     if (sendFlags.Has(SendMessageFlags::kExpectResponse))
     {
@@ -149,37 +148,33 @@ CHIP_ERROR ExchangeContext::SendMessage(Protocols::Id protocolId, uint8_t msgTyp
         // Arm the response timer if a timeout has been specified.
         if (mResponseTimeout > System::Clock::Zero)
         {
-            err = StartResponseTimer();
+            CHIP_ERROR err = StartResponseTimer();
             if (err != CHIP_NO_ERROR)
             {
                 SetResponseExpected(false);
+                return err;
             }
         }
     }
 
-    if (err == CHIP_NO_ERROR)
     {
-        err = mDispatch->SendMessage(mSession.Value(), mExchangeId, IsInitiator(), GetReliableMessageContext(),
-                                     reliableTransmissionRequested, protocolId, msgType, std::move(msgBuf));
+        // Create a new scope for `err`, to avoid shadowing warning previous `err`.
+        CHIP_ERROR err = mDispatch->SendMessage(mSession.Value(), mExchangeId, IsInitiator(), GetReliableMessageContext(),
+                                                reliableTransmissionRequested, protocolId, msgType, std::move(msgBuf));
+        if (err != CHIP_NO_ERROR && IsResponseExpected())
+        {
+            CancelResponseTimer();
+            SetResponseExpected(false);
+        }
+
+        // Standalone acks are not application-level message sends.
+        if (err == CHIP_NO_ERROR && !isStandaloneAck)
+        {
+            MessageHandled();
+        }
+
+        return err;
     }
-
-    if (err != CHIP_NO_ERROR && IsResponseExpected())
-    {
-        CancelResponseTimer();
-        SetResponseExpected(false);
-    }
-
-    // Standalone acks are not application-level message sends.
-    if (err == CHIP_NO_ERROR && !isStandaloneAck)
-    {
-        MessageHandled();
-    }
-
-#if CONFIG_DEVICE_LAYER && CHIP_DEVICE_CONFIG_ENABLE_SED
-    UpdateSEDPollingMode(peerAddress->GetTransportType());
-#endif
-
-    return err;
 }
 
 void ExchangeContext::DoClose(bool clearRetransTable)
@@ -491,6 +486,11 @@ CHIP_ERROR ExchangeContext::HandleMessage(uint32_t messageCounter, const Payload
 
 void ExchangeContext::MessageHandled()
 {
+#if CONFIG_DEVICE_LAYER && CHIP_DEVICE_CONFIG_ENABLE_SED
+    const Transport::PeerAddress * peerAddress = GetSessionHandle().GetPeerAddress(mExchangeMgr->GetSessionManager());
+    UpdateSEDPollingMode(peerAddress->GetTransportType());
+#endif
+
     if (mFlags.Has(Flags::kFlagClosed) || IsResponseExpected() || IsSendExpected())
     {
         return;
