@@ -67,7 +67,7 @@ public:
 #if CHIP_DEVICE_CONFIG_ENABLE_SED
     CHIP_ERROR _GetSEDPollingConfig(ConnectivityManager::SEDPollingConfig & pollingConfig);
     CHIP_ERROR _SetSEDPollingConfig(const ConnectivityManager::SEDPollingConfig & pollingConfig);
-    CHIP_ERROR _AdjustSEDPollingInterval(ConnectivityManager::SEDPollingIntervalType pollingType);
+    CHIP_ERROR _SetSEDPollingMode(ConnectivityManager::SEDPollingMode pollingType);
 #endif
 
     bool _HaveMeshConnectivity();

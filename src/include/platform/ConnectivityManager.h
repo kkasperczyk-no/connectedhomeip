@@ -139,7 +139,7 @@ public:
         kSlowAdvertising = 1,
     };
 
-    enum SEDPollingIntervalType
+    enum class SEDPollingMode
     {
         Idle   = 0,
         Active = 1,
@@ -193,11 +193,11 @@ public:
     CHIP_ERROR GetNetworkInterfaces(NetworkInterface ** netifpp);
     void ReleaseNetworkInterfaces(NetworkInterface * netifp);
 
-// Sleep end device methods
+// Sleepy end device methods
 #if CHIP_DEVICE_CONFIG_ENABLE_SED
     CHIP_ERROR GetSEDPollingConfig(SEDPollingConfig & pollingConfig);
     CHIP_ERROR SetSEDPollingConfig(const SEDPollingConfig & pollingConfig);
-    CHIP_ERROR AdjustSEDPollingInterval(SEDPollingIntervalType pollingType);
+    CHIP_ERROR SetSEDPollingMode(SEDPollingMode pollingType);
 #endif
 
     // Ethernet network diagnostics methods
@@ -589,9 +589,9 @@ inline CHIP_ERROR ConnectivityManager::SetSEDPollingConfig(const SEDPollingConfi
     return static_cast<ImplClass *>(this)->_SetSEDPollingConfig(pollingConfig);
 }
 
-inline CHIP_ERROR ConnectivityManager::AdjustSEDPollingInterval(SEDPollingIntervalType pollingType)
+inline CHIP_ERROR ConnectivityManager::SetSEDPollingMode(SEDPollingMode pollingType)
 {
-    return static_cast<ImplClass *>(this)->_AdjustSEDPollingInterval(pollingType);
+    return static_cast<ImplClass *>(this)->_SetSEDPollingMode(pollingType);
 }
 #endif
 

@@ -232,7 +232,7 @@ private:
     uint16_t mNextExchangeId;
     uint16_t mNextKeyId;
     State mState;
-    bool mIsActiveStateForced; // Active state forced despite there is currently no active exchange
+    bool mIsActiveStateForced = false; // Active state forced despite there is currently no active exchange
 
     ExchangeMgrDelegate * mDelegate;
     SessionManager * mSessionManager;

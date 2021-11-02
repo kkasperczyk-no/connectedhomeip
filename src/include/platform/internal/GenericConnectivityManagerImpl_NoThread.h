@@ -52,7 +52,7 @@ protected:
     CHIP_ERROR _SetThreadDeviceType(ConnectivityManager::ThreadDeviceType deviceType);
     CHIP_ERROR _GetSEDPollingConfig(ConnectivityManager::SEDPollingConfig & pollingConfig);
     CHIP_ERROR _SetSEDPollingConfig(const ConnectivityManager::SEDPollingConfig & pollingConfig);
-    CHIP_ERROR _AdjustSEDPollingInterval(ConnectivityManager::SEDPollingIntervalType pollingType);
+    CHIP_ERROR _SetSEDPollingMode(ConnectivityManager::SEDPollingMode pollingType);
     bool _IsThreadAttached(void);
     bool _IsThreadProvisioned(void);
     void _ErasePersistentInfo(void);
@@ -130,8 +130,8 @@ inline CHIP_ERROR GenericConnectivityManagerImpl_NoThread<ImplClass>::_SetSEDPol
 }
 
 template <class ImplClass>
-inline CHIP_ERROR GenericConnectivityManagerImpl_NoThread<ImplClass>::_AdjustSEDPollingInterval(
-    const ConnectivityManager::SEDPollingIntervalType pollingType)
+inline CHIP_ERROR
+GenericConnectivityManagerImpl_NoThread<ImplClass>::_SetSEDPollingMode(const ConnectivityManager::SEDPollingMode pollingType)
 {
     return CHIP_ERROR_UNSUPPORTED_CHIP_FEATURE;
 }

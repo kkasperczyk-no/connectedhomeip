@@ -66,7 +66,7 @@ protected:
 #if CHIP_DEVICE_CONFIG_ENABLE_SED
     CHIP_ERROR _GetSEDPollingConfig(ConnectivityManager::SEDPollingConfig & pollingConfig);
     CHIP_ERROR _SetSEDPollingConfig(const ConnectivityManager::SEDPollingConfig & pollingConfig);
-    CHIP_ERROR _AdjustSEDPollingInterval(ConnectivityManager::SEDPollingIntervalType pollingType);
+    CHIP_ERROR _SetSEDPollingMode(ConnectivityManager::SEDPollingMode pollingType);
 #endif
     bool _IsThreadAttached();
     bool _IsThreadProvisioned();
@@ -158,9 +158,9 @@ GenericConnectivityManagerImpl_Thread<ImplClass>::_SetSEDPollingConfig(const Con
 
 template <class ImplClass>
 inline CHIP_ERROR
-GenericConnectivityManagerImpl_Thread<ImplClass>::_AdjustSEDPollingInterval(ConnectivityManager::SEDPollingIntervalType pollingType)
+GenericConnectivityManagerImpl_Thread<ImplClass>::_SetSEDPollingMode(ConnectivityManager::SEDPollingMode pollingType)
 {
-    return ThreadStackMgrImpl().AdjustSEDPollingInterval(pollingType);
+    return ThreadStackMgrImpl().SetSEDPollingMode(pollingType);
 }
 #endif
 

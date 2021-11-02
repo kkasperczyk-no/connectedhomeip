@@ -196,7 +196,6 @@ chip_gn_arg_bool  ("chip_enable_openthread"                 CONFIG_NET_L2_OPENTH
 chip_gn_arg_bool  ("chip_config_network_layer_ble"          CONFIG_BT)
 chip_gn_arg_bool  ("chip_inet_config_enable_ipv4"           CONFIG_NET_IPV4)
 chip_gn_arg_bool  ("chip_enable_nfc"                        CONFIG_CHIP_NFC_COMMISSIONING)
-chip_gn_arg_bool  ("chip_enable_sed"                        CONFIG_CHIP_ENABLE_SED)
 chip_gn_arg_bool  ("chip_build_tests"                       CONFIG_CHIP_BUILD_TESTS)
 chip_gn_arg_bool  ("chip_monolithic_tests"                  CONFIG_CHIP_BUILD_TESTS)
 chip_gn_arg_bool  ("chip_inet_config_enable_tcp_endpoint"   CONFIG_CHIP_BUILD_TESTS)

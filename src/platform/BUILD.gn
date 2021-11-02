@@ -112,10 +112,6 @@ if (chip_device_platform != "none") {
       defines += [ "CHIP_DEVICE_CONFIG_ENABLE_CHIPOBLE=${chip_enable_ble}" ]
     }
 
-    if (chip_enable_sed) {
-      defines += [ "CHIP_DEVICE_CONFIG_ENABLE_SED=1" ]
-    }
-
     if (chip_enable_nfc) {
       defines += [ "CHIP_DEVICE_CONFIG_ENABLE_NFC=1" ]
     }

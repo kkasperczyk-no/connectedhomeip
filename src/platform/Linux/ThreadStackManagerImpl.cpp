@@ -399,7 +399,7 @@ CHIP_ERROR ThreadStackManagerImpl::_SetSEDPollingConfig(const ConnectivityManage
     return CHIP_ERROR_NOT_IMPLEMENTED;
 }
 
-CHIP_ERROR ThreadStackManagerImpl::_AdjustSEDPollingInterval(ConnectivityManager::SEDPollingIntervalType pollingType)
+CHIP_ERROR ThreadStackManagerImpl::_SetSEDPollingMode(ConnectivityManager::SEDPollingMode pollingType)
 {
     (void) pollingType;
 

@@ -278,8 +278,7 @@ CHIP_ERROR CommissioningWindowManager::StartAdvertisement()
     mServer->GetExchangeManager().SetActiveStateForced(true);
 
 #if CHIP_DEVICE_CONFIG_ENABLE_SED
-    chip::DeviceLayer::ConnectivityMgr().AdjustSEDPollingInterval(
-        chip::DeviceLayer::ConnectivityManager::SEDPollingIntervalType::Active);
+    DeviceLayer::ConnectivityMgr().SetSEDPollingMode(DeviceLayer::ConnectivityManager::SEDPollingMode::Active);
 #endif
 
     return CHIP_NO_ERROR;
@@ -296,8 +295,7 @@ CHIP_ERROR CommissioningWindowManager::StopAdvertisement()
     mServer->GetExchangeManager().SetActiveStateForced(false);
 
 #if CHIP_DEVICE_CONFIG_ENABLE_SED
-    chip::DeviceLayer::ConnectivityMgr().AdjustSEDPollingInterval(
-        chip::DeviceLayer::ConnectivityManager::SEDPollingIntervalType::Idle);
+    DeviceLayer::ConnectivityMgr().SetSEDPollingMode(DeviceLayer::ConnectivityManager::SEDPollingMode::Idle);
 #endif
 
     if (mIsBLE)

@@ -1411,21 +1411,20 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_SetSEDPollingCo
         return CHIP_ERROR_INVALID_ARGUMENT;
     }
     mPollingConfig = pollingConfig;
-    return Impl()->_AdjustSEDPollingInterval(ConnectivityManager::SEDPollingIntervalType::Idle);
+    return Impl()->_SetSEDPollingMode(mPollingMode);
 }
 
 template <class ImplClass>
-CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_AdjustSEDPollingInterval(
-    ConnectivityManager::SEDPollingIntervalType pollingType)
+CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_SetSEDPollingMode(ConnectivityManager::SEDPollingMode pollingType)
 {
     CHIP_ERROR err = CHIP_NO_ERROR;
     uint32_t interval;
 
-    if (pollingType == ConnectivityManager::SEDPollingIntervalType::Idle)
+    if (pollingType == ConnectivityManager::SEDPollingMode::Idle)
     {
         interval = mPollingConfig.SlowPollingIntervalMS;
     }
-    else if (pollingType == ConnectivityManager::SEDPollingIntervalType::Active)
+    else if (pollingType == ConnectivityManager::SEDPollingMode::Active)
     {
         interval = mPollingConfig.FastPollingIntervalMS;
     }
@@ -1433,6 +1432,7 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_AdjustSEDPollin
     {
         return CHIP_ERROR_INVALID_ARGUMENT;
     }
+    mPollingMode = pollingType;
 
     Impl()->LockThreadStack();
 
@@ -1451,14 +1451,12 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::_AdjustSEDPollin
         ChipLogProgress(DeviceLayer, "OpenThread polling interval set to %" PRId32 "ms", interval);
     }
 
-#if CHIP_DEVICE_CONFIG_ENABLE_THREAD_SRP_CLIENT
-    if (err == CHIP_NO_ERROR && mSrpClient.mIsInitialized)
+    if (err == CHIP_NO_ERROR)
     {
         ChipDeviceEvent event;
         event.Type = DeviceEventType::kSEDPollingIntervalChange;
         err        = chip::DeviceLayer::PlatformMgr().PostEvent(&event);
     }
-#endif
 
     return err;
 }

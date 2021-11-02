@@ -128,7 +128,7 @@
 /**
  * CHIP_DEVICE_CONFIG_SED_SLOW_POLLING_INTERVAL
  *
- * The default amount of time in milliseconds that the sleep end device will use as a slow-polling interval.
+ * The default amount of time in milliseconds that the sleepy end device will use as a slow-polling interval.
  * This interval is used by the device to periodically wake up and poll the data in the idle mode.
  */
 #ifndef CHIP_DEVICE_CONFIG_SED_SLOW_POLLING_INTERVAL
@@ -138,7 +138,7 @@
 /**
  * CHIP_DEVICE_CONFIG_SED_FAST_POLLING_INTERVAL
  *
- * The default amount of time in milliseconds that the sleep end device will use as a fast-polling interval.
+ * The default amount of time in milliseconds that the sleepy end device will use as a fast-polling interval.
  * This interval is used by the device to periodically wake up and poll the data in the active mode.
  */
 #ifndef CHIP_DEVICE_CONFIG_SED_FAST_POLLING_INTERVAL

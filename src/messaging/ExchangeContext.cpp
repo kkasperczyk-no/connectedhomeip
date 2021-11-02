@@ -83,6 +83,23 @@ void ExchangeContext::SetResponseTimeout(Timeout timeout)
     mResponseTimeout = timeout;
 }
 
+#if CONFIG_DEVICE_LAYER && CHIP_DEVICE_CONFIG_ENABLE_SED
+void ExchangeContext::UpdateSEDPollingMode(Transport::Type transportType)
+{
+    if (transportType != Transport::Type::kBle)
+    {
+        if (!IsResponseExpected() && (mExchangeMgr->GetNumActiveExchanges() == 1) && !GetExchangeMgr()->GetActiveStateForced())
+        {
+            chip::DeviceLayer::ConnectivityMgr().SetSEDPollingMode(chip::DeviceLayer::ConnectivityManager::SEDPollingMode::Idle);
+        }
+        else
+        {
+            chip::DeviceLayer::ConnectivityMgr().SetSEDPollingMode(chip::DeviceLayer::ConnectivityManager::SEDPollingMode::Active);
+        }
+    }
+}
+#endif
+
 CHIP_ERROR ExchangeContext::SendMessage(Protocols::Id protocolId, uint8_t msgType, PacketBufferHandle && msgBuf,
                                         const SendFlags & sendFlags)
 {
@@ -121,8 +138,11 @@ CHIP_ERROR ExchangeContext::SendMessage(Protocols::Id protocolId, uint8_t msgTyp
     if (sendFlags.Has(SendMessageFlags::kExpectResponse))
     {
         // Only one 'response expected' message can be outstanding at a time.
-        // TODO: add a test for this case.
-        VerifyOrExit(!IsResponseExpected(), err = CHIP_ERROR_INCORRECT_STATE);
+        if (IsResponseExpected())
+        {
+            // TODO: add a test for this case.
+            return CHIP_ERROR_INCORRECT_STATE;
+        }
 
         SetResponseExpected(true);
 
@@ -130,12 +150,19 @@ CHIP_ERROR ExchangeContext::SendMessage(Protocols::Id protocolId, uint8_t msgTyp
         if (mResponseTimeout > System::Clock::Zero)
         {
             err = StartResponseTimer();
-            VerifyOrExit(err == CHIP_NO_ERROR, SetResponseExpected(false));
+            if (err != CHIP_NO_ERROR)
+            {
+                SetResponseExpected(false);
+            }
         }
     }
 
-    err = mDispatch->SendMessage(mSecureSession.Value(), mExchangeId, IsInitiator(), GetReliableMessageContext(),
-                                 reliableTransmissionRequested, protocolId, msgType, std::move(msgBuf));
+    if (err == CHIP_NO_ERROR)
+    {
+        err = mDispatch->SendMessage(mSession.Value(), mExchangeId, IsInitiator(), GetReliableMessageContext(),
+                                     reliableTransmissionRequested, protocolId, msgType, std::move(msgBuf));
+    }
+
     if (err != CHIP_NO_ERROR && IsResponseExpected())
     {
         CancelResponseTimer();
@@ -148,33 +175,8 @@ CHIP_ERROR ExchangeContext::SendMessage(Protocols::Id protocolId, uint8_t msgTyp
         MessageHandled();
     }
 
-exit:
-
-// Updating Sleepy End Device polling interval in the following way:
-// - it is not done for exchanges over Bluetooth LE
-// - set IDLE polling mode if all conditions are met:
-//    - device doesn't expect response
-//    - there is no other active exchange that current one
-//    - active state is not forced (commissioning window is not opened)
-// - set ACTIVE polling mode if any of the conditions is met:
-//    - device expects response
-//    - there is another active exchange
-//    - active state is forced (commissioning window is currently open)
 #if CONFIG_DEVICE_LAYER && CHIP_DEVICE_CONFIG_ENABLE_SED
-    if (peerAddress->GetTransportType() != Transport::Type::kBle)
-    {
-        if ((!IsResponseExpected() || err != CHIP_NO_ERROR) && (mExchangeMgr->GetNumActiveExchanges() == 1) &&
-            !GetExchangeMgr()->GetActiveStateForced())
-        {
-            chip::DeviceLayer::ConnectivityMgr().AdjustSEDPollingInterval(
-                chip::DeviceLayer::ConnectivityManager::SEDPollingIntervalType::Idle);
-        }
-        else
-        {
-            chip::DeviceLayer::ConnectivityMgr().AdjustSEDPollingInterval(
-                chip::DeviceLayer::ConnectivityManager::SEDPollingIntervalType::Active);
-        }
-    }
+    UpdateSEDPollingMode(peerAddress->GetTransportType());
 #endif
 
     return err;

@@ -96,7 +96,8 @@ config CHIP_ENABLE_DNS_CLIENT
 config CHIP_ENABLE_SED
 	bool "Enable sleepy end device support"
 	default n
-	depends on OPENTHREAD_MTD && OPENTHREAD_MTD_SED
+	depends on OPENTHREAD_MTD
+	imply OPENTHREAD_MTD_SED
 	help
 	  Enables Thread Sleepy End Device support in Matter.
 

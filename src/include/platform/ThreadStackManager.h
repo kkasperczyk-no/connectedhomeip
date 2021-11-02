@@ -154,7 +154,7 @@ private:
 #if CHIP_DEVICE_CONFIG_ENABLE_SED
     CHIP_ERROR GetSEDPollingConfig(ConnectivityManager::SEDPollingConfig & pollingConfig);
     CHIP_ERROR SetSEDPollingConfig(const ConnectivityManager::SEDPollingConfig & pollingConfig);
-    CHIP_ERROR AdjustSEDPollingInterval(ConnectivityManager::SEDPollingIntervalType pollingType);
+    CHIP_ERROR SetSEDPollingMode(ConnectivityManager::SEDPollingMode pollingType);
 #endif
 
     bool HaveMeshConnectivity();
@@ -357,9 +357,9 @@ inline CHIP_ERROR ThreadStackManager::SetSEDPollingConfig(const ConnectivityMana
     return static_cast<ImplClass *>(this)->_SetSEDPollingConfig(pollingConfig);
 }
 
-inline CHIP_ERROR ThreadStackManager::AdjustSEDPollingInterval(ConnectivityManager::SEDPollingIntervalType pollingType)
+inline CHIP_ERROR ThreadStackManager::SetSEDPollingMode(ConnectivityManager::SEDPollingMode pollingType)
 {
-    return static_cast<ImplClass *>(this)->_AdjustSEDPollingInterval(pollingType);
+    return static_cast<ImplClass *>(this)->_SetSEDPollingMode(pollingType);
 }
 #endif
 
