@@ -198,6 +198,9 @@ public:
 
     size_t GetNumActiveExchanges() { return mContextPool.Allocated(); }
 
+    bool GetActiveStateForced() const { return mIsActiveStateForced; }
+    void SetActiveStateForced(bool forced) { mIsActiveStateForced = forced; }
+
 private:
     enum class State
     {
@@ -229,6 +232,7 @@ private:
     uint16_t mNextExchangeId;
     uint16_t mNextKeyId;
     State mState;
+    bool mIsActiveStateForced = false; // Active state forced despite there is currently no active exchange
 
     ExchangeMgrDelegate * mDelegate;
     SessionManager * mSessionManager;

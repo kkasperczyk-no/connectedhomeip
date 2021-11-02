@@ -84,10 +84,14 @@ protected:
     void _ErasePersistentInfo(void);
     ConnectivityManager::ThreadDeviceType _GetThreadDeviceType(void);
     CHIP_ERROR _SetThreadDeviceType(ConnectivityManager::ThreadDeviceType deviceType);
-    void _GetThreadPollingConfig(ConnectivityManager::ThreadPollingConfig & pollingConfig);
-    CHIP_ERROR _SetThreadPollingConfig(const ConnectivityManager::ThreadPollingConfig & pollingConfig);
+
+#if CHIP_DEVICE_CONFIG_ENABLE_SED
+    CHIP_ERROR _GetSEDPollingConfig(ConnectivityManager::SEDPollingConfig & pollingConfig);
+    CHIP_ERROR _SetSEDPollingConfig(const ConnectivityManager::SEDPollingConfig & pollingConfig);
+    CHIP_ERROR _SetSEDPollingMode(ConnectivityManager::SEDPollingMode pollingType);
+#endif
+
     bool _HaveMeshConnectivity(void);
-    void _OnMessageLayerActivityChanged(bool messageLayerIsActive);
     CHIP_ERROR _GetAndLogThreadStatsCounters(void);
     CHIP_ERROR _GetAndLogThreadTopologyMinimal(void);
     CHIP_ERROR _GetAndLogThreadTopologyFull(void);
@@ -121,7 +125,6 @@ protected:
     CHIP_ERROR DoInit(otInstance * otInst);
     bool IsThreadAttachedNoLock(void);
     bool IsThreadInterfaceUpNoLock(void);
-    CHIP_ERROR AdjustPollingInterval(void);
 
     CHIP_ERROR _JoinerStart(void);
 
@@ -129,7 +132,11 @@ private:
     // ===== Private members for use by this class only.
 
     otInstance * mOTInst;
-    ConnectivityManager::ThreadPollingConfig mPollingConfig;
+
+#if CHIP_DEVICE_CONFIG_ENABLE_SED
+    ConnectivityManager::SEDPollingConfig mPollingConfig;
+    ConnectivityManager::SEDPollingMode mPollingMode = ConnectivityManager::SEDPollingMode::Idle;
+#endif
 
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD_SRP_CLIENT
 

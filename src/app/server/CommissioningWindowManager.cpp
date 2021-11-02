@@ -275,6 +275,12 @@ CHIP_ERROR CommissioningWindowManager::StartAdvertisement()
         mAppDelegate->OnPairingWindowOpened();
     }
     mCommissioningWindowOpen = true;
+    mServer->GetExchangeManager().SetActiveStateForced(true);
+
+#if CHIP_DEVICE_CONFIG_ENABLE_SED
+    DeviceLayer::ConnectivityMgr().SetSEDPollingMode(DeviceLayer::ConnectivityManager::SEDPollingMode::Active);
+#endif
+
     return CHIP_NO_ERROR;
 }
 
@@ -286,6 +292,11 @@ CHIP_ERROR CommissioningWindowManager::StopAdvertisement()
     mPairingSession.Clear();
 
     mCommissioningWindowOpen = false;
+    mServer->GetExchangeManager().SetActiveStateForced(false);
+
+#if CHIP_DEVICE_CONFIG_ENABLE_SED
+    DeviceLayer::ConnectivityMgr().SetSEDPollingMode(DeviceLayer::ConnectivityManager::SEDPollingMode::Idle);
+#endif
 
     if (mIsBLE)
     {
