@@ -21,7 +21,7 @@ public:
 	int StartApp();
 
 	void PostEvent(const AppEvent &aEvent);
-	void UpdateClusterState();
+	void UpdateClustersState();
 
 private:
 	friend AppTask &GetAppTask();
@@ -29,6 +29,10 @@ private:
 	int Init();
 	void OpenPairingWindow();
 	void DispatchEvent(AppEvent &event);
+	void UpdateTemperatureClusterState();
+	void UpdatePressureClusterState();
+	void UpdateRelativeHumidityClusterState();
+	void UpdatePowerSourceClusterState();
 
 #ifdef CONFIG_MCUMGR_SMP_BT
 	static void RequestSMPAdvertisingStart(void);

@@ -19,7 +19,6 @@ LOG_MODULE_DECLARE(app);
 #define BATTERY_ENABLE_MEASUREMENT_GPIO DT_GPIO_LABEL(VBATT, power_gpios)
 #define BATTERY_ENABLE_MEASUREMENT_PIN DT_GPIO_PIN(VBATT, power_gpios)
 #define BATTERY_ENABLE_MEASUREMENT_FLAGS DT_GPIO_FLAGS(VBATT, power_gpios)
-// TODO: add dts node?
 #define BATTERY_CHARGE_GPIO DT_LABEL(DT_NODELABEL(gpio1))
 #define BATTERY_CHARGE_PIN 0
 #define BATTERY_FULL_OHMS DT_PROP(VBATT, full_ohms)
@@ -33,7 +32,6 @@ static bool sBatteryConfigured;
 static int16_t sAdcBuffer;
 
 #ifdef CONFIG_ADC_NRFX_SAADC
-// TODO:
 static struct adc_channel_cfg sAdcConfig = {
 	.gain = ADC_GAIN_1,
 	.reference = ADC_REF_INTERNAL,
@@ -131,10 +129,11 @@ int BatteryChargeControlInit()
 	return err;
 }
 
-bool BatteryIsCharged()
+bool BatteryCharged()
 {
 	if (kChargeGpioController) {
-		return gpio_pin_get(kChargeGpioController, BATTERY_CHARGE_PIN);
+		/* Invert logic (low state means charging and high not charging) */ 
+		return !gpio_pin_get(kChargeGpioController, BATTERY_CHARGE_PIN);
 	}
-	return false;
+	return true;
 }

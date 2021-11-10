@@ -10,4 +10,4 @@ int BatteryMeasurementInit();
 int BatteryMeasurementEnable();
 int32_t BatteryMeasurementRead();
 int BatteryChargeControlInit();
-bool BatteryIsCharged();
+bool BatteryCharged();
