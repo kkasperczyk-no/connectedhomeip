@@ -6,6 +6,7 @@
 
 #include "app_task.h"
 
+#include "battery.h"
 #include "LEDWidget.h"
 #include <platform/CHIPDeviceLayer.h>
 
@@ -93,6 +94,21 @@ int AppTask::Init()
 
 	if (!kBme688SensorDev) {
 		LOG_ERR("BME688 sensor init failed");
+		return -1;
+	}
+
+	if (BatteryMeasurementInit()) {
+		LOG_ERR("Battery measurement init failed");
+		return -1;
+	}
+
+	if (BatteryMeasurementEnable()) {
+		LOG_ERR("Enabling battery measurement failed");
+		return -1;
+	}
+
+	if (BatteryChargeControlInit()) {
+		LOG_ERR("Battery charge control init failed");
 		return -1;
 	}
 
@@ -336,6 +352,19 @@ void AppTask::UpdateClusterState()
 		}
 	} else {
 		LOG_ERR("Getting humidity measurement data from BME688 failed with: %d", result);
+	}
+
+	result = BatteryMeasurementRead();
+	if (result > 0) {
+		LOG_INF("Battery level %d mV", result);
+	} else {
+		LOG_ERR("Battery level measurement failed %d", result);
+	}
+
+	if (BatteryIsCharged()) {
+		LOG_INF("Battery is being charged");
+	} else {
+		LOG_INF("Battery is not being charged");
 	}
 }
 
