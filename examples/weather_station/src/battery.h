@@ -8,6 +8,6 @@
 
 int BatteryMeasurementInit();
 int BatteryMeasurementEnable();
-int32_t BatteryMeasurementRead();
+int32_t BatteryMeasurementReadVoltageMv();
 int BatteryChargeControlInit();
 bool BatteryCharged();

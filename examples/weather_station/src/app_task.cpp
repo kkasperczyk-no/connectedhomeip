@@ -12,6 +12,7 @@
 
 #include <app-common/zap-generated/attribute-id.h>
 #include <app-common/zap-generated/attribute-type.h>
+#include <app-common/zap-generated/attributes/Accessors.h>
 #include <app-common/zap-generated/cluster-id.h>
 #include <app/server/OnboardingCodesUtil.h>
 #include <app/server/Server.h>
@@ -27,6 +28,7 @@
 
 using namespace ::chip::Credentials;
 using namespace ::chip::DeviceLayer;
+using namespace ::chip::app;
 
 LOG_MODULE_DECLARE(app);
 
@@ -294,10 +296,7 @@ void AppTask::UpdateTemperatureClusterState() {
 			newValue = kTemperatureMeasurementAttributeInvalidValue;
 		}
 
-		status = emberAfWriteAttribute(kTemperatureMeasurementEndpointId, ZCL_TEMP_MEASUREMENT_CLUSTER_ID,
-					       ZCL_TEMP_MEASURED_VALUE_ATTRIBUTE_ID, CLUSTER_MASK_SERVER,
-					       reinterpret_cast<uint8_t *>(&newValue), ZCL_INT16S_ATTRIBUTE_TYPE);
-
+		status = Clusters::TemperatureMeasurement::Attributes::MeasuredValue::Set(kTemperatureMeasurementEndpointId, newValue);
 		if (status != EMBER_ZCL_STATUS_SUCCESS) {
 			LOG_ERR("Updating temperature measurement %x", status);
 		}
@@ -322,10 +321,7 @@ void AppTask::UpdatePressureClusterState() {
 			newValue = kPressureMeasurementAttributeInvalidValue;
 		}
 
-		status = emberAfWriteAttribute(kPressureMeasurementEndpointId, ZCL_PRESSURE_MEASUREMENT_CLUSTER_ID,
-					       ZCL_PRESSURE_MEASURED_VALUE_ATTRIBUTE_ID, CLUSTER_MASK_SERVER,
-					       reinterpret_cast<uint8_t *>(&newValue), ZCL_INT16S_ATTRIBUTE_TYPE);
-
+		status = Clusters::PressureMeasurement::Attributes::MeasuredValue::Set(kPressureMeasurementEndpointId, newValue);
 		if (status != EMBER_ZCL_STATUS_SUCCESS) {
 			LOG_ERR("Updating pressure measurement %x", status);
 		}
@@ -350,11 +346,7 @@ void AppTask::UpdateRelativeHumidityClusterState() {
 			newValue = kHumidityMeasurementAttributeInvalidValue;
 		}
 
-		status = emberAfWriteAttribute(kHumidityMeasurementEndpointId,
-					       ZCL_RELATIVE_HUMIDITY_MEASUREMENT_CLUSTER_ID,
-					       ZCL_RELATIVE_HUMIDITY_MEASURED_VALUE_ATTRIBUTE_ID, CLUSTER_MASK_SERVER,
-					       reinterpret_cast<uint8_t *>(&newValue), ZCL_INT16U_ATTRIBUTE_TYPE);
-
+		status = Clusters::RelativeHumidityMeasurement::Attributes::MeasuredValue::Set(kHumidityMeasurementEndpointId, newValue);
 		if (status != EMBER_ZCL_STATUS_SUCCESS) {
 			LOG_ERR("Updating relative humidity measurement %x", status);
 		}
@@ -365,7 +357,7 @@ void AppTask::UpdateRelativeHumidityClusterState() {
 
 void AppTask::UpdatePowerSourceClusterState() {
 	EmberAfStatus status;
-	uint32_t voltage = BatteryMeasurementRead();
+	int32_t voltage = BatteryMeasurementReadVoltageMv();
 	/* Value is expressed in half percent units ranging from 0 to 200. */
 	uint8_t batteryPercentage;
 	EmberAfPowerSourceStatus batteryStatus;
@@ -394,10 +386,10 @@ void AppTask::UpdatePowerSourceClusterState() {
 		batteryPercentage = kMaxBatteryPercentage * (voltage - kMinimalOperatingVoltageMv) / (kMaximalOperatingVoltageMv - kMinimalOperatingVoltageMv);
 	}
 
-	if ((voltage < kWarningThresholdVoltageMv) && (voltage >= kCriticalThresholdVoltageMv)) {
-		batteryChargeLevel = EMBER_ZCL_BAT_CHARGE_LEVEL_WARNING;
-	} else if (voltage < kCriticalThresholdVoltageMv) {
+	if (voltage < kCriticalThresholdVoltageMv) {
 		batteryChargeLevel = EMBER_ZCL_BAT_CHARGE_LEVEL_CRITICAL;
+	} else if (voltage < kWarningThresholdVoltageMv) {
+		batteryChargeLevel = EMBER_ZCL_BAT_CHARGE_LEVEL_WARNING;
 	} else {
 		batteryChargeLevel = EMBER_ZCL_BAT_CHARGE_LEVEL_OK;
 	}
@@ -408,55 +400,33 @@ void AppTask::UpdatePowerSourceClusterState() {
 		batteryCharged = EMBER_ZCL_BAT_CHARGE_STATE_IS_NOT_CHARGING;
 	}
 
-	status = emberAfWriteAttribute(kPowerSourceEndpointId,
-				       ZCL_POWER_SOURCE_CLUSTER_ID,
-					   ZCL_POWER_SOURCE_BAT_VOLTAGE_ATTRIBUTE_ID, CLUSTER_MASK_SERVER,
-				       reinterpret_cast<uint8_t *>(&voltage), ZCL_INT32U_ATTRIBUTE_TYPE);
-
+	status = Clusters::PowerSource::Attributes::BatteryVoltage::Set(kPowerSourceEndpointId, voltage);
 	if (status != EMBER_ZCL_STATUS_SUCCESS) {
 		LOG_ERR("Updating battery voltage failed %x", status);
 	}
 
-	status = emberAfWriteAttribute(kPowerSourceEndpointId,
-				       ZCL_POWER_SOURCE_CLUSTER_ID,
-					   ZCL_POWER_SOURCE_BAT_PERCENT_REMAINING_ATTRIBUTE_ID, CLUSTER_MASK_SERVER,
-				       reinterpret_cast<uint8_t *>(&batteryPercentage), ZCL_INT8U_ATTRIBUTE_TYPE);
-
+	status = Clusters::PowerSource::Attributes::BatteryPercentRemaining::Set(kPowerSourceEndpointId, batteryPercentage);
 	if (status != EMBER_ZCL_STATUS_SUCCESS) {
 		LOG_ERR("Updating battery percentage failed %x", status);
 	}
 
-	status = emberAfWriteAttribute(kPowerSourceEndpointId,
-				       ZCL_POWER_SOURCE_CLUSTER_ID,
-					   ZCL_POWER_SOURCE_BAT_CHARGE_LEVEL_ATTRIBUTE_ID, CLUSTER_MASK_SERVER,
-				       reinterpret_cast<uint8_t *>(&batteryChargeLevel), ZCL_ENUM8_ATTRIBUTE_TYPE);
-
+	status = Clusters::PowerSource::Attributes::BatteryChargeLevel::Set(kPowerSourceEndpointId, batteryChargeLevel);
 	if (status != EMBER_ZCL_STATUS_SUCCESS) {
 		LOG_ERR("Updating battery charge level failed %x", status);
 	}
 
-	status = emberAfWriteAttribute(kPowerSourceEndpointId,
-				       ZCL_POWER_SOURCE_CLUSTER_ID,
-				       ZCL_POWER_SOURCE_STATUS_ATTRIBUTE_ID, CLUSTER_MASK_SERVER,
-				       reinterpret_cast<uint8_t *>(&batteryStatus), ZCL_ENUM8_ATTRIBUTE_TYPE);
+	status = Clusters::PowerSource::Attributes::Status::Set(kPowerSourceEndpointId, batteryStatus);
 
 	if (status != EMBER_ZCL_STATUS_SUCCESS) {
 		LOG_ERR("Updating battery status failed %x", status);
 	}
 
-	status = emberAfWriteAttribute(kPowerSourceEndpointId,
-				       ZCL_POWER_SOURCE_CLUSTER_ID,
-				       ZCL_POWER_SOURCE_BAT_PRESENT_ATTRIBUTE_ID, CLUSTER_MASK_SERVER,
-				       reinterpret_cast<uint8_t *>(&batteryPresent), ZCL_BOOLEAN_ATTRIBUTE_TYPE);
-
+	status = Clusters::PowerSource::Attributes::BatteryPresent::Set(kPowerSourceEndpointId, batteryPresent);
 	if (status != EMBER_ZCL_STATUS_SUCCESS) {
 		LOG_ERR("Updating battery present failed %x", status);
 	}
 
-	status = emberAfWriteAttribute(kPowerSourceEndpointId,
-				       ZCL_POWER_SOURCE_CLUSTER_ID,
-				       ZCL_POWER_SOURCE_BAT_CHARGE_STATE_ATTRIBUTE_ID, CLUSTER_MASK_SERVER,
-				       reinterpret_cast<uint8_t *>(&batteryCharged), ZCL_ENUM8_ATTRIBUTE_TYPE);
+	status = Clusters::PowerSource::Attributes::BatteryChargeState::Set(kPowerSourceEndpointId, batteryCharged);
 
 	if (status != EMBER_ZCL_STATUS_SUCCESS) {
 		LOG_ERR("Updating battery charge failed %x", status);
