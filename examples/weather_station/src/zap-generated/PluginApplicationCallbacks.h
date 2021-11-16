@@ -29,6 +29,7 @@
     MatterGeneralDiagnosticsPluginServerInitCallback();                                                                            \
     MatterNetworkCommissioningPluginServerInitCallback();                                                                          \
     MatterOperationalCredentialsPluginServerInitCallback();                                                                        \
+    MatterPowerSourcePluginServerInitCallback();                                                                                   \
     MatterPressureMeasurementPluginServerInitCallback();                                                                           \
     MatterRelativeHumidityMeasurementPluginServerInitCallback();                                                                   \
     MatterSoftwareDiagnosticsPluginServerInitCallback();                                                                           \
