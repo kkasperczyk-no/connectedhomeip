@@ -7,6 +7,7 @@
 #include "app_task.h"
 
 #include "battery.h"
+#include "buzzer.h"
 #include "LEDWidget.h"
 #include <platform/CHIPDeviceLayer.h>
 
@@ -14,12 +15,12 @@
 #include <app-common/zap-generated/attribute-type.h>
 #include <app-common/zap-generated/attributes/Accessors.h>
 #include <app-common/zap-generated/cluster-id.h>
+#include <app-common/zap-generated/attributes/Accessors.h>
 #include <app/server/OnboardingCodesUtil.h>
 #include <app/server/Server.h>
 #include <app/util/attribute-storage.h>
 #include <credentials/DeviceAttestationCredsProvider.h>
 #include <credentials/examples/DeviceAttestationCredsExample.h>
-
 
 #include <dk_buttons_and_leds.h>
 #include <drivers/sensor.h>
@@ -61,10 +62,14 @@ constexpr int16_t kCriticalThresholdVoltageMv = 3250;
 constexpr uint8_t kMinBatteryPercentage = 0;
 /* Value is expressed in half percent units ranging from 0 to 200. */
 constexpr uint8_t kMaxBatteryPercentage = 200;
+constexpr uint8_t kIdentifyEndpointId = 0;
+/* It is recommended to toggle the signalled state with 0.5 s interval. */
+constexpr size_t kIdentifyTimerIntervalMs = 500;
 
 K_MSGQ_DEFINE(sAppEventQueue, sizeof(AppEvent), kAppEventQueueSize, alignof(AppEvent));
 k_timer sFunctionTimer;
 k_timer sMeasurementsTimer;
+k_timer sIdentifyTimer;
 FunctionTimerMode sFunctionTimerMode = FunctionTimerMode::kDisabled;
 
 LEDWidget sRedLED;
@@ -78,7 +83,11 @@ bool sHaveBLEConnections;
 
 LedState sLedState = LedState::kAlive;
 
-const device *kBme688SensorDev = device_get_binding(DT_LABEL(DT_INST(0, bosch_bme680)));
+Identify sIdentify = {
+    chip::EndpointId{ kIdentifyEndpointId }, AppTask::OnIdentifyStart, AppTask::OnIdentifyStop, EMBER_ZCL_IDENTIFY_IDENTIFY_TYPE_AUDIBLE_BEEP
+};
+
+const device *sBme688SensorDev = device_get_binding(DT_LABEL(DT_INST(0, bosch_bme680)));
 } /* namespace */
 
 AppTask AppTask::sAppTask;
@@ -102,7 +111,7 @@ int AppTask::Init()
 		return ret;
 	}
 
-	if (!kBme688SensorDev) {
+	if (!sBme688SensorDev) {
 		LOG_ERR("BME688 sensor init failed");
 		return -1;
 	}
@@ -122,6 +131,12 @@ int AppTask::Init()
 		return -1;
 	}
 
+    if (BuzzerInit())
+    {
+        LOG_ERR("Buzzer init failed");
+        return -1;
+    }
+
 #ifdef CONFIG_MCUMGR_SMP_BT
 	GetDFUOverSMP().Init(RequestSMPAdvertisingStart);
 	GetDFUOverSMP().ConfirmNewImage();
@@ -135,6 +150,8 @@ int AppTask::Init()
 		&sMeasurementsTimer, [](k_timer *) { sAppTask.PostEvent(AppEvent{ AppEvent::MeasurementsTimer }); },
 		nullptr);
 	k_timer_start(&sMeasurementsTimer, K_MSEC(kMeasurementsIntervalMs), K_MSEC(kMeasurementsIntervalMs));
+	k_timer_init(&sIdentifyTimer, [](k_timer *) { sAppTask.PostEvent(AppEvent{ AppEvent::IdentifyTimer }); },
+		nullptr);
 
 	/* Init ZCL Data Model and start server */
 	chip::Server::GetInstance().Init();
@@ -216,6 +233,9 @@ void AppTask::DispatchEvent(AppEvent &event)
 	case AppEvent::MeasurementsTimer:
 		MeasurementsTimerHandler();
 		break;
+	case AppEvent::IdentifyTimer:
+		IdentifyTimerHandler();
+		break;
 	case AppEvent::UpdateLedState:
 		event.UpdateLedStateEvent.LedWidget->UpdateState();
 		break;
@@ -280,10 +300,25 @@ void AppTask::MeasurementsTimerHandler()
 	sAppTask.UpdateClustersState();
 }
 
+void AppTask::OnIdentifyStart(Identify *)
+{
+	k_timer_start(&sIdentifyTimer, K_MSEC(kIdentifyTimerIntervalMs), K_MSEC(kIdentifyTimerIntervalMs));
+}
+
+void AppTask::OnIdentifyStop(Identify *)
+{
+	k_timer_stop(&sIdentifyTimer);
+}
+
+void AppTask::IdentifyTimerHandler()
+{
+	BuzzerToggleState();
+}
+
 void AppTask::UpdateTemperatureClusterState() {
 	struct sensor_value sTemperature;
 	EmberAfStatus status;
-	int result = sensor_channel_get(kBme688SensorDev, SENSOR_CHAN_AMBIENT_TEMP, &sTemperature);
+	int result = sensor_channel_get(sBme688SensorDev, SENSOR_CHAN_AMBIENT_TEMP, &sTemperature);
 	if (result == 0) {
 		/* Defined by cluster temperature measured value = 100 x temperature in degC with resolution of
 		 * 0.01 degC. val1 is an integer part of the value and val2 is fractional part in one-millionth
@@ -308,7 +343,7 @@ void AppTask::UpdateTemperatureClusterState() {
 void AppTask::UpdatePressureClusterState() {
 	struct sensor_value sPressure;
 	EmberAfStatus status;
-	int result = sensor_channel_get(kBme688SensorDev, SENSOR_CHAN_PRESS, &sPressure);
+	int result = sensor_channel_get(sBme688SensorDev, SENSOR_CHAN_PRESS, &sPressure);
 	if (result == 0) {
 		/* Defined by cluster pressure measured value = 10 x pressure in kPa with resolution of 0.1 kPa.
 		 * val1 is an integer part of the value and val2 is fractional part in one-millionth parts.
@@ -333,7 +368,7 @@ void AppTask::UpdatePressureClusterState() {
 void AppTask::UpdateRelativeHumidityClusterState() {
 	struct sensor_value sHumidity;
 	EmberAfStatus status;
-	int result = sensor_channel_get(kBme688SensorDev, SENSOR_CHAN_HUMIDITY, &sHumidity);
+	int result = sensor_channel_get(sBme688SensorDev, SENSOR_CHAN_HUMIDITY, &sHumidity);
 	if (result == 0) {
 		/* Defined by cluster humidity measured value = 100 x humidity in %RH with resolution of 0.01 %.
 		 * val1 is an integer part of the value and val2 is fractional part in one-millionth parts.
@@ -435,7 +470,7 @@ void AppTask::UpdatePowerSourceClusterState() {
 
 void AppTask::UpdateClustersState()
 {
-	int result = sensor_sample_fetch(kBme688SensorDev);
+	int result = sensor_sample_fetch(sBme688SensorDev);
 
 	if (result == 0) {
 		UpdateTemperatureClusterState();

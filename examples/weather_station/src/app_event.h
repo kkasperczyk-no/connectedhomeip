@@ -16,9 +16,10 @@ struct AppEvent {
 		FunctionRelease,
 		FunctionTimer,
 		MeasurementsTimer,
+		IdentifyTimer,
 	};
 
-	enum UpdateLedStateEventType : uint8_t { UpdateLedState = MeasurementsTimer + 1 };
+	enum UpdateLedStateEventType : uint8_t { UpdateLedState = IdentifyTimer + 1 };
 
 	enum OtherEventType : uint8_t {
 #ifdef CONFIG_MCUMGR_SMP_BT
