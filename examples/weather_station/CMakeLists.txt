@@ -48,6 +48,7 @@ target_sources(app PRIVATE
     src/app_task.cpp
     src/main.cpp
     src/battery.cpp
+    src/buzzer.cpp
     src/zap-generated/attribute-size.cpp
     src/zap-generated/IMClusterCommandHandler.cpp
     src/zap-generated/callback-stub.cpp

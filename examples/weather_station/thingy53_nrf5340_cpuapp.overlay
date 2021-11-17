@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
  */
 
+/ {
+	aliases {
+		buzzer-pwm = &pwm1;
+	};
+};
+
  &i2c1 {
 	bme688@76 {
         compatible = "bosch,bme680";
