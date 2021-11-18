@@ -38,6 +38,10 @@ namespace
 enum class FunctionTimerMode { kDisabled, kFactoryResetTrigger, kFactoryResetComplete };
 enum class LedState { kAlive, kAdvertisingBle, kConnectedBle, kProvisioned };
 
+#if CONFIG_CHIP_DEVICE_AVERAGE_CURRENT_CONSUMPTION <= 0
+#error Invalid CONFIG_CHIP_DEVICE_AVERAGE_CURRENT_CONSUMPTION value set 
+#endif
+
 constexpr size_t kAppEventQueueSize = 10;
 constexpr size_t kFactoryResetTriggerTimeoutMs = 3000;
 constexpr size_t kFactoryResetCompleteTimeoutMs = 3000;
@@ -62,6 +66,12 @@ constexpr int16_t kCriticalThresholdVoltageMv = 3250;
 constexpr uint8_t kMinBatteryPercentage = 0;
 /* Value is expressed in half percent units ranging from 0 to 200. */
 constexpr uint8_t kMaxBatteryPercentage = 200;
+/* Battery capacity in uAh */
+constexpr uint32_t kBatteryCapacityUaH = 1350000;
+/* Average device current consumption in uA */
+constexpr uint32_t kDeviceAverageCurrentConsumptionUa = CONFIG_CHIP_DEVICE_AVERAGE_CURRENT_CONSUMPTION;
+/* Fully charged battery operation time in seconds */
+constexpr uint32_t kFullBatteryOperationTime = kBatteryCapacityUaH / kDeviceAverageCurrentConsumptionUa * 3600;
 constexpr uint8_t kIdentifyEndpointId = 0;
 /* It is recommended to toggle the signalled state with 0.5 s interval. */
 constexpr size_t kIdentifyTimerIntervalMs = 500;
@@ -308,6 +318,7 @@ void AppTask::OnIdentifyStart(Identify *)
 void AppTask::OnIdentifyStop(Identify *)
 {
 	k_timer_stop(&sIdentifyTimer);
+	BuzzerSetState(false);
 }
 
 void AppTask::IdentifyTimerHandler()
@@ -395,6 +406,7 @@ void AppTask::UpdatePowerSourceClusterState() {
 	int32_t voltage = BatteryMeasurementReadVoltageMv();
 	/* Value is expressed in half percent units ranging from 0 to 200. */
 	uint8_t batteryPercentage;
+	uint32_t batteryTimeRemaining;
 	EmberAfPowerSourceStatus batteryStatus;
 	EmberAfBatChargeLevel batteryChargeLevel;
 	bool batteryPresent;
@@ -421,6 +433,8 @@ void AppTask::UpdatePowerSourceClusterState() {
 		batteryPercentage = kMaxBatteryPercentage * (voltage - kMinimalOperatingVoltageMv) / (kMaximalOperatingVoltageMv - kMinimalOperatingVoltageMv);
 	}
 
+	batteryTimeRemaining =  kFullBatteryOperationTime * batteryPercentage / kMaxBatteryPercentage;
+
 	if (voltage < kCriticalThresholdVoltageMv) {
 		batteryChargeLevel = EMBER_ZCL_BAT_CHARGE_LEVEL_CRITICAL;
 	} else if (voltage < kWarningThresholdVoltageMv) {
@@ -443,6 +457,11 @@ void AppTask::UpdatePowerSourceClusterState() {
 	status = Clusters::PowerSource::Attributes::BatteryPercentRemaining::Set(kPowerSourceEndpointId, batteryPercentage);
 	if (status != EMBER_ZCL_STATUS_SUCCESS) {
 		LOG_ERR("Updating battery percentage failed %x", status);
+	}
+
+	status = Clusters::PowerSource::Attributes::BatteryTimeRemaining::Set(kPowerSourceEndpointId, batteryTimeRemaining);
+	if (status != EMBER_ZCL_STATUS_SUCCESS) {
+		LOG_ERR("Updating battery time remaining failed %x", status);
 	}
 
 	status = Clusters::PowerSource::Attributes::BatteryChargeLevel::Set(kPowerSourceEndpointId, batteryChargeLevel);

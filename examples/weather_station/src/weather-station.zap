@@ -985,6 +985,21 @@
               "reportableChange": 0
             },
             {
+              "name": "BatteryTimeRemaining",
+              "code": 13,
+              "mfgCode": null,
+              "side": "server",
+              "included": 1,
+              "storageOption": "RAM",
+              "singleton": 0,
+              "bounded": 0,
+              "defaultValue": "",
+              "reportable": 0,
+              "minInterval": 1,
+              "maxInterval": 65534,
+              "reportableChange": 0
+            },
+            {
               "name": "BatteryChargeLevel",
               "code": 14,
               "mfgCode": null,
@@ -1002,6 +1017,21 @@
             {
               "name": "BatteryPresent",
               "code": 17,
+              "mfgCode": null,
+              "side": "server",
+              "included": 1,
+              "storageOption": "RAM",
+              "singleton": 0,
+              "bounded": 0,
+              "defaultValue": "",
+              "reportable": 0,
+              "minInterval": 1,
+              "maxInterval": 65534,
+              "reportableChange": 0
+            },
+            {
+              "name": "ActiveBatteryFaults",
+              "code": 18,
               "mfgCode": null,
               "side": "server",
               "included": 1,

@@ -27,3 +27,7 @@ config CHIP_NFC_COMMISSIONING
 	imply NFC_NDEF_URI_MSG
 	help
 	  Enables NFC commissioning by sharing onboarding payload in NFC tag.
+
+config CHIP_DEVICE_AVERAGE_CURRENT_CONSUMPTION
+	int "Average device current consumption in microamperes"
+	default 0
