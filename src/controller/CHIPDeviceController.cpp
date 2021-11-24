@@ -268,6 +268,13 @@ void DeviceController::OnSessionReleased(SessionHandle session)
     mCASESessionManager->OnSessionReleased(session);
 }
 
+void DeviceController::OnFirstMessageDeliveryFailed(SessionHandle session)
+{
+    VerifyOrReturn(mState == State::Initialized,
+                   ChipLogError(Controller, "OnFirstMessageDeliveryFailed was called in incorrect state"));
+    UpdateDevice(session.GetPeerNodeId());
+}
+
 CHIP_ERROR DeviceController::InitializePairedDeviceList()
 {
     CHIP_ERROR err   = CHIP_NO_ERROR;
@@ -542,6 +549,7 @@ CHIP_ERROR DeviceCommissioner::Init(CommissionerInitParams params)
 
     params.systemState->SessionMgr()->RegisterCreationDelegate(*this);
     params.systemState->SessionMgr()->RegisterReleaseDelegate(*this);
+    params.systemState->SessionMgr()->RegisterRecoveryDelegate(*this);
 
     uint16_t nextKeyID = 0;
     uint16_t size      = sizeof(nextKeyID);
@@ -1767,7 +1775,7 @@ void DeviceCommissioner::AdvanceCommissioningStage(CHIP_ERROR err)
         RendezvousCleanup(CHIP_NO_ERROR);
 #if CHIP_DEVICE_CONFIG_ENABLE_DNSSD
         ChipLogProgress(Controller, "Finding node on operational network");
-        Dnssd::Resolver::Instance().ResolveNodeId(peerId, Inet::IPAddressType::kAny);
+        Dnssd::Resolver::Instance().ResolveNodeId(peerId, Inet::IPAddressType::kAny, false);
 #endif
     }
     break;

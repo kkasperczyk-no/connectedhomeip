@@ -198,6 +198,32 @@ public:
         });
     }
 
+    void RegisterRecoveryDelegate(SessionRecoveryDelegate & cb)
+    {
+#ifndef NDEBUG
+        mSessionRecoveryDelegates.ForEachActiveObject([&](std::reference_wrapper<SessionRecoveryDelegate> * i) {
+            VerifyOrDie(std::addressof(cb) != std::addressof(i->get()));
+            return true;
+        });
+#endif
+        std::reference_wrapper<SessionRecoveryDelegate> * slot = mSessionRecoveryDelegates.CreateObject(cb);
+        VerifyOrDie(slot != nullptr);
+    }
+
+    void UnregisterRecoveryDelegate(SessionRecoveryDelegate & cb)
+    {
+        mSessionRecoveryDelegates.ForEachActiveObject([&](std::reference_wrapper<SessionRecoveryDelegate> * i) {
+            if (std::addressof(cb) == std::addressof(i->get()))
+            {
+                mSessionRecoveryDelegates.ReleaseObject(i);
+                return false;
+            }
+            return true;
+        });
+    }
+
+    void RefreshSessionOperationalData(SessionHandle sessionHandle);
+
     /**
      * @brief
      *   Establish a new pairing with a peer node
@@ -290,6 +316,9 @@ private:
     //       delegate directly, in order to prevent dangling handles.
     BitMapObjectPool<std::reference_wrapper<SessionReleaseDelegate>, CHIP_CONFIG_MAX_SESSION_RELEASE_DELEGATES>
         mSessionReleaseDelegates;
+
+    BitMapObjectPool<std::reference_wrapper<SessionRecoveryDelegate>, CHIP_CONFIG_MAX_SESSION_RECOVERY_DELEGATES>
+        mSessionRecoveryDelegates;
 
     TransportMgrBase * mTransportMgr                                   = nullptr;
     Transport::MessageCounterManagerInterface * mMessageCounterManager = nullptr;

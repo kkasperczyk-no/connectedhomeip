@@ -48,4 +48,12 @@ public:
     virtual void OnSessionReleased(SessionHandle session) = 0;
 };
 
+class DLL_EXPORT SessionRecoveryDelegate
+{
+public:
+    virtual ~SessionRecoveryDelegate() {}
+
+    virtual void OnFirstMessageDeliveryFailed(SessionHandle session) = 0;
+};
+
 } // namespace chip
