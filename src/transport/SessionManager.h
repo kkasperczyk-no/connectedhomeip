@@ -198,31 +198,9 @@ public:
         });
     }
 
-    void RegisterRecoveryDelegate(SessionRecoveryDelegate & cb)
-    {
-#ifndef NDEBUG
-        mSessionRecoveryDelegates.ForEachActiveObject([&](std::reference_wrapper<SessionRecoveryDelegate> * i) {
-            VerifyOrDie(std::addressof(cb) != std::addressof(i->get()));
-            return true;
-        });
-#endif
-        std::reference_wrapper<SessionRecoveryDelegate> * slot = mSessionRecoveryDelegates.CreateObject(cb);
-        VerifyOrDie(slot != nullptr);
-    }
-
-    void UnregisterRecoveryDelegate(SessionRecoveryDelegate & cb)
-    {
-        mSessionRecoveryDelegates.ForEachActiveObject([&](std::reference_wrapper<SessionRecoveryDelegate> * i) {
-            if (std::addressof(cb) == std::addressof(i->get()))
-            {
-                mSessionRecoveryDelegates.ReleaseObject(i);
-                return false;
-            }
-            return true;
-        });
-    }
-
-    void RefreshSessionOperationalData(SessionHandle sessionHandle);
+    void RegisterRecoveryDelegate(SessionRecoveryDelegate & cb);
+    void UnregisterRecoveryDelegate(SessionRecoveryDelegate & cb);
+    void RefreshSessionOperationalData(const SessionHandle & sessionHandle);
 
     /**
      * @brief

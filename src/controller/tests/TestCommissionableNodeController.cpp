@@ -34,8 +34,7 @@ public:
     CHIP_ERROR Init(chip::Inet::InetLayer * inetLayer) override { return InitStatus; }
     void Shutdown() override {}
     void SetResolverDelegate(ResolverDelegate *) override {}
-    CHIP_ERROR ResolveNodeId(const PeerId & peerId, Inet::IPAddressType type,
-                             ResolvedNodeData::CacheBypass dnssdCacheBypass) override
+    CHIP_ERROR ResolveNodeId(const PeerId & peerId, Inet::IPAddressType type, Resolver::CacheBypass dnssdCacheBypass) override
     {
         return ResolveNodeIdStatus;
     }

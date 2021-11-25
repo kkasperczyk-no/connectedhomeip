@@ -380,7 +380,7 @@ protected:
     void OnSessionReleased(SessionHandle session) override;
 
     //////////// SessionRecoveryDelegate Implementation ///////////////
-    void OnFirstMessageDeliveryFailed(SessionHandle session) override;
+    void OnFirstMessageDeliveryFailed(const SessionHandle & session) override;
 
 #if CHIP_DEVICE_CONFIG_ENABLE_DNSSD
     //////////// ResolverDelegate Implementation ///////////////

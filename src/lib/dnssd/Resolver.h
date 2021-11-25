@@ -36,12 +36,6 @@ namespace Dnssd {
 
 struct ResolvedNodeData
 {
-    enum class CacheBypass
-    {
-        On,
-        Off
-    };
-
     // TODO: use pool to allow dynamic
     static constexpr int kMaxIPAddresses = 5;
     void LogNodeIdResolved()
@@ -258,6 +252,12 @@ public:
 class Resolver
 {
 public:
+    enum class CacheBypass
+    {
+        On,
+        Off
+    };
+
     virtual ~Resolver() {}
 
     /**
@@ -289,8 +289,7 @@ public:
      * the result of the operation is passed to the delegate's `OnNodeIdResolved` or
      * `OnNodeIdResolutionFailed` method, respectively.
      */
-    virtual CHIP_ERROR ResolveNodeId(const PeerId & peerId, Inet::IPAddressType type,
-                                     ResolvedNodeData::CacheBypass dnssdCacheBypass) = 0;
+    virtual CHIP_ERROR ResolveNodeId(const PeerId & peerId, Inet::IPAddressType type, Resolver::CacheBypass dnssdCacheBypass) = 0;
 
     /**
      * Finds all commissionable nodes matching the given filter.

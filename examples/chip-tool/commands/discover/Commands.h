@@ -37,7 +37,7 @@ public:
         ChipLogProgress(chipTool, "Dnssd: Searching for NodeId: %" PRIx64 " FabricId: %" PRIx64 " ...", remoteId, fabricId);
         return chip::Dnssd::Resolver::Instance().ResolveNodeId(chip::PeerId().SetNodeId(remoteId).SetCompressedFabricId(fabricId),
                                                                chip::Inet::IPAddressType::kAny,
-                                                               chip::Dnssd::ResolvedNodeData::CacheBypass::On);
+                                                               chip::Dnssd::Resolver::CacheBypass::On);
     }
 
     void OnNodeIdResolved(const chip::Dnssd::ResolvedNodeData & nodeData) override

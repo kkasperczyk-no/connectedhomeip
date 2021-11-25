@@ -70,7 +70,7 @@ void CASESessionManager::ReleaseSession(NodeId nodeId)
 CHIP_ERROR CASESessionManager::ResolveDeviceAddress(NodeId nodeId)
 {
     return Dnssd::Resolver::Instance().ResolveNodeId(GetFabricInfo()->GetPeerIdForNode(nodeId), Inet::IPAddressType::kAny,
-                                                     Dnssd::ResolvedNodeData::CacheBypass::On);
+                                                     Dnssd::Resolver::CacheBypass::On);
 }
 
 void CASESessionManager::OnNodeIdResolved(const Dnssd::ResolvedNodeData & nodeData)

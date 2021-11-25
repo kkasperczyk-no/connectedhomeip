@@ -357,8 +357,7 @@ CHIP_ERROR ReliableMessageMgr::SendFromRetransTable(RetransTableEntry * entry)
         // After the first failure notify session manager to refresh device data
         if (entry->sendCount == 0)
         {
-            entry->ec->GetExchangeContext()->GetExchangeMgr()->GetSessionManager()->RefreshSessionOperationalData(
-                entry->ec->GetSessionHandle());
+            entry->ec->GetExchangeMgr()->GetSessionManager()->RefreshSessionOperationalData(entry->ec->GetSessionHandle());
         }
         // Update the counters
         entry->sendCount++;

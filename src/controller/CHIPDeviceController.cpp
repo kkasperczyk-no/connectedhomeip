@@ -268,7 +268,7 @@ void DeviceController::OnSessionReleased(SessionHandle session)
     mCASESessionManager->OnSessionReleased(session);
 }
 
-void DeviceController::OnFirstMessageDeliveryFailed(SessionHandle session)
+void DeviceController::OnFirstMessageDeliveryFailed(const SessionHandle & session)
 {
     VerifyOrReturn(mState == State::Initialized,
                    ChipLogError(Controller, "OnFirstMessageDeliveryFailed was called in incorrect state"));
@@ -1775,7 +1775,7 @@ void DeviceCommissioner::AdvanceCommissioningStage(CHIP_ERROR err)
         RendezvousCleanup(CHIP_NO_ERROR);
 #if CHIP_DEVICE_CONFIG_ENABLE_DNSSD
         ChipLogProgress(Controller, "Finding node on operational network");
-        Dnssd::Resolver::Instance().ResolveNodeId(peerId, Inet::IPAddressType::kAny, Dnssd::ResolvedNodeData::CacheBypass::Off);
+        Dnssd::Resolver::Instance().ResolveNodeId(peerId, Inet::IPAddressType::kAny, Dnssd::Resolver::CacheBypass::Off);
 #endif
     }
     break;
