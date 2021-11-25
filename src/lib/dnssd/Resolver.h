@@ -36,6 +36,12 @@ namespace Dnssd {
 
 struct ResolvedNodeData
 {
+    enum class CacheBypass
+    {
+        On,
+        Off
+    };
+
     // TODO: use pool to allow dynamic
     static constexpr int kMaxIPAddresses = 5;
     void LogNodeIdResolved()
@@ -276,14 +282,15 @@ public:
     /**
      * Requests resolution of the given operational node service.
      *
-     * If `dnssdCacheBypass` is set it forces resolution of the given node and bypass option
+     * If `dnssdCacheBypass` is set to `On` it forces resolution of the given node and bypass option
      * of using DNS-SD cache.
      *
      * When the operation succeeds or fails, and a resolver delegate has been registered,
      * the result of the operation is passed to the delegate's `OnNodeIdResolved` or
      * `OnNodeIdResolutionFailed` method, respectively.
      */
-    virtual CHIP_ERROR ResolveNodeId(const PeerId & peerId, Inet::IPAddressType type, bool dnssdCacheBypass) = 0;
+    virtual CHIP_ERROR ResolveNodeId(const PeerId & peerId, Inet::IPAddressType type,
+                                     ResolvedNodeData::CacheBypass dnssdCacheBypass) = 0;
 
     /**
      * Finds all commissionable nodes matching the given filter.

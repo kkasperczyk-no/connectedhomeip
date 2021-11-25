@@ -30,7 +30,8 @@ public:
     void Shutdown() override {}
     void SetResolverDelegate(ResolverDelegate *) override {}
 
-    CHIP_ERROR ResolveNodeId(const PeerId & peerId, Inet::IPAddressType type, bool dnssdCacheBypass) override
+    CHIP_ERROR ResolveNodeId(const PeerId & peerId, Inet::IPAddressType type,
+                             ResolvedNodeData::CacheBypass dnssdCacheBypass) override
     {
         ChipLogError(Discovery, "Failed to resolve node ID: dnssd resolving not available");
         return CHIP_ERROR_NOT_IMPLEMENTED;

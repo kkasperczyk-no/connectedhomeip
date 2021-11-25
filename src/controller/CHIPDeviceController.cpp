@@ -1775,7 +1775,7 @@ void DeviceCommissioner::AdvanceCommissioningStage(CHIP_ERROR err)
         RendezvousCleanup(CHIP_NO_ERROR);
 #if CHIP_DEVICE_CONFIG_ENABLE_DNSSD
         ChipLogProgress(Controller, "Finding node on operational network");
-        Dnssd::Resolver::Instance().ResolveNodeId(peerId, Inet::IPAddressType::kAny, false);
+        Dnssd::Resolver::Instance().ResolveNodeId(peerId, Inet::IPAddressType::kAny, Dnssd::ResolvedNodeData::CacheBypass::Off);
 #endif
     }
     break;

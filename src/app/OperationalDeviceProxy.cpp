@@ -52,7 +52,8 @@ CHIP_ERROR OperationalDeviceProxy::Connect(Callback::Callback<OnDeviceConnected>
         break;
 
     case State::NeedsAddress:
-        err = Dnssd::Resolver::Instance().ResolveNodeId(mPeerId, chip::Inet::IPAddressType::kAny, false);
+        err = Dnssd::Resolver::Instance().ResolveNodeId(mPeerId, chip::Inet::IPAddressType::kAny,
+                                                        Dnssd::ResolvedNodeData::CacheBypass::Off);
         EnqueueConnectionCallbacks(onConnection, onFailure);
         break;
 
