@@ -850,6 +850,43 @@ bool InterfaceIterator::HasBroadcastAddress()
     return HasCurrent() && INET_CONFIG_ENABLE_IPV4;
 }
 
+InterfaceType InterfaceIterator::GetInterfaceType() const
+{
+    const net_linkaddr * linkAddr = net_if_get_link_addr(mCurrentInterface);
+    if (!linkAddr)
+        return InterfaceType::Unknown;
+
+    // Do not consider other than WiFi and Thread for now.
+    if (linkAddr->type == NET_LINK_IEEE802154)
+    {
+        return InterfaceType::Thread;
+    }
+    // Zephyr doesn't define WiFi address type, so it shares the same type as Ethernet.
+    else if (linkAddr->type == NET_LINK_ETHERNET)
+    {
+        return InterfaceType::WiFi;
+    }
+    else
+    {
+        return InterfaceType::Unknown;
+    }
+}
+
+CHIP_ERROR InterfaceIterator::GetHardwareAddress(uint8_t * addressBuffer, uint8_t & addressSize, uint8_t addressBufferSize) const
+{
+    const net_linkaddr * linkAddr = net_if_get_link_addr(mCurrentInterface);
+    if (!linkAddr)
+        return CHIP_ERROR_INCORRECT_STATE;
+
+    if (linkAddr->len > addressBufferSize)
+        return CHIP_ERROR_INVALID_ARGUMENT;
+
+    addressSize = linkAddr->len;
+    memcpy(addressBuffer, linkAddr->addr, linkAddr->len);
+
+    return CHIP_NO_ERROR;
+}
+
 InterfaceAddressIterator::InterfaceAddressIterator() = default;
 
 bool InterfaceAddressIterator::HasCurrent()
