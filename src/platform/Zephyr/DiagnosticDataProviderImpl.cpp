@@ -90,6 +90,39 @@ CHIP_ERROR DiagnosticDataProviderImpl::GetRebootCount(uint16_t & rebootCount)
     return err;
 }
 
+CHIP_ERROR DiagnosticDataProviderImpl::GetUpTime(uint64_t & upTime)
+{
+    System::Clock::Timestamp currentTime = System::SystemClock().GetMonotonicTimestamp();
+    System::Clock::Timestamp startTime   = PlatformMgrImpl().GetStartTime();
+
+    if (currentTime >= startTime)
+    {
+        upTime = std::chrono::duration_cast<System::Clock::Seconds64>(currentTime - startTime).count();
+        return CHIP_NO_ERROR;
+    }
+
+    return CHIP_ERROR_INVALID_TIME;
+}
+
+CHIP_ERROR DiagnosticDataProviderImpl::GetTotalOperationalHours(uint32_t & totalOperationalHours)
+{
+    System::Clock::Timestamp lastSaveTime = PlatformMgrImpl().GetLastOperationalHoursSaveTime();
+    System::Clock::Timestamp currentTime = System::SystemClock().GetMonotonicTimestamp();
+
+    if (currentTime >= lastSaveTime)
+    {
+        uint32_t totalHours = 0;
+        uint64_t deltaTime = std::chrono::duration_cast<System::Clock::Seconds64>(currentTime - lastSaveTime).count();
+        if (ConfigurationMgr().GetTotalOperationalHours(totalHours) == CHIP_NO_ERROR)
+        {
+            totalOperationalHours = deltaTime / 3600 < UINT32_MAX ? totalHours + static_cast<uint32_t>(deltaTime / 3600) : totalHours + UINT32_MAX;
+            return CHIP_NO_ERROR;
+        }
+    }
+
+    return CHIP_ERROR_INVALID_TIME;
+}
+
 CHIP_ERROR DiagnosticDataProviderImpl::GetBootReason(uint8_t & bootReason)
 {
 #if CONFIG_HWINFO
