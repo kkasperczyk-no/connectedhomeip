@@ -47,7 +47,7 @@ public:
     // ===== Platform-specific members that may be accessed directly by the application.
 
     System::Clock::Timestamp GetStartTime() { return mStartTime; }
-    System::Clock::Timestamp GetLastOperationalHoursSaveTime() { return mLastOperationalHoursSaveTime; }
+    uint32_t GetSavedOperationalHoursSinceBoot() { return mSavedOperationalHoursSinceBoot; }
 
 private:
     // ===== Methods that implement the PlatformManager abstract interface.
@@ -65,7 +65,7 @@ private:
     friend class Internal::BLEManagerImpl;
 
     System::Clock::Timestamp mStartTime                    = System::Clock::kZero;
-    System::Clock::Timestamp mLastOperationalHoursSaveTime = System::Clock::kZero;
+    uint32_t mSavedOperationalHoursSinceBoot = 0;
 
     explicit PlatformManagerImpl(ThreadStack & stack) : Internal::GenericPlatformManagerImpl_Zephyr<PlatformManagerImpl>(stack) {}
 

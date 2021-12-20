@@ -111,13 +111,12 @@ config CHIP_OTA_REQUESTOR
 config CHIP_OPERATIONAL_TIME_SAVE_INTERVAL
 	int "Interval of saving node operation time to flash in hours unit"
 	default 10
-	range 1 24
+	range 1 4294967295
 	help
 	  Interval in hours with which the node operation time is saved to the flash
 	  memory. Selected value is a trade of between performing often saves to know
 	  precisely operation time in case of device reboot and maximizing flash memory
-	  lifetime. Default value of 10 hours allows for over 11 years of flash memory operation,
-	  assumming 10 000 write cycles limit.
+	  lifetime.
 
 config APP_LINK_WITH_CHIP
 	bool "Link 'app' with Connected Home over IP"

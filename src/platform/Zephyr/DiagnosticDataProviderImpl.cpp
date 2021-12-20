@@ -106,21 +106,19 @@ CHIP_ERROR DiagnosticDataProviderImpl::GetUpTime(uint64_t & upTime)
 
 CHIP_ERROR DiagnosticDataProviderImpl::GetTotalOperationalHours(uint32_t & totalOperationalHours)
 {
-    System::Clock::Timestamp lastSaveTime = PlatformMgrImpl().GetLastOperationalHoursSaveTime();
-    System::Clock::Timestamp currentTime = System::SystemClock().GetMonotonicTimestamp();
+    uint64_t upTimeS;
 
-    if (currentTime >= lastSaveTime)
-    {
-        uint32_t totalHours = 0;
-        uint64_t deltaTime = std::chrono::duration_cast<System::Clock::Seconds64>(currentTime - lastSaveTime).count();
-        if (ConfigurationMgr().GetTotalOperationalHours(totalHours) == CHIP_NO_ERROR)
-        {
-            totalOperationalHours = deltaTime / 3600 < UINT32_MAX ? totalHours + static_cast<uint32_t>(deltaTime / 3600) : totalHours + UINT32_MAX;
-            return CHIP_NO_ERROR;
-        }
-    }
+    ReturnErrorOnFailure(GetUpTime(upTimeS));
 
-    return CHIP_ERROR_INVALID_TIME;
+    uint32_t totalHours = 0;
+    const uint32_t upTimeH = upTimeS / 3600 < UINT32_MAX ? static_cast<uint32_t>(upTimeS / 3600) : UINT32_MAX;
+    const uint32_t deltaTime = upTimeH - PlatformMgrImpl().GetSavedOperationalHoursSinceBoot();
+
+    ReturnErrorOnFailure(ConfigurationMgr().GetTotalOperationalHours(totalHours));
+
+    totalOperationalHours = totalHours + deltaTime < UINT32_MAX ? totalHours + deltaTime : UINT32_MAX;
+    
+    return CHIP_NO_ERROR;
 }
 
 CHIP_ERROR DiagnosticDataProviderImpl::GetBootReason(uint8_t & bootReason)

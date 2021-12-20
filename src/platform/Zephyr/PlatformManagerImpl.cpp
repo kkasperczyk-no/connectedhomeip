@@ -70,21 +70,21 @@ void PlatformManagerImpl::OperationalHoursSavingTimerEventHandler(k_timer * time
 
 void PlatformManagerImpl::UpdateOperationalHours(intptr_t arg)
 {
-    System::Clock::Timestamp currentTime = System::SystemClock().GetMonotonicTimestamp();
-
-    if (currentTime < sInstance.mLastOperationalHoursSaveTime)
+    uint64_t upTimeS;
+    
+    if (GetDiagnosticDataProvider().GetUpTime(upTimeS) != CHIP_NO_ERROR) {
+        ChipLogError(DeviceLayer, "Failed to get up time of the node");
         return;
+    }
 
     uint32_t totalOperationalHours = 0;
+    const uint32_t upTimeH = upTimeS / 3600 < UINT32_MAX ? static_cast<uint32_t>(upTimeS / 3600) : UINT32_MAX;
+    const uint32_t deltaTime = upTimeH - sInstance.mSavedOperationalHoursSinceBoot;
+
     if (ConfigurationMgr().GetTotalOperationalHours(totalOperationalHours) == CHIP_NO_ERROR)
     {
-        ConfigurationMgr().StoreTotalOperationalHours(
-            totalOperationalHours +
-            static_cast<uint32_t>(
-                std::chrono::duration_cast<System::Clock::Seconds64>(currentTime - sInstance.mLastOperationalHoursSaveTime)
-                    .count() /
-                3600));
-        sInstance.mLastOperationalHoursSaveTime = currentTime;
+        ConfigurationMgr().StoreTotalOperationalHours(totalOperationalHours + deltaTime);
+        sInstance.mSavedOperationalHoursSinceBoot = upTimeH;
     }
     else
     {
