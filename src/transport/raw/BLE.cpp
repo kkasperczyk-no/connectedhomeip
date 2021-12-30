@@ -163,6 +163,8 @@ void BLEBase::OnEndPointConnectComplete(BLEEndPoint * endPoint, CHIP_ERROR err)
     if (err != CHIP_NO_ERROR)
     {
         ChipLogError(Inet, "Failed to establish BLE connection: %s", ErrorStr(err));
+        mState       = State::kInitialized;
+        mBleEndPoint = nullptr;
         ClearPendingPackets();
         return;
     }
