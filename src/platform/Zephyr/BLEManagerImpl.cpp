@@ -31,6 +31,9 @@
 #include <lib/support/CodeUtils.h>
 #include <lib/support/logging/CHIPLogging.h>
 #include <platform/internal/BLEManager.h>
+#if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
+#include <setup_payload/AdditionalDataPayloadGenerator.h>
+#endif
 
 #include <bluetooth/addr.h>
 #include <bluetooth/gatt.h>
@@ -55,6 +58,11 @@ const bt_uuid_128 UUID128_CHIPoBLEChar_RX =
     BT_UUID_INIT_128(0x11, 0x9D, 0x9F, 0x42, 0x9C, 0x4F, 0x9F, 0x95, 0x59, 0x45, 0x3D, 0x26, 0xF5, 0x2E, 0xEE, 0x18);
 const bt_uuid_128 UUID128_CHIPoBLEChar_TX =
     BT_UUID_INIT_128(0x12, 0x9D, 0x9F, 0x42, 0x9C, 0x4F, 0x9F, 0x95, 0x59, 0x45, 0x3D, 0x26, 0xF5, 0x2E, 0xEE, 0x18);
+#if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
+const bt_uuid_128 UUID128_CHIPoBLEChar_C3 =
+    BT_UUID_INIT_128(0x04, 0x8F, 0x21, 0x83, 0x8A, 0x74, 0x7D, 0xB8, 0xF2, 0x45, 0x72, 0x87, 0x38, 0x02, 0x63, 0x64);
+#endif
+
 bt_uuid_16 UUID16_CHIPoBLEService = BT_UUID_INIT_16(0xFFF6);
 
 const ChipBleUUID chipUUID_CHIPoBLEChar_RX = { { 0x18, 0xEE, 0x2E, 0xF5, 0x26, 0x3D, 0x45, 0x59, 0x95, 0x9F, 0x4F, 0x9C, 0x42, 0x9F,
@@ -76,6 +84,12 @@ struct bt_gatt_attr sChipoBleAttributes[] = {    BT_GATT_PRIMARY_SERVICE(&UUID16
                                BT_GATT_CHRC_NOTIFY,
                                BT_GATT_PERM_NONE,
                                nullptr, nullptr, nullptr),
+#if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
+        BT_GATT_CHARACTERISTIC(&UUID128_CHIPoBLEChar_C3.uuid,
+                               BT_GATT_CHRC_READ,
+                               BT_GATT_PERM_READ,
+                               BLEManagerImpl::HandleC3Read, nullptr, nullptr),
+#endif
         BT_GATT_CCC_MANAGED(&CHIPoBLEChar_TX_CCC, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE)};
 
 struct bt_gatt_service sChipoBleService = BT_GATT_SERVICE(sChipoBleAttributes);
@@ -272,6 +286,12 @@ CHIP_ERROR BLEManagerImpl::StartAdvertising(void)
     static_assert(sizeof(serviceData) == 10, "Size of BLE advertisement data changed! Was that intentional?");
     chip::Encoding::LittleEndian::Put16(serviceData.uuid, UUID16_CHIPoBLEService.val);
     ReturnErrorOnFailure(ConfigurationMgr().GetBLEDeviceIdentificationInfo(serviceData.deviceIdInfo));
+
+#if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
+    ReturnErrorOnFailure(PrepareC3CharData());
+    // Increment life time counter to protect against long-term tracking of rotating device ID.
+    ReturnErrorOnFailure(ConfigurationMgr().IncrementLifetimeCounter());
+#endif
 
     if (!isAdvertisingRerun)
     {
@@ -562,6 +582,37 @@ CHIP_ERROR BLEManagerImpl::HandleTXCharComplete(const ChipDeviceEvent * event)
 
     return CHIP_NO_ERROR;
 }
+
+#if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
+CHIP_ERROR BLEManagerImpl::PrepareC3CharData()
+{
+    CHIP_ERROR err = CHIP_NO_ERROR;
+
+    char serialNumber[ConfigurationManager::kMaxSerialNumberLength + 1];
+    uint16_t lifetimeCounter = 0;
+    BitFlags<AdditionalDataFields> additionalDataFields;
+
+#if CHIP_ENABLE_ROTATING_DEVICE_ID
+    err = ConfigurationMgr().GetSerialNumber(serialNumber, sizeof(serialNumber));
+    SuccessOrExit(err);
+    err = ConfigurationMgr().GetLifetimeCounter(lifetimeCounter);
+    SuccessOrExit(err);
+
+    additionalDataFields.Set(AdditionalDataFields::RotatingDeviceId);
+#endif
+
+    err = AdditionalDataPayloadGenerator().generateAdditionalDataPayload(lifetimeCounter, serialNumber, strlen(serialNumber),
+                                                                         c3CharDataBufferHandle, additionalDataFields);
+
+exit:
+    if (err != CHIP_NO_ERROR)
+    {
+        ChipLogError(DeviceLayer, "Failed to generate TLV encoded Additional Data (%s)", __func__);
+    }
+
+    return err;
+}
+#endif
 
 void BLEManagerImpl::HandleBLEAdvertisementTimeout(System::Layer * layer, void * param)
 {
@@ -855,6 +906,23 @@ void BLEManagerImpl::HandleDisconnect(struct bt_conn * conId, uint8_t reason)
 exit:
     PlatformMgr().UnlockChipStack();
 }
+
+#if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
+ssize_t BLEManagerImpl::HandleC3Read(struct bt_conn * conId, const struct bt_gatt_attr * attr, void * buf, uint16_t len,
+                                     uint16_t offset)
+{
+    ChipLogDetail(DeviceLayer, "Read request received for CHIPoBLE C3 (ConnId 0x%02" PRIx16 ")", bt_conn_index(conId));
+
+    if (sInstance.c3CharDataBufferHandle.IsNull())
+    {
+        return 0;
+    }
+
+    return bt_gatt_attr_read(conId, attr, buf, len, offset, sInstance.c3CharDataBufferHandle->Start(),
+                             sInstance.c3CharDataBufferHandle->DataLength());
+}
+#endif
+
 } // namespace Internal
 } // namespace DeviceLayer
 } // namespace chip

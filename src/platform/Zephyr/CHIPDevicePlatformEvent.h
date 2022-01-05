@@ -26,6 +26,7 @@
 #include <platform/CHIPDeviceEvent.h>
 
 #include <bluetooth/bluetooth.h>
+#include <bluetooth/gatt.h>
 
 namespace chip {
 namespace DeviceLayer {

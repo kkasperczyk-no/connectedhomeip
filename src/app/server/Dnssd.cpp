@@ -336,6 +336,7 @@ CHIP_ERROR DnssdServer::Advertise(bool commissionableNode, chip::Dnssd::Commissi
     }
 
 #if CHIP_ENABLE_ROTATING_DEVICE_ID
+    ChipLogError(Discovery, "======= DNS advertise rotating ID");
     char rotatingDeviceIdHexBuffer[RotatingDeviceId::kHexMaxLength];
     ReturnErrorOnFailure(GenerateRotatingDeviceId(rotatingDeviceIdHexBuffer, ArraySize(rotatingDeviceIdHexBuffer)));
     advertiseParameters.SetRotatingDeviceId(chip::Optional<const char *>::Value(rotatingDeviceIdHexBuffer));
@@ -485,6 +486,7 @@ void DnssdServer::StartServer(chip::Dnssd::CommissioningMode mode)
 #if CHIP_ENABLE_ROTATING_DEVICE_ID
 CHIP_ERROR DnssdServer::GenerateRotatingDeviceId(char rotatingDeviceIdHexBuffer[], size_t rotatingDeviceIdHexBufferSize)
 {
+    ChipLogError(Discovery, "======= GenerateRotatingDeviceId");
     char serialNumber[chip::DeviceLayer::ConfigurationManager::kMaxSerialNumberLength + 1];
     uint16_t lifetimeCounter               = 0;
     size_t rotatingDeviceIdValueOutputSize = 0;

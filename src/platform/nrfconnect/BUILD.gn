@@ -77,4 +77,8 @@ static_library("nrfconnect") {
       "OTAImageProcessorImpl.h",
     ]
   }
+
+  if (chip_enable_additional_data_advertising) {
+    deps += [ "${chip_root}/src/setup_payload" ]
+  }
 }
