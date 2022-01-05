@@ -70,6 +70,12 @@ declare_args() {
   # Enable OTA requestor support
   chip_enable_ota_requestor = false
 
+  # Enable including the additional data in the advertisement packets
+  chip_enable_additional_data_advertising = false
+
+  # Enable adding optional rotating device id to the additional data.
+  chip_enable_rotating_device_id = false
+
   # Select DNS-SD implementation
   if (chip_device_platform == "linux" || chip_device_platform == "esp32" ||
       chip_device_platform == "mbed" || chip_device_platform == "p6" ||
