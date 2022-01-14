@@ -102,6 +102,15 @@ EmberAfStatus OtaRequestorServerSetUpdateState(OTAUpdateStateEnum value)
     return status;
 }
 
+EmberAfStatus OtaRequestorServerGetUpdateState(uint8_t endpointId, OTAUpdateStateEnum & value)
+{
+    EmberAfStatus status = EMBER_ZCL_STATUS_SUCCESS;
+
+    status = Attributes::UpdateState::Get(endpointId, &value);
+
+    return status;
+}
+
 EmberAfStatus OtaRequestorServerSetUpdateStateProgress(uint8_t value)
 {
     EmberAfStatus status = EMBER_ZCL_STATUS_SUCCESS;
@@ -117,6 +126,24 @@ EmberAfStatus OtaRequestorServerSetUpdateStateProgress(uint8_t value)
             status = Attributes::UpdateStateProgress::Set(endpoint, value);
             VerifyOrDie(EMBER_ZCL_STATUS_SUCCESS == status);
         }
+    }
+
+    return status;
+}
+
+EmberAfStatus OtaRequestorServerGetUpdateStateProgress(uint8_t endpointId, uint8_t & value)
+{
+    EmberAfStatus status = EMBER_ZCL_STATUS_SUCCESS;
+
+    app::DataModel::Nullable<uint8_t> currentValue;
+    status = Attributes::UpdateStateProgress::Get(endpointId, currentValue);
+    if (currentValue.IsNull())
+    {
+        value = 0;
+    }
+    else
+    {
+        value = currentValue.Value();
     }
 
     return status;

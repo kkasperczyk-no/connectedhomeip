@@ -80,21 +80,6 @@ public:
      */
     virtual void SetOTAImageProcessorParams(OTAImageProcessorParams & params) { mParams = params; };
 
-    /**
-     * Called to check the current download status of the OTA image download.
-     */
-    virtual uint8_t GetPercentComplete()
-    {
-        if (mParams.totalFileBytes == 0)
-        {
-            return 0;
-        }
-        else
-        {
-            return static_cast<uint8_t>((mParams.downloadedBytes * 100) / mParams.totalFileBytes);
-        }
-    }
-
 protected:
     OTAImageProcessorParams mParams;
 };

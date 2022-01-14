@@ -92,6 +92,12 @@ public:
      */
     void ConnectToProvider(OnConnectedAction onConnectedAction);
 
+    // Get image update progress in percents unit
+    CHIP_ERROR GetUpdateProgress(uint8_t endpointId, uint8_t & progress);
+
+    // Get requestor state
+    CHIP_ERROR GetState(uint8_t endpointId, app::Clusters::OtaSoftwareUpdateRequestor::OTAUpdateStateEnum & state);
+
     /**
      * Called to indicate test mode. This is when the Requestor is used as a test tool and the the provider parameters are supplied
      * explicitly.
