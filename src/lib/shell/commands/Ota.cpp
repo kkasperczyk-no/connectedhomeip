@@ -68,11 +68,7 @@ CHIP_ERROR StateHandler(int argc, char ** argv)
     app::Clusters::OtaSoftwareUpdateRequestor::OTAUpdateStateEnum state;
     err = GetRequestorInstance()->GetState(0, state);
 
-    if (err != CHIP_NO_ERROR)
-    {
-        streamer_printf(streamer_get(), "Error: %" CHIP_ERROR_FORMAT "\r\n", err.Format());
-    }
-    else
+    if (err == CHIP_NO_ERROR)
     {
         streamer_printf(streamer_get(), "Update state: ");
         switch (state)
@@ -111,7 +107,7 @@ CHIP_ERROR StateHandler(int argc, char ** argv)
         streamer_printf(streamer_get(), "\r\n");
     }
 
-    return CHIP_NO_ERROR;
+    return err;
 }
 
 CHIP_ERROR ProgressHandler(int argc, char ** argv)
@@ -123,11 +119,7 @@ CHIP_ERROR ProgressHandler(int argc, char ** argv)
     uint8_t progress;
     err = GetRequestorInstance()->GetUpdateProgress(0, progress);
 
-    if (err != CHIP_NO_ERROR)
-    {
-        streamer_printf(streamer_get(), "Error: %" CHIP_ERROR_FORMAT "\r\n", err.Format());
-    }
-    else
+    if (err == CHIP_NO_ERROR)
     {
         streamer_printf(streamer_get(), "Update progress: %d %%\r\n", progress);
     }

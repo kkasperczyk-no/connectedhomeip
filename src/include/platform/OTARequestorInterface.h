@@ -65,10 +65,10 @@ public:
     virtual void ApplyUpdate() = 0;
 
     // Get image update progress in percents unit
-    virtual CHIP_ERROR GetUpdateProgress(uint8_t endpointId, uint8_t & progress) = 0;
+    virtual CHIP_ERROR GetUpdateProgress(EndpointId endpointId, uint8_t & progress) = 0;
 
     // Get requestor state
-    virtual CHIP_ERROR GetState(uint8_t endpointId,
+    virtual CHIP_ERROR GetState(EndpointId endpointId,
                                 chip::app::Clusters::OtaSoftwareUpdateRequestor::OTAUpdateStateEnum & state) = 0;
 
     // Manually set OTA Provider parameters
