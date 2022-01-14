@@ -102,6 +102,11 @@ EmberAfStatus OtaRequestorServerSetUpdateState(OTAUpdateStateEnum value)
     return status;
 }
 
+EmberAfStatus OtaRequestorServerGetUpdateState(chip::EndpointId endpointId, OTAUpdateStateEnum & value)
+{
+    return Attributes::UpdateState::Get(endpointId, &value);
+}
+
 EmberAfStatus OtaRequestorServerSetUpdateStateProgress(uint8_t value)
 {
     EmberAfStatus status = EMBER_ZCL_STATUS_SUCCESS;
@@ -117,6 +122,22 @@ EmberAfStatus OtaRequestorServerSetUpdateStateProgress(uint8_t value)
             status = Attributes::UpdateStateProgress::Set(endpoint, value);
             VerifyOrDie(EMBER_ZCL_STATUS_SUCCESS == status);
         }
+    }
+
+    return status;
+}
+
+EmberAfStatus OtaRequestorServerGetUpdateStateProgress(chip::EndpointId endpointId, uint8_t & value)
+{
+    app::DataModel::Nullable<uint8_t> currentValue;
+    EmberAfStatus status = Attributes::UpdateStateProgress::Get(endpointId, currentValue);
+    if (currentValue.IsNull())
+    {
+        value = 0;
+    }
+    else
+    {
+        value = currentValue.Value();
     }
 
     return status;

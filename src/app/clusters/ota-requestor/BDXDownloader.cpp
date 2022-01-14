@@ -103,6 +103,18 @@ CHIP_ERROR BDXDownloader::FetchNextData()
     return CHIP_NO_ERROR;
 }
 
+uint8_t BDXDownloader::GetDownloadPercentComplete()
+{
+    if (mBdxTransfer.GetTransferLength() == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return static_cast<uint8_t>((mBdxTransfer.GetNumBytesProcessed() * 100) / mBdxTransfer.GetTransferLength());
+    }
+}
+
 void BDXDownloader::OnDownloadTimeout()
 {
     if (mState == State::kInProgress)
@@ -181,7 +193,7 @@ CHIP_ERROR BDXDownloader::HandleBdxEvent(const chip::bdx::TransferSession::Outpu
     case TransferSession::OutputEventType::kBlockReceived: {
         chip::ByteSpan blockData(outEvent.blockdata.Data, outEvent.blockdata.Length);
         ReturnErrorOnFailure(mImageProcessor->ProcessBlock(blockData));
-        mStateDelegate->OnUpdateProgressChanged(mImageProcessor->GetPercentComplete());
+        mStateDelegate->OnUpdateProgressChanged(GetDownloadPercentComplete());
 
         // TODO: this will cause problems if Finalize() is not guaranteed to do its work after ProcessBlock().
         if (outEvent.blockdata.IsEof)

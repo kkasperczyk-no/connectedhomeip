@@ -21,4 +21,7 @@
 #include <app-common/zap-generated/attributes/Accessors.h>
 
 EmberAfStatus OtaRequestorServerSetUpdateState(chip::app::Clusters::OtaSoftwareUpdateRequestor::OTAUpdateStateEnum value);
+EmberAfStatus OtaRequestorServerGetUpdateState(chip::EndpointId endpointId,
+                                               chip::app::Clusters::OtaSoftwareUpdateRequestor::OTAUpdateStateEnum & value);
 EmberAfStatus OtaRequestorServerSetUpdateStateProgress(uint8_t value);
+EmberAfStatus OtaRequestorServerGetUpdateStateProgress(chip::EndpointId endpointId, uint8_t & value);
