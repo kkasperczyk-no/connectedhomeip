@@ -115,11 +115,11 @@ config CHIP_ROTATING_DEVICE_ID
 	  which is unique per device and rotates at pre-defined moments.
 
 config CHIP_COMMISSIONABLE_DEVICE_TYPE
-	bool "Enable device type subtype in commissionable node discovery"
+	bool "Enable the device type subtype in commissionable node discovery record"
 	depends on CHIP_ENABLE_DNSSD_SRP
 	help
-	  Enables device type subtype in commissionable node discovery that allows filtering of the results
-	  to find the nodes that match the device type.
+	  Enables device type subtype included in the commissionable node discovery record,
+	  which allows filtering of the results to find the nodes that match the device type.
 
 config CHIP_DEVICE_TYPE
 	int "Device type"

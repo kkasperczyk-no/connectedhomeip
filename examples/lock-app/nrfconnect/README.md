@@ -24,7 +24,6 @@ into an existing Matter network and can be controlled by this network.
     -   [Bluetooth LE advertising](#bluetooth-le-advertising)
     -   [Bluetooth LE rendezvous](#bluetooth-le-rendezvous)
     -   [Device Firmware Upgrade](#device-firmware-upgrade)
-    -   [Pre-commissioning device identification](#pre-commissioning-device-identification)
 -   [Requirements](#requirements)
     -   [Supported devices](#supported_devices)
 -   [Device UI](#device-ui)
@@ -36,7 +35,6 @@ into an existing Matter network and can be controlled by this network.
     -   [Building with release configuration](#building-with-release-configuration)
     -   [Building with low-power configuration](#building-with-low-power-configuration)
     -   [Building with Device Firmware Upgrade support](#building-with-device-firmware-upgrade-support)
-    -   [Building with pre-commissioning device identification features support](#building-with-pre-commissioning-device-identification-features-support)
 -   [Configuring the example](#configuring-the-example)
 -   [Flashing and debugging](#flashing-and-debugging)
 -   [Testing the example](#testing-the-example)
@@ -94,24 +92,6 @@ Last part of the rendezvous procedure, the provisioning operation involves
 sending the Thread network credentials from the Matter controller to the Matter
 device. As a result, device is able to join the Thread network and communicate
 with other Thread devices in the network.
-
-### Pre-commissioning device identification
-
-There might be some vendor-specific cases to uniquely identify the device 
-or just filter out some devices from a bigger group before attempting to commission it 
-onto the network. This can be done by advertising some additional data either using
-Bluetooth LE advertisements or DNS-SD commissionable node discovery.
-
-#### Rotating Device Id
-
-The rotating device identifier is an optional feature that provides unique per-device identifier.
-It is similar to the serial number, but additionally it rotates at predefined moments of time
-to protect against device long-term tracking.
-
-#### Commissionable Device Type
-
-This optional functionality includes Matter Device Type Identifier subtype in commissionable node discovery.
-It allows filtering of a discovery results to find only the nodes that match the specific device type.
 
 ### Device Firmware Upgrade
 
@@ -451,20 +431,6 @@ example `nrf52840dk_nrf52840`), edit the `pm_static.yml` file located in the
 `configuration/build-target/` directory.
 
 <hr>
-
-### Building with pre-commissioning device identification features support
-
-To enable the desire features you need to configure the proper Kconfig options.
-See [Configuring the example](#configuring-the-example) to read how to configure example's options.
-
-#### Rotating Device Id
-
-You can enable the rotating device id feature by setting the `CONFIG_CHIP_ROTATING_DEVICE_ID=y` Kconfig option.
-
-#### Commissionable Device Type
-
-You can enable the commissionable device type feature by setting the `CONFIG_CHIP_COMMISSIONABLE_DEVICE_TYPE=y` Kconfig option.
-To configure the Matter Device Type Identifier value to the one matching the used device type you need to set `CONFIG_CHIP_DEVICE_TYPE` option. For example the Door Lock device type value is equal to `10 (0x000A)`.
 
 <a name="configuring"></a>
 
