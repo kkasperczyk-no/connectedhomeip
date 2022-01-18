@@ -118,7 +118,7 @@ config CHIP_COMMISSIONABLE_DEVICE_TYPE
 	bool "Enable the device type subtype in commissionable node discovery record"
 	depends on CHIP_ENABLE_DNSSD_SRP
 	help
-	  Enables device type subtype included in the commissionable node discovery record,
+	  Enables including device type subtype in the commissionable node discovery record,
 	  which allows filtering of the results to find the nodes that match the device type.
 
 config CHIP_DEVICE_TYPE

@@ -149,7 +149,7 @@ structure.
 
 ### Mandatory configuration
 
-To use the Matter protocol, you need to enable the `CONFIG_CHIP` Kconfig option. Setting this option enables the Matter protocol stack and other associated Kconfig options, including CONFIG_CHIP_ENABLE_DNSSD_SRP that is required for the discovery of the Matter device using DNS-SD.
+To use the Matter protocol, you need to set the `CONFIG_CHIP` Kconfig option. Setting this option enables the Matter protocol stack and other associated Kconfig options, including `CONFIG_CHIP_ENABLE_DNSSD_SRP` that is required for the Matter device to be discoverable using DNS-SD.
 
 After that, make sure to set the `CONFIG_CHIP_PROJECT_CONFIG` Kconfig option and define the path to the configuration file that specifies Vendor ID, Product ID, and other project-specific Matter settings.
 
@@ -167,15 +167,15 @@ You can enable the support for Thread Sleepy End Device in Matter by setting the
 
 **Commissioning with NFC support**
 
-You can configure the Matter protocol to use NFC tag for commissioning, instead of the default QR code.
+You can configure the Matter protocol to use an NFC tag for commissioning, instead of using a QR code, which is the default configuration.
 
 To enable NFC for commissioning and share the onboarding payload in an NFC tag, set the `CONFIG_CHIP_NFC_COMMISSIONING` option.
 
 **Logging**
 
-You can enable logging for both the stack and Zephyr’s [Logging](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/zephyr/reference/logging/index.html#logging-api) API, by setting `CONFIG_LOG` option.
+You can enable logging for both the stack and Zephyr’s [Logging](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/zephyr/reference/logging/index.html#logging-api) API by setting the `CONFIG_LOG` option.
 
-Zephyr allows you to configure log levels of different software modules independently. To change the log level configuration for Matter module set one of the available options:
+Zephyr allows you to configure log levels of different software modules independently. To change the log level configuration for the Matter module, set one of the available options:
 - `CONFIG_MATTER_LOG_LEVEL_ERR`
 - `CONFIG_MATTER_LOG_LEVEL_INFO`
 - `CONFIG_MATTER_LOG_LEVEL_DBG`
@@ -187,10 +187,10 @@ See [Using CLI in nRF Connect examples](nrfconnect_examples_cli.md) for the list
 
 **Matter device identification**
 
-In the Matter there are many mandatory and optional ways to identify the specific device. That can be done for the various purposes including dividing devices into some groups (by function, by vendor or by location), device commissioning or vendor-specific customer support cases before the device was commissioned, like for example identifying factory software version or related features.
+Matter has many mandatory and optional ways to identify a specific device. These can be used for various purposes, such as dividing devices into groups (by function, by vendor or by location), device commissioning or vendor-specific customer support cases before the device was commissioned (for example, identifying factory software version or related features).
 
 Only some part of these features can be configured using Kconfig options and only those were listed below:
-- `CONFIG_CHIP_DEVICE_TYPE` - type of device that uses the Matter Device Type Identifier, like for example Door Lock (0x000A) or Dimmable Light Bulb (0x0101).
-- `CONFIG_CHIP_COMMISSIONABLE_DEVICE_TYPE` - enables optional Matter Device Type Identifier subtype included in the commissionable node discovery record, which allows filtering of the discovery results to find the nodes that match the device type.
-- `CONFIG_CHIP_ROTATING_DEVICE_ID` - enables rotating device identifier that is an optional feature providing unique identifier for each device.
+- `CONFIG_CHIP_DEVICE_TYPE` - type of device that uses the Matter Device Type Identifier, for example Door Lock (0x000A) or Dimmable Light Bulb (0x0101).
+- `CONFIG_CHIP_COMMISSIONABLE_DEVICE_TYPE` - enables including optional device type subtype in the commissionable node discovery record, which allows filtering of the discovery results to find the nodes that match the device type.
+- `CONFIG_CHIP_ROTATING_DEVICE_ID` - enables rotating device identifier that is an optional feature providing additional unique identifier for each device.
 It is similar to the serial number, but additionally it rotates at predefined moments of time to protect against long-term tracking of the device.
