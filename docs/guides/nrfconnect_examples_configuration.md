@@ -192,5 +192,5 @@ Matter has many mandatory and optional ways to identify a specific device. These
 Only some part of these features can be configured using Kconfig options and only those were listed below:
 - `CONFIG_CHIP_DEVICE_TYPE` - type of device that uses the Matter Device Type Identifier, for example Door Lock (0x000A) or Dimmable Light Bulb (0x0101).
 - `CONFIG_CHIP_COMMISSIONABLE_DEVICE_TYPE` - enables including optional device type subtype in the commissionable node discovery record, which allows filtering of the discovery results to find the nodes that match the device type.
-- `CONFIG_CHIP_ROTATING_DEVICE_ID` - enables rotating device identifier that is an optional feature providing additional unique identifier for each device.
-It is similar to the serial number, but additionally it rotates at predefined moments of time to protect against long-term tracking of the device.
+- `CONFIG_CHIP_ROTATING_DEVICE_ID` - enables rotating device identifier, an optional feature that provides an additional unique identifier for each device.
+This identifier is similar to the serial number, but it additionally changes at predefined times to protect against long-term tracking of the device.
