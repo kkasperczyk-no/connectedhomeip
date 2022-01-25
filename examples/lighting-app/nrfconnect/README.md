@@ -106,7 +106,7 @@ For both methods, the [MCUboot](https://developer.nordicsemi.com/nRF_Connect_SDK
 
 #### Matter Over-the-Air Update
 
-The Matter over-the-air update distinguishes two types of devices: OTA Provider and OTA Requestor.
+The Matter over-the-air update distinguishes two types of nodes: OTA Provider and OTA Requestor.
 
 An OTA Provider is a node that hosts a new firmware image and is able to respond on an OTA Requestor's
 queries regarding availability of new firmware images or requests to start sending the update packages.
