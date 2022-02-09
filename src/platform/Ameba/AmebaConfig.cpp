@@ -77,6 +77,7 @@ const AmebaConfig::Key AmebaConfig::kConfigKey_OperationalDevicePrivateKey = { k
 const AmebaConfig::Key AmebaConfig::kConfigKey_RegulatoryLocation          = { kConfigNamespace_ChipConfig, "regulatory-location" };
 const AmebaConfig::Key AmebaConfig::kConfigKey_CountryCode                 = { kConfigNamespace_ChipConfig, "country-code" };
 const AmebaConfig::Key AmebaConfig::kConfigKey_Breadcrumb                  = { kConfigNamespace_ChipConfig, "breadcrumb" };
+const AmebaConfig::Key AmebaConfig::kConfigKey_UniqueId                    = { kConfigNamespace_ChipConfig, "unique-id" };
 
 // Keys stored in the Chip-counters namespace
 const AmebaConfig::Key AmebaConfig::kCounterKey_RebootCount           = { kConfigNamespace_ChipCounters, "reboot-count" };
