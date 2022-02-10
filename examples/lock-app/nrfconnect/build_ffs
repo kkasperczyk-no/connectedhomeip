@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Build firmware
+
+mkdir -p ffs
+for i in {1..3}; do
+  west build -b nrf52840dk_nrf52840 -d build.ffs$i -- -DCONFIG_CHIP_PROJECT_CONFIG='"main/include/CHIPProjectConfig.'$i'.h"'
+  cp build.ffs$i/zephyr/merged.hex ffs/nrf_lock_$i.hex
+done
+
+# Flash
+
+read -p "Flash the firmware onto boards? "
+
+BOARDS=(683295089 683125656 683754116)
+
+for i in {1..3}; do
+  nrfjprog -s ${BOARDS[$((i-1))]} --chiperase --program ffs/nrf_lock_$i.hex --reset
+done
+
