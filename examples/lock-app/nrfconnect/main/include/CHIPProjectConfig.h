@@ -39,3 +39,10 @@
 #define CHIP_DEVICE_CONFIG_USE_TEST_SETUP_DISCRIMINATOR 0xF00
 
 #define CHIP_DEVICE_CONFIG_SED_SLOW_POLLING_INTERVAL 2000_ms32
+
+#define CHIP_DEVICE_CONFIG_TEST_SERIAL_NUMBER "NRF_SN_1"
+
+#define CHIP_DEVICE_CONFIG_TEST_ROTATING_DEVICE_ID_UNIQUE_ID                                                                       \
+    {                                                                                                                              \
+        0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22, 0x33, 0x33, 0x33, 0x33, 0x44, 0x44, 0x44, 0x44                             \
+    }
