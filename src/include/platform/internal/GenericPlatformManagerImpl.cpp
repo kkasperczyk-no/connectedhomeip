@@ -298,7 +298,10 @@ void GenericPlatformManagerImpl<ImplClass>::HandleDeviceRebooted(intptr_t arg)
 
     if (generalDiagnosticsDelegate != nullptr)
     {
-        generalDiagnosticsDelegate->OnDeviceRebooted();
+        uint8_t bootReason;
+
+        ReturnOnFailure(GetDiagnosticDataProvider().GetBootReason(bootReason));
+        generalDiagnosticsDelegate->OnDeviceRebooted(bootReason);
     }
 
     // The StartUp event SHALL be emitted by a Node after completing a boot or reboot process

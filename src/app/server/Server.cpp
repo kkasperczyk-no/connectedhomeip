@@ -298,6 +298,20 @@ void Server::DispatchShutDownAndStopEventLoop()
     chip::DeviceLayer::PlatformMgr().ScheduleWork(StopEventLoop);
 }
 
+void Server::FactoryReset()
+{
+    // Delete all fabrics and emit Leave event.
+    GetFabricTable().DeleteAllFabrics();
+
+    // Emit Shutdown event, as shutdown will come after factory reset.
+    DispatchShutDownEvent(0);
+
+    // Flush all dispatched events.
+    chip::app::InteractionModelEngine::GetInstance()->GetReportingEngine().ScheduleUrgentEventDeliverySync();
+
+    chip::DeviceLayer::ConfigurationMgr().InitiateFactoryReset();
+}
+
 void Server::Shutdown()
 {
     chip::Dnssd::ServiceAdvertiser::Instance().Shutdown();

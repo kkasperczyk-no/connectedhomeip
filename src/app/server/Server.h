@@ -93,6 +93,8 @@ public:
      */
     void DispatchShutDownAndStopEventLoop();
 
+    void FactoryReset();
+
     void Shutdown();
 
     static Server & GetInstance() { return sServer; }

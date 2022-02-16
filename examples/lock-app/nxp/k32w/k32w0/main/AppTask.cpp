@@ -357,7 +357,7 @@ void AppTask::FunctionTimerEventHandler(void * aGenericEvent)
     K32W_LOG("Device will factory reset...");
 
     // Actually trigger Factory Reset
-    ConfigurationMgr().InitiateFactoryReset();
+    chip::Server::GetInstance().FactoryReset();
 }
 
 void AppTask::ResetActionEventHandler(void * aGenericEvent)
