@@ -203,13 +203,14 @@ class GeneralDiagnosticsDelegate : public DeviceLayer::ConnectivityManagerDelega
 
         for (auto endpoint : EnabledEndpointsWithServerCluster(GeneralDiagnostics::Id))
         {
-            // If GeneralDiagnostics cluster is implemented on this endpoint
             Events::BootReason::Type event{ static_cast<BootReasonType>(bootReason) };
             EventNumber eventNumber;
 
-            if (CHIP_NO_ERROR != LogEvent(event, endpoint, eventNumber, EventOptions::Type::kUrgent))
+            CHIP_ERROR err = LogEvent(event, endpoint, eventNumber, EventOptions::Type::kUrgent);
+            if (CHIP_NO_ERROR != err)
             {
-                ChipLogError(Zcl, "GeneralDiagnosticsDelegate: Failed to record BootReason event");
+                ChipLogError(Zcl, "GeneralDiagnosticsDelegate: Failed to record BootReason event: %" CHIP_ERROR_FORMAT,
+                             err.Format());
             }
         }
     }
