@@ -215,7 +215,7 @@ void AppTask::FactoryResetButtonEventHandler(void)
 void AppTask::FactoryResetHandler(AppEvent * aEvent)
 {
     LOG_INF("Factory Reset triggered.");
-    chip::Server::GetInstance().FactoryReset();
+    chip::Server::GetInstance().ScheduleFactoryReset();
 }
 
 void AppTask::StartThreadButtonEventHandler(void)

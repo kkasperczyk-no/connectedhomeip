@@ -453,7 +453,7 @@ public:
         }
         else if (i == 1)
         {
-            chip::Server::GetInstance().FactoryReset();
+            chip::Server::GetInstance().ScheduleFactoryReset();
         }
         else if (i == 2)
         {

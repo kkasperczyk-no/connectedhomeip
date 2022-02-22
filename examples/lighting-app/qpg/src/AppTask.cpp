@@ -305,7 +305,7 @@ void AppTask::FunctionTimerEventHandler(AppEvent * aEvent)
     {
         // Actually trigger Factory Reset
         sAppTask.mFunction = kFunction_NoneSelected;
-        chip::Server::GetInstance().FactoryReset();
+        chip::Server::GetInstance().ScheduleFactoryReset();
     }
 }
 

@@ -352,7 +352,7 @@ void AppTask::DispatchEvent(AppEvent * aEvent)
         }
         else if (AppEvent::kAppEventButtonType_LongPressed == aEvent->ButtonEvent.Type)
         {
-            chip::Server::GetInstance().FactoryReset();
+            chip::Server::GetInstance().ScheduleFactoryReset();
         }
         break;
 
