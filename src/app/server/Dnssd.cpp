@@ -324,7 +324,7 @@ CHIP_ERROR DnssdServer::Advertise(bool commissionableNode, chip::Dnssd::Commissi
     uint32_t val32;
     if (DeviceLayer::ConfigurationMgr().GetVendorId(value) != CHIP_NO_ERROR)
     {
-        ChipLogProgress(Discovery, "Vendor ID not known");
+        ChipLogDetail(Discovery, "Vendor ID not known");
     }
     else
     {
@@ -333,7 +333,7 @@ CHIP_ERROR DnssdServer::Advertise(bool commissionableNode, chip::Dnssd::Commissi
 
     if (DeviceLayer::ConfigurationMgr().GetProductId(value) != CHIP_NO_ERROR)
     {
-        ChipLogProgress(Discovery, "Product ID not known");
+        ChipLogDetail(Discovery, "Product ID not known");
     }
     else
     {
@@ -381,7 +381,7 @@ CHIP_ERROR DnssdServer::Advertise(bool commissionableNode, chip::Dnssd::Commissi
     {
         if (DeviceLayer::ConfigurationMgr().GetInitialPairingHint(value) != CHIP_NO_ERROR)
         {
-            ChipLogProgress(Discovery, "DNS-SD Pairing Hint not set");
+            ChipLogDetail(Discovery, "DNS-SD Pairing Hint not set");
         }
         else
         {
@@ -390,7 +390,7 @@ CHIP_ERROR DnssdServer::Advertise(bool commissionableNode, chip::Dnssd::Commissi
 
         if (DeviceLayer::ConfigurationMgr().GetInitialPairingInstruction(pairingInst, sizeof(pairingInst)) != CHIP_NO_ERROR)
         {
-            ChipLogProgress(Discovery, "DNS-SD Pairing Instruction not set");
+            ChipLogDetail(Discovery, "DNS-SD Pairing Instruction not set");
         }
         else
         {
@@ -401,7 +401,7 @@ CHIP_ERROR DnssdServer::Advertise(bool commissionableNode, chip::Dnssd::Commissi
     {
         if (DeviceLayer::ConfigurationMgr().GetSecondaryPairingHint(value) != CHIP_NO_ERROR)
         {
-            ChipLogProgress(Discovery, "DNS-SD Pairing Hint not set");
+            ChipLogDetail(Discovery, "DNS-SD Pairing Hint not set");
         }
         else
         {
@@ -410,7 +410,7 @@ CHIP_ERROR DnssdServer::Advertise(bool commissionableNode, chip::Dnssd::Commissi
 
         if (DeviceLayer::ConfigurationMgr().GetSecondaryPairingInstruction(pairingInst, sizeof(pairingInst)) != CHIP_NO_ERROR)
         {
-            ChipLogProgress(Discovery, "DNS-SD Pairing Instruction not set");
+            ChipLogDetail(Discovery, "DNS-SD Pairing Instruction not set");
         }
         else
         {
@@ -474,7 +474,7 @@ void DnssdServer::StartServer(Dnssd::CommissioningMode mode)
 
     if (HaveOperationalCredentials())
     {
-        ChipLogProgress(Discovery, "Have operational credentials");
+        ChipLogDetail(Discovery, "Have operational credentials");
         if (mode != chip::Dnssd::CommissioningMode::kDisabled)
         {
             err = AdvertiseCommissionableNode(mode);
