@@ -14,6 +14,10 @@
 #   limitations under the License.
 #
 
+# The purpose of this file is to define new default values of settings used when building Matter samples.
+# This file only changes defaults and thus all symbols here must be promptless
+# and safeguarded so that they only are applied when building Matter.
+
 if CHIP
 
 config LOG
