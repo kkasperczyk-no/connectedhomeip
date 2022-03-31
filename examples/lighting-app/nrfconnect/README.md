@@ -421,7 +421,7 @@ To completely disable support for both DFU methods, run the following command
 with _build-target_ replaced with the build target name of the Nordic
 Semiconductor kit you are using (for example `nrf52840dk_nrf52840`):
 
-    $ west build -b build-target -- -DCONFIG_CHIP_OTA_REQUESTOR=n -DCONFIG_CHIP_DFU_OVER_BT_SMP=n
+    $ west build -b build-target -- -DCONF_FILE=prj_no_dfu.conf
 
 > **Note**:
 >
@@ -458,7 +458,7 @@ purposes. You can change these settings by defining
 This example uses this option to define using an external flash.
 
 To modify the flash settings of your board (that is, your _build-target_, for
-example `nrf52840dk_nrf52840`), edit the `pm_static.yml` file located in the
+example `nrf52840dk_nrf52840`), edit the `pm_static_dfu.yml` file located in the
 `configuration/build-target/` directory.
 
 <hr>
@@ -491,6 +491,7 @@ Before you start testing the application, you can select one of the build types 
 
 - debug -- Debug version of the application - can be used to enable additional features for verifying the application behavior, such as logs or command-line shell.
 - release -- Release version of the application - can be used to enable only the necessary application functionalities to optimize its performance.
+- no_dfu -- Debug version of the application without Device Firmware Upgrade feature support - can be used only for the nRF52840 DK and nRF5340 DK, as those platforms have DFU enabled by default.
 
 For more information, see the
 [Configuring nRF Connect SDK examples](../../../docs/guides/nrfconnect_examples_configuration.md)

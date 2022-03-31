@@ -66,14 +66,6 @@ config HWINFO
     default y
 
 # Generic networking options
-config NETWORKING
-    bool
-    default y
-
-config NET_SOCKETS
-    bool
-    default y
-
 config NET_SOCKETS_POSIX_NAMES
     bool
     default n
@@ -142,10 +134,6 @@ config BT_GAP_AUTO_UPDATE_CONN_PARAMS
 config BT_GATT_DYNAMIC_DB
     bool
     default y
-
-config BT_DEVICE_APPEARANCE
-    int
-    default 0
 
 config BT_DEVICE_NAME_DYNAMIC
     bool

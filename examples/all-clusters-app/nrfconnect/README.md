@@ -308,7 +308,7 @@ To build the example with configuration that supports DFU, run the following
 command with _build-target_ replaced with the build target name of the Nordic
 Semiconductor kit you are using (for example `nrf52840dk_nrf52840`):
 
-    $ west build -b build-target -- -DCONFIG_CHIP_OTA_REQUESTOR=y
+    $ west build -b build-target -- -DCONF_FILE=prj_dfu.conf
 
 > **Note**:
 >
@@ -339,7 +339,7 @@ purposes. You can change these settings by defining
 This example uses this option to define using an external flash.
 
 To modify the flash settings of your board (that is, your _build-target_, for
-example `nrf52840dk_nrf52840`), edit the `pm_static.yml` file located in the
+example `nrf52840dk_nrf52840`), edit the `pm_static_dfu.yml` file located in the
 `configuration/build-target/` directory.
 
 <hr>
@@ -371,7 +371,8 @@ The `prj.conf` file represents a debug build type. Other build types are covered
 Before you start testing the application, you can select one of the build types supported by the sample. This sample supports the following build types, depending on the selected board:
 
 - debug -- Debug version of the application - can be used to enable additional features for verifying the application behavior, such as logs or command-line shell.
-- release -- Release version of the application - can be used to enable only the necessary application functionalities to optimize its performance.
+- release -- Release version of the application - can be used to enable only the necessary application functionalities to optimize its performance. It has Device Firmware Upgrade feature enabled.
+- dfu -- Debug version of the application with Device Firmware Upgrade feature support.
 
 For more information, see the
 [Configuring nRF Connect SDK examples](../../../docs/guides/nrfconnect_examples_configuration.md)
