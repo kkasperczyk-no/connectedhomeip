@@ -79,6 +79,14 @@ config INIT_STACKS
     bool
     default y
 
+config CHIP_DEVICE_VENDOR_ID
+	int
+	default 65521
+
+config CHIP_DEVICE_PRODUCT_ID
+	int
+	default 32768
+
 # Disable certain parts of Zephyr IPv6 stack
 config NET_IPV6_NBR_CACHE
     bool
