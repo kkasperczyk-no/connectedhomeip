@@ -405,7 +405,7 @@ host computer. To build the example with the RPC server, run the following
 command with _build-target_ replaced with the build target name of the Nordic
 Semiconductor's kit you own:
 
-    $ west build -b build-target -- -DOVERLAY_CONFIG=rpc.overlay
+    $ west build -b build-target -- -DOVERLAY_CONFIG=../../rpc.overlay
 
 ### Building with Device Firmware Upgrade support
 
