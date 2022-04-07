@@ -462,11 +462,11 @@ To build for the low-power configuration, run the following command with
 _build-target_ replaced with the build target name of the Nordic Semiconductor's
 kit you own (for example `nrf52840dk_nrf52840`):
 
-    $ west build -b build-target -- -DOVERLAY_CONFIG=../../overlay-low_power.conf
+    $ west build -b build-target -- -DOVERLAY_CONFIG=overlay-low_power.conf
 
 For example, use the following command for `nrf52840dk_nrf52840`:
 
-    $ west build -b nrf52840dk_nrf52840 -- -DOVERLAY_CONFIG=../../overlay-low_power.conf
+    $ west build -b nrf52840dk_nrf52840 -- -DOVERLAY_CONFIG=overlay-low_power.conf
 
 ### Building with Device Firmware Upgrade support
 
@@ -496,8 +496,7 @@ Semiconductor kit you are using (for example `nrf52840dk_nrf52840`):
 #### Changing bootloader configuration
 
 To change the default MCUboot configuration, edit the `prj.conf` file located in the
-`configuration/build-target/child_image/mcuboot` directory (_build-target_ is your board
-name, for example `nrf52840dk_nrf52840`).
+`child_image/mcuboot` directory.
 
 Make sure to keep the configuration consistent with changes made to the
 application configuration. This is necessary for the configuration to work, as
