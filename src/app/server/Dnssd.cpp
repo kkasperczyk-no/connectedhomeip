@@ -48,7 +48,7 @@ void OnPlatformEvent(const DeviceLayer::ChipDeviceEvent * event)
 {
     if (event->Type == DeviceLayer::DeviceEventType::kDnssdPlatformInitialized
 #if CHIP_DEVICE_CONFIG_ENABLE_SED
-        || event->Type == DeviceLayer::DeviceEventType::kSEDPollingIntervalChange
+        || event->Type == DeviceLayer::DeviceEventType::kSEDIntervalChange
 #endif
     )
     {
