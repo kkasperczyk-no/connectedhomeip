@@ -35,7 +35,7 @@ void BindingHandler::Init()
     DeviceLayer::PlatformMgr().ScheduleWork(InitInternal);
 }
 
-void BindingHandler::OnInvokeCommandFailure(DeviceProxy * aDevice, const BindingData & aBindingData, CHIP_ERROR aError)
+void BindingHandler::OnInvokeCommandFailure(DeviceProxy * aDevice, BindingData & aBindingData, CHIP_ERROR aError)
 {
     CHIP_ERROR error;
 
@@ -58,8 +58,8 @@ void BindingHandler::OnInvokeCommandFailure(DeviceProxy * aDevice, const Binding
         BindingHandler::GetInstance().mCaseSessionRecovered = true;
 
         // Establish new CASE session and retrasmit command that was not applied.
-        error = BindingManager::GetInstance().NotifyBoundClusterChanged(
-            aBindingData.EndpointId, aBindingData.ClusterId, static_cast<void *>(&const_cast<BindingData &>(aBindingData)));
+        error = BindingManager::GetInstance().NotifyBoundClusterChanged(aBindingData.EndpointId, aBindingData.ClusterId,
+                                                                        static_cast<void *>(&aBindingData));
     }
     else
     {
@@ -81,7 +81,7 @@ void BindingHandler::OnOffProcessCommand(CommandId aCommandId, const EmberBindin
             BindingHandler::GetInstance().mCaseSessionRecovered = false;
     };
 
-    auto onFailure = [aDevice, dataRef = *data](CHIP_ERROR aError) {
+    auto onFailure = [aDevice, dataRef = *data](CHIP_ERROR aError) mutable {
         BindingHandler::OnInvokeCommandFailure(aDevice, dataRef, aError);
     };
 
@@ -152,7 +152,7 @@ void BindingHandler::LevelControlProcessCommand(CommandId aCommandId, const Embe
             BindingHandler::GetInstance().mCaseSessionRecovered = false;
     };
 
-    auto onFailure = [aDevice, dataRef = *data](CHIP_ERROR aError) {
+    auto onFailure = [aDevice, dataRef = *data](CHIP_ERROR aError) mutable {
         BindingHandler::OnInvokeCommandFailure(aDevice, dataRef, aError);
     };
 
