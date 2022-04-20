@@ -469,8 +469,10 @@ ConnectivityManager::ThreadDeviceType GenericThreadStackManagerImpl_OpenThread<I
     if (linkMode.mRxOnWhenIdle)
         ExitNow(deviceType = ConnectivityManager::kThreadDeviceType_MinimalEndDevice);
 
+#if OPENTHREAD_CONFIG_MAC_CSL_RECEIVER_ENABLE
     if (otLinkCslGetPeriod(mOTInst) != 0)
         ExitNow(deviceType = ConnectivityManager::kThreadDeviceType_SynchronizedSleepyEndDevice);
+#endif
 
     ExitNow(deviceType = ConnectivityManager::kThreadDeviceType_SleepyEndDevice);
 
@@ -1765,9 +1767,9 @@ GenericThreadStackManagerImpl_OpenThread<ImplClass>::SetSEDIntervalMode(Connecti
     Impl()->LockThreadStack();
 
 // For Thread devices, the intervals are defined as:
-// * poll period for SED devices that polls for data to the parent 
+// * poll period for SED devices that polls for data to the parent
 // * CSL period for SSED devices that listen for messages in scheduled time slots.
-#if CHIP_DEVICE_CONFIG_THREAD_SSED
+#if CHIP_DEVICE_CONFIG_THREAD_SSED && OPENTHREAD_CONFIG_MAC_CSL_RECEIVER_ENABLE
     // Get CSL period in units of 10 symbols, convert it to microseconds and divide by 1000 to get milliseconds.
     uint32_t curIntervalMS = otLinkCslGetPeriod(mOTInst) * OT_US_PER_TEN_SYMBOLS / 1000;
 #else
@@ -1776,8 +1778,8 @@ GenericThreadStackManagerImpl_OpenThread<ImplClass>::SetSEDIntervalMode(Connecti
 
     if (interval.count() != curIntervalMS)
     {
-#if CHIP_DEVICE_CONFIG_THREAD_SSED
-    // Set CSL period in units of 10 symbols, convert it to microseconds and divide by 1000 to get milliseconds.
+#if CHIP_DEVICE_CONFIG_THREAD_SSED && OPENTHREAD_CONFIG_MAC_CSL_RECEIVER_ENABLE
+        // Set CSL period in units of 10 symbols, convert it to microseconds and divide by 1000 to get milliseconds.
         otError otErr = otLinkCslSetPeriod(mOTInst, interval.count() * 1000 / OT_US_PER_TEN_SYMBOLS);
 #else
         otError otErr = otLinkSetPollPeriod(mOTInst, interval.count());
