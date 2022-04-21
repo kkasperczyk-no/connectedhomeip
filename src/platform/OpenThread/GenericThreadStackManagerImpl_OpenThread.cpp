@@ -469,7 +469,7 @@ ConnectivityManager::ThreadDeviceType GenericThreadStackManagerImpl_OpenThread<I
     if (linkMode.mRxOnWhenIdle)
         ExitNow(deviceType = ConnectivityManager::kThreadDeviceType_MinimalEndDevice);
 
-#if OPENTHREAD_CONFIG_MAC_CSL_RECEIVER_ENABLE
+#if CHIP_DEVICE_CONFIG_THREAD_SSED
     if (otLinkCslGetPeriod(mOTInst) != 0)
         ExitNow(deviceType = ConnectivityManager::kThreadDeviceType_SynchronizedSleepyEndDevice);
 #endif
@@ -497,7 +497,9 @@ GenericThreadStackManagerImpl_OpenThread<ImplClass>::_SetThreadDeviceType(Connec
 #endif
     case ConnectivityManager::kThreadDeviceType_MinimalEndDevice:
     case ConnectivityManager::kThreadDeviceType_SleepyEndDevice:
+#if CHIP_DEVICE_CONFIG_THREAD_SSED
     case ConnectivityManager::kThreadDeviceType_SynchronizedSleepyEndDevice:
+#endif
         break;
     default:
         ExitNow(err = CHIP_ERROR_INVALID_ARGUMENT);
@@ -520,9 +522,11 @@ GenericThreadStackManagerImpl_OpenThread<ImplClass>::_SetThreadDeviceType(Connec
         case ConnectivityManager::kThreadDeviceType_SleepyEndDevice:
             deviceTypeStr = "SLEEPY END DEVICE";
             break;
+#if CHIP_DEVICE_CONFIG_THREAD_SSED
         case ConnectivityManager::kThreadDeviceType_SynchronizedSleepyEndDevice:
             deviceTypeStr = "SYNCHRONIZED SLEEPY END DEVICE";
             break;
+#endif
         default:
             deviceTypeStr = "(unknown)";
             break;
@@ -1653,7 +1657,7 @@ CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::DoInit(otInstanc
     err                                 = _SetSEDIntervalsConfig(sedIntervalsConfig);
     if (err != CHIP_NO_ERROR)
     {
-        ChipLogError(DeviceLayer, "Sleepy end device intervals config set failed: %s", ErrorStr(err));
+        ChipLogError(DeviceLayer, "Failed to set sleepy end device intervals: %s", ErrorStr(err));
     }
     SuccessOrExit(err);
 #endif
@@ -1767,9 +1771,9 @@ GenericThreadStackManagerImpl_OpenThread<ImplClass>::SetSEDIntervalMode(Connecti
     Impl()->LockThreadStack();
 
 // For Thread devices, the intervals are defined as:
-// * poll period for SED devices that polls for data to the parent
+// * poll period for SED devices that poll the parent for data
 // * CSL period for SSED devices that listen for messages in scheduled time slots.
-#if CHIP_DEVICE_CONFIG_THREAD_SSED && OPENTHREAD_CONFIG_MAC_CSL_RECEIVER_ENABLE
+#if CHIP_DEVICE_CONFIG_THREAD_SSED
     // Get CSL period in units of 10 symbols, convert it to microseconds and divide by 1000 to get milliseconds.
     uint32_t curIntervalMS = otLinkCslGetPeriod(mOTInst) * OT_US_PER_TEN_SYMBOLS / 1000;
 #else
@@ -1778,7 +1782,7 @@ GenericThreadStackManagerImpl_OpenThread<ImplClass>::SetSEDIntervalMode(Connecti
 
     if (interval.count() != curIntervalMS)
     {
-#if CHIP_DEVICE_CONFIG_THREAD_SSED && OPENTHREAD_CONFIG_MAC_CSL_RECEIVER_ENABLE
+#if CHIP_DEVICE_CONFIG_THREAD_SSED
         // Set CSL period in units of 10 symbols, convert it to microseconds and divide by 1000 to get milliseconds.
         otError otErr = otLinkCslSetPeriod(mOTInst, interval.count() * 1000 / OT_US_PER_TEN_SYMBOLS);
 #else
