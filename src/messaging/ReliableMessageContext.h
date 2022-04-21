@@ -153,11 +153,11 @@ public:
     /// Set whether there is a message hasn't been acknowledged.
     void SetMessageNotAcked(bool messageNotAcked);
 
-    /// Set if this exchange is requesting Sleepy End Device fast-polling mode
-    void SetRequestingFastPollingMode(bool fastPollingMode);
+    /// Set if this exchange is requesting Sleepy End Device active mode
+    void SetRequestingActiveMode(bool activeMode);
 
-    /// Determine whether this exchange is requesting Sleepy End Device fast-polling mode
-    bool IsRequestingFastPollingMode() const;
+    /// Determine whether this exchange is requesting Sleepy End Device active mode
+    bool IsRequestingActiveMode() const;
 
     /**
      * Get the reliable message manager that corresponds to this reliable
@@ -204,8 +204,8 @@ protected:
         /// When set, we have had Close() or Abort() called on us already.
         kFlagClosed = (1u << 10),
 
-        /// When set, signifies that the exchange is requesting Sleepy End Device fast-polling mode.
-        kFlagFastPollingMode = (1u << 11),
+        /// When set, signifies that the exchange is requesting Sleepy End Device active mode.
+        kFlagActiveMode = (1u << 11),
     };
 
     BitFlags<Flags> mFlags; // Internal state flags
@@ -267,9 +267,9 @@ inline bool ReliableMessageContext::HasPiggybackAckPending() const
     return mFlags.Has(Flags::kFlagAckMessageCounterIsValid);
 }
 
-inline bool ReliableMessageContext::IsRequestingFastPollingMode() const
+inline bool ReliableMessageContext::IsRequestingActiveMode() const
 {
-    return mFlags.Has(Flags::kFlagFastPollingMode);
+    return mFlags.Has(Flags::kFlagActiveMode);
 }
 
 inline void ReliableMessageContext::SetAutoRequestAck(bool autoReqAck)
@@ -297,9 +297,9 @@ inline void ReliableMessageContext::SetMessageNotAcked(bool messageNotAcked)
     mFlags.Set(Flags::kFlagMessageNotAcked, messageNotAcked);
 }
 
-inline void ReliableMessageContext::SetRequestingFastPollingMode(bool fastPollingMode)
+inline void ReliableMessageContext::SetRequestingActiveMode(bool activeMode)
 {
-    mFlags.Set(Flags::kFlagFastPollingMode, fastPollingMode);
+    mFlags.Set(Flags::kFlagActiveMode, activeMode);
 }
 
 } // namespace Messaging
