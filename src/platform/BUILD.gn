@@ -50,16 +50,6 @@ if (chip_device_platform != "none" && chip_device_platform != "external") {
     # Enable including the additional data in the advertisement packets
     chip_enable_additional_data_advertising = false
 
-    # Enable default/generic test-mode DeviceInstanceInfoProvider in GenericConfigurationManagerImpl
-    # === FOR TRANSITION UNTIL ALL EXAMPLES PROVIDE THEIR OWN ===
-    chip_use_transitional_device_instance_info_provider = true
-
-    # Enable default/generic test-mode CommissionableDataProvider in GenericConfigurationManagerImpl
-    # === FOR TRANSITION UNTIL ALL EXAMPLES PROVIDE THEIR OWN ===
-    # Linux platform has already transitioned.
-    chip_use_transitional_commissionable_data_provider =
-        chip_device_platform != "linux" && chip_device_platform != "android"
-
     # lock tracking: none/log/fatal or auto for a platform-dependent choice
     chip_stack_lock_tracking = "auto"
 

@@ -194,6 +194,10 @@ config NVS_LOOKUP_CACHE
     bool
     default y
 
+config CHIP_FACTORY_DATA
+    bool
+    default y
+
 # Increase the default RX stack size
 config IEEE802154_NRF5_RX_STACK_SIZE
     int

@@ -36,7 +36,6 @@
 #include <lib/support/CodeUtils.h>
 #include <lib/support/ErrorStr.h>
 #include <system/SystemClock.h>
-
 #if CONFIG_CHIP_OTA_REQUESTOR
 #include "OTAUtil.h"
 #endif
@@ -152,7 +151,13 @@ CHIP_ERROR AppTask::Init()
 #endif
 
     // Initialize CHIP server
+#if CONFIG_CHIP_FACTORY_DATA
+    SetDeviceAttestationCredentialsProvider(&mFactoryDataProvider);
+    SetCommissionableDataProvider(&mFactoryDataProvider);
+#else
     SetDeviceAttestationCredentialsProvider(Examples::GetExampleDACProvider());
+#endif
+
     static chip::CommonCaseDeviceServerInitParams initParams;
     (void) initParams.InitializeStaticResourcesBeforeServerInit();
 

@@ -169,7 +169,12 @@ CHIP_ERROR AppTask::Init()
 #endif
 
     // Initialize CHIP server
+#if CONFIG_CHIP_FACTORY_DATA
+    SetDeviceAttestationCredentialsProvider(&mFactoryDataProvider);
+    SetCommissionableDataProvider(&mFactoryDataProvider);
+#else
     SetDeviceAttestationCredentialsProvider(Examples::GetExampleDACProvider());
+#endif
     chip::app::DnssdServer::Instance().SetExtendedDiscoveryTimeoutSecs(kExtDiscoveryTimeoutSecs);
 
     static chip::CommonCaseDeviceServerInitParams initParams;

@@ -142,7 +142,12 @@ CHIP_ERROR AppTask::Init()
     k_timer_user_data_set(&sFunctionTimer, this);
 
     // Initialize CHIP server
+#if CONFIG_CHIP_FACTORY_DATA
+    SetDeviceAttestationCredentialsProvider(&mFactoryDataProvider);
+    SetCommissionableDataProvider(&mFactoryDataProvider);
+#else
     SetDeviceAttestationCredentialsProvider(Examples::GetExampleDACProvider());
+#endif
 
     static chip::CommonCaseDeviceServerInitParams initParams;
     (void) initParams.InitializeStaticResourcesBeforeServerInit();
