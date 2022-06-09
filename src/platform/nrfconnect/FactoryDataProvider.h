@@ -22,7 +22,7 @@
 #include <platform/DeviceInstanceInfoProvider.h>
 
 extern "C" {
-#include "factory_data/FactoryDataParser.h"
+#include "FactoryDataParser.h"
 }
 
 namespace chip {
@@ -67,8 +67,8 @@ public:
     CHIP_ERROR GetRotatingDeviceIdUniqueId(MutableByteSpan & uniqueIdSpan) override;
 
 private:
-    static constexpr uint16_t kFactoryDataPartitionSize    = PM_FACTORY_DATA_SIZE;
-    static constexpr uint32_t kFactoryDataPartitionAddress = PM_FACTORY_DATA_ADDRESS;
+    static constexpr uint16_t kFactoryDataPartitionSize    = 4096;    // PM_FACTORY_DATA_SIZE;
+    static constexpr uint32_t kFactoryDataPartitionAddress = 0xfb000; // PM_FACTORY_DATA_ADDRESS;
     static constexpr uint8_t kDACPrivateKeyLength          = 32;
     static constexpr uint8_t kDACPublicKeyLength           = 65;
 

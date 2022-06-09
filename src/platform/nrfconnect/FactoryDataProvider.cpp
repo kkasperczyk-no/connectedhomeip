@@ -87,15 +87,19 @@ CHIP_ERROR FactoryDataProvider::SignWithDeviceAttestationKey(const ByteSpan & di
     VerifyOrReturnError(IsSpanUsable(digestToSign), CHIP_ERROR_INVALID_ARGUMENT);
     VerifyOrReturnError(outSignBuffer.size() >= signature.Capacity(), CHIP_ERROR_BUFFER_TOO_SMALL);
 
+    // Extract public key from DAC cert.
+    MutableByteSpan dacCertSpan{ reinterpret_cast<uint8_t *>(mFactoryData.dac_cert.data), mFactoryData.dac_cert.len };
+    chip::Crypto::P256PublicKey dacPublicKey;
+    CHIP_ERROR err = chip::Crypto::ExtractPubkeyFromX509Cert(dacCertSpan, dacPublicKey);
+
+    // Read private key from factory data.
     uint8_t privKeyBuf[kDACPrivateKeyLength];
-    uint8_t pubKeyBuf[kDACPublicKeyLength];
     size_t privKeyLen = sizeof(privKeyBuf);
-    size_t pubKeyLen  = sizeof(pubKeyBuf);
 
     memcpy(privKeyBuf, mFactoryData.dac_priv_key.data, mFactoryData.dac_priv_key.len);
-    memcpy(pubKeyBuf, mFactoryData.dac_pub_key.data, mFactoryData.dac_pub_key.len);
 
-    ReturnErrorOnFailure(LoadKeypairFromRaw(ByteSpan(privKeyBuf, privKeyLen), ByteSpan(pubKeyBuf, pubKeyLen), keypair));
+    ReturnErrorOnFailure(
+        LoadKeypairFromRaw(ByteSpan(privKeyBuf, privKeyLen), ByteSpan(dacPublicKey.Bytes(), dacPublicKey.Length()), keypair));
     ReturnErrorOnFailure(keypair.ECDSA_sign_hash(digestToSign.data(), digestToSign.size(), signature));
 
     return CopySpanToMutableSpan(ByteSpan{ signature.ConstBytes(), signature.Length() }, outSignBuffer);

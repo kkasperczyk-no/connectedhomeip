@@ -23,8 +23,8 @@
 
 #include <ctype.h>
 
-#define MAX_FACTORY_DATA_ELEMENTS 20
-#define MIN_FACTORY_DATA_ELEMENTS 16
+#define MAX_FACTORY_DATA_ELEMENTS 19
+#define MIN_FACTORY_DATA_ELEMENTS 15
 
 LOG_MODULE_DECLARE(app, CONFIG_MATTER_LOG_LEVEL);
 
@@ -51,44 +51,44 @@ bool GetFactoryData(uint8_t * buffer, uint16_t bufferSize, uint32_t factoryDataA
     {
         res = res && zcbor_tstr_decode(states, &currentString);
 
-        if (strncmp("hw_ver", currentString.value, currentString.len) == 0)
+        if (strncmp("hw_ver", (const char *) currentString.value, currentString.len) == 0)
         {
             uint32_t hw_ver;
             res = res && zcbor_uint32_decode(states, &hw_ver);
             LOG_INF("%x", hw_ver);
             factoryData->hw_ver = hw_ver;
         }
-        else if (strncmp("spake2_it", currentString.value, currentString.len) == 0)
+        else if (strncmp("spake2_it", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_uint32_decode(states, &factoryData->spake2_it);
         }
-        else if (strncmp("vendor_id", currentString.value, currentString.len) == 0)
+        else if (strncmp("vendor_id", (const char *) currentString.value, currentString.len) == 0)
         {
             uint32_t vendor_id;
             res                    = res && zcbor_uint32_decode(states, &vendor_id);
             factoryData->vendor_id = vendor_id;
         }
-        else if (strncmp("product_id", currentString.value, currentString.len) == 0)
+        else if (strncmp("product_id", (const char *) currentString.value, currentString.len) == 0)
         {
             uint32_t product_id;
             res                     = res && zcbor_uint32_decode(states, &product_id);
             factoryData->product_id = product_id;
         }
-        else if (strncmp("discriminator", currentString.value, currentString.len) == 0)
+        else if (strncmp("discriminator", (const char *) currentString.value, currentString.len) == 0)
         {
             uint32_t discriminator;
             res                        = res && zcbor_uint32_decode(states, &discriminator);
             factoryData->discriminator = discriminator;
         }
-        else if (strncmp("passcode", currentString.value, currentString.len) == 0)
+        else if (strncmp("passcode", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_uint32_decode(states, &factoryData->passcode);
         }
-        else if (strncmp("sn", currentString.value, currentString.len) == 0)
+        else if (strncmp("sn", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->sn);
         }
-        else if (strncmp("date", currentString.value, currentString.len) == 0)
+        else if (strncmp("date", (const char *) currentString.value, currentString.len) == 0)
         {
             // Date format is YYYY-MM-DD, so format needs to be validated and string parse to integer parts.
             struct zcbor_string date;
@@ -107,51 +107,47 @@ bool GetFactoryData(uint8_t * buffer, uint16_t bufferSize, uint32_t factoryDataA
                 LOG_ERR("Parsing error - wrong date format");
             }
         }
-        else if (strncmp("hw_ver_str", currentString.value, currentString.len) == 0)
+        else if (strncmp("hw_ver_str", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->hw_ver_str);
         }
-        else if (strncmp("rd_uid", currentString.value, currentString.len) == 0)
+        else if (strncmp("rd_uid", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->rd_uid);
         }
-        else if (strncmp("dac_cert", currentString.value, currentString.len) == 0)
+        else if (strncmp("dac_cert", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->dac_cert);
         }
-        else if (strncmp("dac_pub_key", currentString.value, currentString.len) == 0)
-        {
-            res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->dac_pub_key);
-        }
-        else if (strncmp("dac_priv_key", currentString.value, currentString.len) == 0)
+        else if (strncmp("dac_key", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->dac_priv_key);
         }
-        else if (strncmp("pai_cert", currentString.value, currentString.len) == 0)
+        else if (strncmp("pai_cert", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->pai_cert);
         }
-        else if (strncmp("spake2_salt", currentString.value, currentString.len) == 0)
+        else if (strncmp("spake2_salt", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->spake2_salt);
         }
-        else if (strncmp("spake2_verifier", currentString.value, currentString.len) == 0)
+        else if (strncmp("spake2_verifier", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->spake2_verifier);
         }
-        else if (strncmp("vendor_name", currentString.value, currentString.len) == 0)
+        else if (strncmp("vendor_name", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->vendor_name);
         }
-        else if (strncmp("product_name", currentString.value, currentString.len) == 0)
+        else if (strncmp("product_name", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->product_name);
         }
-        else if (strncmp("fw_info", currentString.value, currentString.len) == 0)
+        else if (strncmp("fw_info", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->fw_info);
         }
-        else if (strncmp("user", currentString.value, currentString.len) == 0)
+        else if (strncmp("user", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->user);
         }

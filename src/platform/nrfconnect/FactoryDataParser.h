@@ -40,7 +40,6 @@ struct FactoryData
     struct FactoryDataString hw_ver_str;
     struct FactoryDataString rd_uid;
     struct FactoryDataString dac_cert;
-    struct FactoryDataString dac_pub_key;
     struct FactoryDataString dac_priv_key;
     struct FactoryDataString pai_cert;
     uint32_t spake2_it;

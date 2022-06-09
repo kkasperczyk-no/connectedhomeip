@@ -324,10 +324,6 @@ if (CONFIG_CHIP_EXAMPLE_DEVICE_INFO_PROVIDER)
     target_include_directories(chip INTERFACE ${CHIP_ROOT}/examples/providers)
 endif()
 
-if (CONFIG_CHIP_FACTORY_DATA)
-    include(${CHIP_ROOT}/src/platform/nrfconnect/factory_data/CMakeLists.txt)
-endif()
-
 if (CONFIG_CHIP_MALLOC_SYS_HEAP_OVERRIDE)
     target_link_options(chip INTERFACE
         -Wl,--wrap=malloc

@@ -57,6 +57,8 @@ static_library("nrfconnect") {
     sources += [
        "FactoryDataProvider.cpp",
        "FactoryDataProvider.h",
+       "FactoryDataParser.c",
+       "FactoryDataParser.h",
     ]
   }
 
