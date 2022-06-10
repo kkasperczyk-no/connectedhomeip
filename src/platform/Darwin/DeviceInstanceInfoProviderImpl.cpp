@@ -60,6 +60,9 @@ CHIP_ERROR DeviceInstanceInfoProviderImpl::GetProductName(char * buf, size_t buf
 
 CHIP_ERROR DeviceInstanceInfoProviderImpl::GetSerialNumber(char * buf, size_t bufSize)
 {
+#if CHIP_DISABLE_PLATFORM_KVS
+    return CHIP_ERROR_UNSUPPORTED_CHIP_FEATURE;
+#else
     ChipError err       = CHIP_NO_ERROR;
     size_t serialNumLen = 0; // without counting null-terminator
 
@@ -79,10 +82,14 @@ CHIP_ERROR DeviceInstanceInfoProviderImpl::GetSerialNumber(char * buf, size_t bu
     ReturnErrorCodeIf(buf[serialNumLen] != 0, CHIP_ERROR_INVALID_STRING_LENGTH);
 
     return err;
+#endif
 }
 
 CHIP_ERROR DeviceInstanceInfoProviderImpl::GetManufacturingDate(uint16_t & year, uint8_t & month, uint8_t & day)
 {
+#if CHIP_DISABLE_PLATFORM_KVS
+    return CHIP_ERROR_UNSUPPORTED_CHIP_FEATURE;
+#else
     CHIP_ERROR err;
     enum
     {
@@ -119,18 +126,22 @@ exit:
         ChipLogError(DeviceLayer, "Invalid manufacturing date: %s", dateStr);
     }
     return err;
+#endif
 }
 
 CHIP_ERROR DeviceInstanceInfoProviderImpl::GetHardwareVersion(uint16_t & hardwareVersion)
 {
-    ChipError err   = CHIP_NO_ERROR;
+#if CHIP_DISABLE_PLATFORM_KVS
+    return CHIP_ERROR_UNSUPPORTED_CHIP_FEATURE;
+#else
+    ChipError err = CHIP_NO_ERROR;
     uint32_t valInt = 0;
 
     err = Internal::PosixConfig::ReadConfigValue(Internal::PosixConfig::kConfigKey_HardwareVersion, valInt);
     if (err == CHIP_DEVICE_ERROR_CONFIG_NOT_FOUND)
     {
         hardwareVersion = static_cast<uint16_t>(CHIP_DEVICE_CONFIG_DEFAULT_DEVICE_HARDWARE_VERSION);
-        err             = CHIP_NO_ERROR;
+        err = CHIP_NO_ERROR;
     }
     else
     {
@@ -138,6 +149,7 @@ CHIP_ERROR DeviceInstanceInfoProviderImpl::GetHardwareVersion(uint16_t & hardwar
     }
 
     return err;
+#endif
 }
 
 CHIP_ERROR DeviceInstanceInfoProviderImpl::GetHardwareVersionString(char * buf, size_t bufSize)
