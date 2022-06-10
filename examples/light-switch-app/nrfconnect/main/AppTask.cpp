@@ -160,6 +160,7 @@ CHIP_ERROR AppTask::Init()
 #endif
 
 #if CONFIG_CHIP_FACTORY_DATA
+    SetDeviceInstanceInfoProvider(&mFactoryDataProvider);
     SetDeviceAttestationCredentialsProvider(&mFactoryDataProvider);
     SetCommissionableDataProvider(&mFactoryDataProvider);
 #else

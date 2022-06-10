@@ -65,6 +65,8 @@ CHIP_ERROR FactoryDataProvider::GetDeviceAttestationCert(MutableByteSpan & outBu
 
     memcpy(outBuffer.data(), mFactoryData.dac_cert.data, mFactoryData.dac_cert.len);
 
+    outBuffer.reduce_size(mFactoryData.dac_cert.len);
+
     return CHIP_NO_ERROR;
 }
 
@@ -74,6 +76,8 @@ CHIP_ERROR FactoryDataProvider::GetProductAttestationIntermediateCert(MutableByt
     ReturnErrorCodeIf(!mFactoryData.pai_cert.data, CHIP_ERROR_PERSISTED_STORAGE_VALUE_NOT_FOUND);
 
     memcpy(outBuffer.data(), mFactoryData.pai_cert.data, mFactoryData.pai_cert.len);
+
+    outBuffer.reduce_size(mFactoryData.pai_cert.len);
 
     return CHIP_NO_ERROR;
 }
@@ -130,6 +134,8 @@ CHIP_ERROR FactoryDataProvider::GetSpake2pSalt(MutableByteSpan & saltBuf)
 
     memcpy(saltBuf.data(), mFactoryData.spake2_salt.data, mFactoryData.spake2_salt.len);
 
+    saltBuf.reduce_size(mFactoryData.spake2_salt.len);
+
     return CHIP_NO_ERROR;
 }
 
@@ -139,6 +145,10 @@ CHIP_ERROR FactoryDataProvider::GetSpake2pVerifier(MutableByteSpan & verifierBuf
     ReturnErrorCodeIf(!mFactoryData.spake2_verifier.data, CHIP_ERROR_PERSISTED_STORAGE_VALUE_NOT_FOUND);
 
     memcpy(verifierBuf.data(), mFactoryData.spake2_verifier.data, mFactoryData.spake2_verifier.len);
+
+    verifierLen = mFactoryData.spake2_verifier.len;
+
+    verifierBuf.reduce_size(verifierLen);
 
     return CHIP_NO_ERROR;
 }

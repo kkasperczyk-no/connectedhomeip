@@ -54,8 +54,7 @@ bool GetFactoryData(uint8_t * buffer, uint16_t bufferSize, uint32_t factoryDataA
         if (strncmp("hw_ver", (const char *) currentString.value, currentString.len) == 0)
         {
             uint32_t hw_ver;
-            res = res && zcbor_uint32_decode(states, &hw_ver);
-            LOG_INF("%x", hw_ver);
+            res                 = res && zcbor_uint32_decode(states, &hw_ver);
             factoryData->hw_ver = hw_ver;
         }
         else if (strncmp("spake2_it", (const char *) currentString.value, currentString.len) == 0)

@@ -28,7 +28,6 @@ struct FactoryDataString
 struct FactoryData
 {
     struct FactoryDataString sn;
-    struct FactoryDataString date;
     uint16_t date_year;
     uint8_t date_month;
     uint8_t date_day;
