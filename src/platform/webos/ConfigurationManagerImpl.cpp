@@ -35,6 +35,7 @@
 #include <platform/ConfigurationManager.h>
 #include <platform/DiagnosticDataProvider.h>
 #include <platform/internal/GenericConfigurationManagerImpl.ipp>
+#include <platform/webos/DeviceInstanceInfoProviderImpl.h>
 #include <platform/webos/PosixConfig.h>
 
 namespace chip {
@@ -64,6 +65,11 @@ CHIP_ERROR ConfigurationManagerImpl::Init()
     // Initialize the generic implementation base class.
     err = Internal::GenericConfigurationManagerImpl<PosixConfig>::Init();
     SuccessOrExit(err);
+
+#if !CHIP_USE_TRANSITIONAL_DEVICE_INSTANCE_INFO_PROVIDER
+    static DeviceInstanceInfoProviderImpl sDeviceInstanceInfoProvider;
+    SetDeviceInstanceInfoProvider(&sDeviceInstanceInfoProvider);
+#endif
 
     if (!PosixConfig::ConfigValueExists(PosixConfig::kConfigKey_VendorId))
     {

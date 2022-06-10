@@ -35,6 +35,7 @@
 #include <lib/support/logging/CHIPLogging.h>
 #include <platform/ConfigurationManager.h>
 #include <platform/android/AndroidConfig.h>
+#include <platform/android/DeviceInstanceInfoProviderImpl.h>
 #include <platform/internal/GenericConfigurationManagerImpl.ipp>
 
 namespace chip {
@@ -54,6 +55,11 @@ void ConfigurationManagerImpl::InitializeWithObject(jobject managerObject)
     mConfigurationManagerObject      = env->NewGlobalRef(managerObject);
     jclass configurationManagerClass = env->GetObjectClass(mConfigurationManagerObject);
     VerifyOrReturn(configurationManagerClass != nullptr, ChipLogError(DeviceLayer, "Failed to get KVS Java class"));
+
+#if !CHIP_USE_TRANSITIONAL_DEVICE_INSTANCE_INFO_PROVIDER
+    static DeviceInstanceInfoProviderImpl sDeviceInstanceInfoProvider;
+    SetDeviceInstanceInfoProvider(&sDeviceInstanceInfoProvider);
+#endif
 
     AndroidConfig::InitializeWithObject(managerObject);
 }
