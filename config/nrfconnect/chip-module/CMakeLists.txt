@@ -222,6 +222,7 @@ chip_gn_arg_bool  ("chip_malloc_sys_heap"                   CONFIG_CHIP_MALLOC_S
 if (CONFIG_CHIP_FACTORY_DATA)
     chip_gn_arg_bool  ("chip_use_transitional_device_instance_info_provider" "false")
     chip_gn_arg_bool  ("chip_use_transitional_commissionable_data_provider" "false")
+    chip_gn_arg_bool  ("chip_enable_factory_data" "true")
 endif()
 
 if (CONFIG_CHIP_ROTATING_DEVICE_ID)

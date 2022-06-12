@@ -89,6 +89,9 @@ declare_args() {
     chip_mdns = "none"
   }
 
+  # Enable factory data support
+  chip_enable_factory_data = false
+
   # Enable default/generic test-mode DeviceInstanceInfoProvider in GenericConfigurationManagerImpl
   # === FOR TRANSITION UNTIL ALL EXAMPLES PROVIDE THEIR OWN ===
   chip_use_transitional_device_instance_info_provider =

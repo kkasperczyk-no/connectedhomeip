@@ -17,7 +17,6 @@
 
 #include "FactoryDataParser.h"
 
-#include <drivers/flash.h>
 #include <logging/log.h>
 #include <zcbor_decode.h>
 
@@ -28,28 +27,25 @@
 
 LOG_MODULE_DECLARE(app, CONFIG_MATTER_LOG_LEVEL);
 
-static const struct device * flash_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_flash_controller));
-
-bool GetFactoryData(uint8_t * buffer, uint16_t bufferSize, uint32_t factoryDataAddress, struct FactoryData * factoryData)
+bool GetFactoryData(uint8_t * buffer, uint16_t bufferSize, struct FactoryData * factoryData)
 {
-    int ret = flash_read(flash_dev, factoryDataAddress, buffer, bufferSize);
-    if (ret != 0)
-    {
-        LOG_ERR("Flash read operation failed: %d", ret);
-        return false;
-    }
-
     uint32_t elementsCount = 0;
-    bool keyNotFound       = false;
+    bool keyNotFound;
 
     ZCBOR_STATE_D(states, MAX_FACTORY_DATA_ELEMENTS, buffer, bufferSize, 1);
 
     bool res = zcbor_map_start_decode(states);
     struct zcbor_string currentString;
 
-    while (!keyNotFound && res)
+    while (res)
     {
-        res = res && zcbor_tstr_decode(states, &currentString);
+        keyNotFound = false;
+        res         = res && zcbor_tstr_decode(states, &currentString);
+
+        if (!res)
+        {
+            break;
+        }
 
         if (strncmp("hw_ver", (const char *) currentString.value, currentString.len) == 0)
         {
@@ -142,10 +138,6 @@ bool GetFactoryData(uint8_t * buffer, uint16_t bufferSize, uint32_t factoryDataA
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->product_name);
         }
-        else if (strncmp("fw_info", (const char *) currentString.value, currentString.len) == 0)
-        {
-            res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->fw_info);
-        }
         else if (strncmp("user", (const char *) currentString.value, currentString.len) == 0)
         {
             res = res && zcbor_bstr_decode(states, (struct zcbor_string *) &factoryData->user);
@@ -153,6 +145,7 @@ bool GetFactoryData(uint8_t * buffer, uint16_t bufferSize, uint32_t factoryDataA
         else
         {
             keyNotFound = true;
+            res         = res && zcbor_any_skip(states, NULL);
         }
 
         if (!keyNotFound && res)

@@ -53,7 +53,7 @@ static_library("nrfconnect") {
 
   public_deps = [ "${chip_root}/src/platform:platform_base" ]
 
-  if (!chip_use_transitional_device_instance_info_provider && !chip_use_transitional_commissionable_data_provider) {
+  if (chip_enable_factory_data) {
     sources += [
        "FactoryDataProvider.cpp",
        "FactoryDataProvider.h",

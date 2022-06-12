@@ -46,20 +46,16 @@ struct FactoryData
     struct FactoryDataString spake2_verifier;
     uint16_t discriminator;
     uint32_t passcode;
-    struct FactoryDataString fw_info;
     struct FactoryDataString user;
 };
 
 /**
- * @brief Reads factory data from flash and puts it into the factory data structure.
+ * @brief Parses raw factory data into the factory data structure.
  *
- * @param[in] buffer Buffer to copy factory data from flash partition.
- * @param[in] bufferSize Size of data that can be written to buffer.
- *            It must be equal to the size of factory data flash partition.
- * @param[in] factoryDataAddress Starting address of flash memory to read factory data.
-              It must be the starting address of factory data flash partition.
- * @param[out] factoryData address of object to be filled with read and parsed factory data.
+ * @param[in] buffer Buffer containing raw factory data.
+ * @param[in] bufferSize Size of factory data.
+ * @param[out] factoryData address of object to be filled with parsed factory data.
  *
  * @returns true on success, false otherwise.
  */
-bool GetFactoryData(uint8_t * buffer, uint16_t bufferSize, uint32_t factoryDataAddress, struct FactoryData * factoryData);
+bool GetFactoryData(uint8_t * buffer, uint16_t bufferSize, struct FactoryData * factoryData);

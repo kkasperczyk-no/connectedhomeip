@@ -21,6 +21,7 @@
 #include <platform/CommissionableDataProvider.h>
 #include <platform/DeviceInstanceInfoProvider.h>
 
+#include <drivers/flash.h>
 #include <pm_config.h>
 
 extern "C" {
@@ -30,6 +31,38 @@ extern "C" {
 namespace chip {
 namespace DeviceLayer {
 
+struct InternalFlashFactoryData
+{
+    CHIP_ERROR GetFactoryDataPartition(uint8_t ** data, size_t & dataSize)
+    {
+        *data    = reinterpret_cast<uint8_t *>(reinterpret_cast<uint32_t *>(PM_FACTORY_DATA_ADDRESS));
+        dataSize = PM_FACTORY_DATA_SIZE;
+        return CHIP_NO_ERROR;
+    }
+};
+
+struct ExternalFlashFactoryData
+{
+    CHIP_ERROR GetFactoryDataPartition(uint8_t ** data, size_t & dataSize)
+    {
+        int ret = flash_read(mFlashDevice, PM_FACTORY_DATA_ADDRESS, mFactoryDataBuffer, PM_FACTORY_DATA_SIZE);
+
+        if (ret != 0)
+        {
+            return CHIP_ERROR_READ_FAILED;
+        }
+
+        *data    = mFactoryDataBuffer;
+        dataSize = PM_FACTORY_DATA_SIZE;
+
+        return CHIP_NO_ERROR;
+    }
+
+    const struct device * mFlashDevice = DEVICE_DT_GET(DT_CHOSEN(zephyr_flash_controller));
+    uint8_t mFactoryDataBuffer[PM_FACTORY_DATA_SIZE];
+};
+
+template <class FlashFactoryData>
 class FactoryDataProvider : public chip::Credentials::DeviceAttestationCredentialsProvider,
                             public CommissionableDataProvider,
                             public DeviceInstanceInfoProvider
@@ -77,7 +110,7 @@ private:
     void LoadFactoryData();
 
     struct FactoryData mFactoryData;
-    uint8_t mFactoryDataBuffer[kFactoryDataPartitionSize];
+    FlashFactoryData mFlashFactoryData;
 };
 
 } // namespace DeviceLayer
