@@ -24,6 +24,7 @@
 
 #include <platform/internal/CHIPDeviceLayerInternal.h>
 
+#include <platform/Darwin/DeviceInstanceInfoProviderImpl.h>
 #include <platform/Darwin/DiagnosticDataProviderImpl.h>
 #include <platform/PlatformManager.h>
 
@@ -48,6 +49,7 @@ CHIP_ERROR PlatformManagerImpl::_InitChipStack()
 #endif // CHIP_DISABLE_PLATFORM_KVS
     SetConfigurationMgr(&ConfigurationManagerImpl::GetDefaultInstance());
     SetDiagnosticDataProvider(&DiagnosticDataProviderImpl::GetDefaultInstance());
+    SetDeviceInstanceInfoProvider(&DeviceInstanceInfoProviderMgrImpl());
 
     mRunLoopSem = dispatch_semaphore_create(0);
 
