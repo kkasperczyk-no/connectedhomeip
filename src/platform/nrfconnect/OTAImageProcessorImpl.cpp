@@ -41,7 +41,6 @@
 // Cd globals are needed to be accessed from dfu image writer lambdas
 namespace {
 uint8_t sCdBuf[chip::Credentials::kMaxCMSSignedCDMessage] = { 0 };
-size_t sCdBufSize                                         = 0;
 size_t sCdSavedBytes                                      = 0;
 } // namespace
 #endif
@@ -79,11 +78,8 @@ CHIP_ERROR OTAImageProcessorImpl::PrepareDownloadImpl()
 #if CONFIG_CHIP_CERTIFICATION_DECLARATION_STORAGE
     dfu_image_writer cdWriter;
     cdWriter.image_id = CONFIG_CHIP_CERTIFiCATION_DECLARATION_OTA_IMAGE_ID;
-    cdWriter.open     = [](int id, size_t size) {
-        sCdBufSize = size;
-        return 0;
-    };
-    cdWriter.write = [](const uint8_t * chunk, size_t chunk_size) {
+    cdWriter.open     = [](int id, size_t size) { return size <= sizeof(sCdBuf) ? 0 : -EFBIG; };
+    cdWriter.write    = [](const uint8_t * chunk, size_t chunk_size) {
         memcpy(&sCdBuf[sCdSavedBytes], chunk, chunk_size);
         sCdSavedBytes += chunk_size;
         return 0;

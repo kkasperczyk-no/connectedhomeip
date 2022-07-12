@@ -269,7 +269,7 @@ config CHIP_CERTIFiCATION_DECLARATION_OTA_IMAGE_ID
 	int "Certification declaration OTA image id"
 	default 205 #0xcd
 	help
-	  The image id of Certiciation Declaration image
+	  The image id of Certification Declaration image
 	  for sending it via OTA Software Update purposes.
 
 endif

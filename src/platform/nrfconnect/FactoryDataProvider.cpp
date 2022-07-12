@@ -90,18 +90,12 @@ template <class FlashFactoryData>
 CHIP_ERROR FactoryDataProvider<FlashFactoryData>::GetCertificationDeclaration(MutableByteSpan & outBuffer)
 {
 #if CONFIG_CHIP_CERTIFICATION_DECLARATION_STORAGE
-    VerifyOrReturnError(Internal::ZephyrConfig::ConfigValueExists(Internal::ZephyrConfig::kConfigKey_CertificationDeclaration),
-                        CHIP_ERROR_PERSISTED_STORAGE_VALUE_NOT_FOUND);
+    size_t cdLen = 0;
 
-    char cd[Credentials::kMaxCMSSignedCDMessage] = { 0 };
-    size_t cdLen                                 = 0;
+    ReturnErrorOnFailure(Internal::ZephyrConfig::ReadConfigValueStr(Internal::ZephyrConfig::kConfigKey_CertificationDeclaration,
+                                                                    reinterpret_cast<char *>(outBuffer.data()), outBuffer.size(),
+                                                                    cdLen));
 
-    ReturnErrorOnFailure(Internal::ZephyrConfig::ReadConfigValueStr(Internal::ZephyrConfig::kConfigKey_CertificationDeclaration, cd,
-                                                                    sizeof(cd), cdLen));
-
-    ReturnErrorCodeIf(outBuffer.size() < cdLen, CHIP_ERROR_BUFFER_TOO_SMALL);
-
-    memcpy(outBuffer.data(), cd, cdLen);
     outBuffer.reduce_size(cdLen);
 
     return CHIP_NO_ERROR;
