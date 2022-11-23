@@ -213,7 +213,7 @@ AndroidDeviceControllerWrapper * AndroidDeviceControllerWrapper::AllocateNew(
     {
         CHIPP256KeypairBridge * nativeKeypairBridge = wrapper->GetP256KeypairBridge();
         nativeKeypairBridge->SetDelegate(keypairDelegate);
-        *errInfoOnFailure = nativeKeypairBridge->Initialize();
+        *errInfoOnFailure = nativeKeypairBridge->Initialize(Crypto::ECPKeyTarget::ECDSA);
         if (*errInfoOnFailure != CHIP_NO_ERROR)
         {
             return nullptr;
@@ -249,7 +249,7 @@ AndroidDeviceControllerWrapper * AndroidDeviceControllerWrapper::AllocateNew(
         ChipLogProgress(Controller,
                         "No existing credentials provided: generating ephemeral local NOC chain with OperationalCredentialsIssuer");
 
-        *errInfoOnFailure = ephemeralKey.Initialize();
+        *errInfoOnFailure = ephemeralKey.Initialize(Crypto::ECPKeyTarget::ECDSA);
         if (*errInfoOnFailure != CHIP_NO_ERROR)
         {
             return nullptr;
