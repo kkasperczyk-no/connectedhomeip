@@ -6,9 +6,9 @@
 
 #include "app_task.h"
 
+#include "LEDWidget.h"
 #include "battery.h"
 #include "buzzer.h"
-#include "led_widget.h"
 #include <platform/CHIPDeviceLayer.h>
 
 #include <DeviceInfoProviderImpl.h>
@@ -16,7 +16,6 @@
 #include <app-common/zap-generated/attribute-id.h>
 #include <app-common/zap-generated/attribute-type.h>
 #include <app-common/zap-generated/attributes/Accessors.h>
-#include <app-common/zap-generated/cluster-id.h>
 #include <app-common/zap-generated/cluster-objects.h>
 #include <app/clusters/ota-requestor/OTATestEventTriggerDelegate.h>
 #include <app/server/OnboardingCodesUtil.h>
@@ -26,13 +25,13 @@
 #include <credentials/examples/DeviceAttestationCredsExample.h>
 
 #ifdef CONFIG_CHIP_OTA_REQUESTOR
-#include "ota_util.h"
+#include "OTAUtil.h"
 #endif
 
 #include <dk_buttons_and_leds.h>
 #include <zephyr/drivers/sensor.h>
-#include <zephyr/logging/log.h>
 #include <zephyr/kernel.h>
+#include <zephyr/logging/log.h>
 
 using namespace ::chip;
 using namespace ::chip::Credentials;
